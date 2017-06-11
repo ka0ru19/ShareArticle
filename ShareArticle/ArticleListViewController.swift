@@ -9,6 +9,11 @@
 import UIKit
 
 class ArticleListViewController: UIViewController {
+    
+    @IBOutlet weak var outputButton: UIBarButtonItem!
+    @IBOutlet weak var articleTableView: UITableView!
+    @IBOutlet weak var toolbar: UIToolbar!
+    @IBOutlet weak var outputSelectedItemsButton: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()

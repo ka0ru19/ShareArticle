@@ -10,6 +10,14 @@ import UIKit
 
 class ReadWebViewController: UIViewController {
 
+    @IBOutlet weak var webView: UIWebView!
+    
+    @IBOutlet weak var backButton: UIBarButtonItem!
+    @IBOutlet weak var nextButton: UIBarButtonItem!
+    @IBOutlet weak var stopButton: UIBarButtonItem!
+    @IBOutlet weak var loadButton: UIBarButtonItem!
+    @IBOutlet weak var actionButton: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
