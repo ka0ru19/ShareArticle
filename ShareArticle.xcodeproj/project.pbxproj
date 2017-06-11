@@ -8,20 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		632910991EECEC880071F2E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910981EECEC880071F2E1 /* AppDelegate.swift */; };
-		6329109B1EECEC880071F2E1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6329109A1EECEC880071F2E1 /* ViewController.swift */; };
 		6329109E1EECEC880071F2E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6329109C1EECEC880071F2E1 /* Main.storyboard */; };
 		632910A01EECEC880071F2E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6329109F1EECEC880071F2E1 /* Assets.xcassets */; };
 		632910A31EECEC880071F2E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 632910A11EECEC880071F2E1 /* LaunchScreen.storyboard */; };
+		632910AB1EECF20B0071F2E1 /* ArticleListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910AA1EECF20B0071F2E1 /* ArticleListViewController.swift */; };
+		632910AD1EECF2760071F2E1 /* ReadWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910AC1EECF2760071F2E1 /* ReadWebViewController.swift */; };
+		632910B01EECF29F0071F2E1 /* ArticleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910AE1EECF29F0071F2E1 /* ArticleTableViewCell.swift */; };
+		632910B11EECF29F0071F2E1 /* ArticleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 632910AF1EECF29F0071F2E1 /* ArticleTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		632910951EECEC880071F2E1 /* ShareArticle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareArticle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		632910981EECEC880071F2E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6329109A1EECEC880071F2E1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		6329109D1EECEC880071F2E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6329109F1EECEC880071F2E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		632910A21EECEC880071F2E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		632910A41EECEC880071F2E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		632910AA1EECF20B0071F2E1 /* ArticleListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleListViewController.swift; sourceTree = "<group>"; };
+		632910AC1EECF2760071F2E1 /* ReadWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWebViewController.swift; sourceTree = "<group>"; };
+		632910AE1EECF29F0071F2E1 /* ArticleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleTableViewCell.swift; sourceTree = "<group>"; };
+		632910AF1EECF29F0071F2E1 /* ArticleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ArticleTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +61,10 @@
 			isa = PBXGroup;
 			children = (
 				632910981EECEC880071F2E1 /* AppDelegate.swift */,
-				6329109A1EECEC880071F2E1 /* ViewController.swift */,
+				632910AA1EECF20B0071F2E1 /* ArticleListViewController.swift */,
+				632910AC1EECF2760071F2E1 /* ReadWebViewController.swift */,
+				632910AE1EECF29F0071F2E1 /* ArticleTableViewCell.swift */,
+				632910AF1EECF29F0071F2E1 /* ArticleTableViewCell.xib */,
 				6329109C1EECEC880071F2E1 /* Main.storyboard */,
 				6329109F1EECEC880071F2E1 /* Assets.xcassets */,
 				632910A11EECEC880071F2E1 /* LaunchScreen.storyboard */,
@@ -124,6 +133,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				632910B11EECF29F0071F2E1 /* ArticleTableViewCell.xib in Resources */,
 				632910A31EECEC880071F2E1 /* LaunchScreen.storyboard in Resources */,
 				632910A01EECEC880071F2E1 /* Assets.xcassets in Resources */,
 				6329109E1EECEC880071F2E1 /* Main.storyboard in Resources */,
@@ -137,7 +147,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6329109B1EECEC880071F2E1 /* ViewController.swift in Sources */,
+				632910B01EECF29F0071F2E1 /* ArticleTableViewCell.swift in Sources */,
+				632910AD1EECF2760071F2E1 /* ReadWebViewController.swift in Sources */,
+				632910AB1EECF20B0071F2E1 /* ArticleListViewController.swift in Sources */,
 				632910991EECEC880071F2E1 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
