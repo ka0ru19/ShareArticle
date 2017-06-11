@@ -19,29 +19,22 @@ class ArticleListViewController: UIViewController {
     
     var articleDictionary: Dictionary<String, [Article]> = [:]
     
-    var sectionTitleArray = ["2017/06/11 (日)","2017/06/10 (土)","2017/06/09 (金)"]
+    var dateArray = ["2017/06/11","2017/06/10","2017/06/09"]
+    var articleArray: [Article] = []
+    var articleUdArray: [Dictionary<String, Any>] = [] // udで保存するために型変換した記事配列
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        articleTableView.delegate = self
-        articleTableView.dataSource = self
-        articleTableView.register(UINib(nibName: "ArticleTableViewCell", bundle: nil),
-                                  forCellReuseIdentifier: "articleCell")
         
-        articleTableView.rowHeight = UITableViewAutomaticDimension
-        articleTableView.estimatedRowHeight = 600
-        articleTableView.sectionHeaderHeight = 20
-
-        
+        initDict()
+        loadPostArrayFromUd()
         initView()
-        
-        
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        loadPostArrayFromUd()
         articleTableView.reloadData()
-    }
+        }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -57,20 +50,24 @@ class ArticleListViewController: UIViewController {
 
 extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sectionTitleArray.count
+        return 1 //dateArray.count 一旦セクション関係なし
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionTitleArray[section]
-    }
+//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return dateArray[section]
+//    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return articleUdArray.count // のちのちarticleArrayにしないといけない日がくるかも
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "articleCell", for: indexPath) as! ArticleTableViewCell
+        cell.urlLabel.text = articleUdArray[indexPath.row]["urlString"] as? String ?? "no-url"
+        cell.titleLabel.text = articleUdArray[indexPath.row]["title"] as? String ?? "no-title"
+        let date: Date? = articleUdArray[indexPath.row]["date"] as? Date
+        cell.timeLabel.text = date?.timeString() ?? "no-date"
         return cell
     }
     
@@ -82,11 +79,81 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
 
 extension ArticleListViewController {
     
+    func initDict() {
+        
+        ud.removeSuite(named: "articleUdArray")
+        articleUdArray = []
+        
+        var titleArray: [String] = ["mac","ipad","iphone"]
+        var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
+                                   URL(string: "https://www.apple.com/jp/ipad/")!,
+                                   URL(string: "https://www.apple.com/jp/iphone/")!]
+        var dateArray = ["2017/06/11 02:21:58 +0000","2017/06/10 02:21:28 +0000","2017/06/09 02:21:53 +0000"]
+        var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
+        
+        var atc:Article!
+        for i in 0 ..< titleArray.count {
+            atc = Article(title: titleArray[i],
+                                 urlString: String(describing: urlArray[i] as URL),
+                                 dateString: dateArray[i],
+                                 imageNsData: nil,
+                                 comment: commentArray[i])
+            
+            articleUdArray.append(atc.change2UdDict())
+        }
+        
+        print(articleUdArray)
+        ud.set(articleUdArray, forKey: "articleUdArray")
+    }
+    
+    func loadPostArrayFromUd() {
+        articleArray = []
+        if let obj = ud.array(forKey: "articleUdArray") {
+            articleUdArray = obj as? [Dictionary<String, Any>] ?? []
+            print(articleUdArray)
+        } else {
+            print("articleUdArray keyでヒットするobjがない")
+        }
+    }
+    
     func initView() {
-        // TODO: 配列の初期化
+        
+        articleTableView.delegate = self
+        articleTableView.dataSource = self
+        articleTableView.register(UINib(nibName: "ArticleTableViewCell", bundle: nil),
+                                  forCellReuseIdentifier: "articleCell")
+        
+        articleTableView.rowHeight = UITableViewAutomaticDimension
+        articleTableView.estimatedRowHeight = 600
+        articleTableView.sectionHeaderHeight = 20
+        
         
         // 最初はtoolbarを下に隠しておく
         toolbar.frame.origin.y = self.articleTableView.bottomY
     }
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

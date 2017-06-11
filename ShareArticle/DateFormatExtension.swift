@@ -25,13 +25,13 @@ public extension Date {
     }
     
     // Date -> 2017/06/21
-    func dateString(format: String = "yyyy/MM/ddZ") -> String {
+    func dateString(format: String = "yyyy/MM/dd") -> String {
         formatter.dateFormat = format
         return formatter.string(from: self)
     }
     
     // Date -> 12:34
-    func timeString(format: String = "HH:mmZ") -> String {
+    func timeString(format: String = "HH:mm") -> String {
         formatter.dateFormat = format
         return formatter.string(from: self)
     }
