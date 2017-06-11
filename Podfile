@@ -7,6 +7,4 @@ target 'ShareArticle' do
 
   # Pods for ShareArticle
 
-  pod 'RealmSwift'
-
 end
