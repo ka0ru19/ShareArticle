@@ -46,7 +46,7 @@
                         <outlet property="outputButton" destination="jRd-GW-V0N" id="Ibp-Z9-aFg"/>
                         <outlet property="outputSelectedItemsButton" destination="LDY-vg-aWf" id="QhG-Ue-slt"/>
                         <outlet property="toolbar" destination="qQe-eO-t6I" id="7iV-Nl-qDd"/>
-                        <segue destination="2IS-5V-m73" kind="push" id="sv4-Fw-Trm"/>
+                        <segue destination="2IS-5V-m73" kind="push" identifier="toReadWebVC" id="sv4-Fw-Trm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
