@@ -116,6 +116,13 @@
                     <constraint firstAttribute="trailingMargin" secondItem="pwp-f3-QpR" secondAttribute="trailing" id="gp4-0c-xf6"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="commentLabel" destination="UEt-nW-rV1" id="IbR-IM-1OY"/>
+                <outlet property="thumbnailImageView" destination="Z3a-zP-BIn" id="WBy-lV-W91"/>
+                <outlet property="timeLabel" destination="WsD-kZ-FiJ" id="Ixd-Pg-4Kq"/>
+                <outlet property="titleLabel" destination="xeD-RS-FuU" id="g7T-au-WHr"/>
+                <outlet property="urlLabel" destination="zrZ-fW-STG" id="kPi-c3-UBh"/>
+            </connections>
             <point key="canvasLocation" x="34" y="153.5"/>
         </tableViewCell>
     </objects>

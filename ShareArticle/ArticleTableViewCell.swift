@@ -9,7 +9,13 @@
 import UIKit
 
 class ArticleTableViewCell: UITableViewCell {
-
+    
+    @IBOutlet weak var thumbnailImageView: UIImageView!
+    @IBOutlet weak var urlLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var commentLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
