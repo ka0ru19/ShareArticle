@@ -17,6 +17,8 @@ class ArticleListViewController: UIViewController {
     
     let ud = UserDefaults.standard
     
+    var articleDictionary: Dictionary<String, [Article]> = [:]
+    
     var sectionTitleArray = ["2017/06/11 (日)","2017/06/10 (土)","2017/06/09 (金)"]
     
     override func viewDidLoad() {
@@ -32,6 +34,9 @@ class ArticleListViewController: UIViewController {
 
         
         initView()
+        
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
