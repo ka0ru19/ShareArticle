@@ -19,6 +19,8 @@ class ArticleListViewController: UIViewController {
     
     var articleDictionary: Dictionary<String, [Article]> = [:]
     
+    var selectedUrl: URL!
+    
     var dateArray = ["2017/06/11","2017/06/10","2017/06/09"]
     var articleArray: [Article] = []
     var articleUdArray: [Dictionary<String, Any>] = [] // udで保存するために型変換した記事配列
@@ -43,8 +45,10 @@ class ArticleListViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toReadWebVC" {
             let nextVC = segue.destination as! ReadWebViewController
+            nextVC.originUrl = self.selectedUrl
         }
     }
+
     
 }
 
@@ -64,6 +68,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "articleCell", for: indexPath) as! ArticleTableViewCell
+        cell.thumbnailImageView.backgroundColor = UIColor(colorLiteralRed: 0, green: 0, blue: 1, alpha: 0.5)
         cell.urlLabel.text = articleUdArray[indexPath.row]["urlString"] as? String ?? "no-url"
         cell.titleLabel.text = articleUdArray[indexPath.row]["title"] as? String ?? "no-title"
         let date: Date? = articleUdArray[indexPath.row]["date"] as? Date
@@ -72,8 +77,11 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let urlStr = articleUdArray[indexPath.row]["urlString"] as? String ?? "no urlText value"
+        selectedUrl = URL(string: urlStr)
         performSegue(withIdentifier: "toReadWebVC", sender: nil)
     }
+    
 }
 
 
@@ -88,7 +96,7 @@ extension ArticleListViewController {
         var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
                                    URL(string: "https://www.apple.com/jp/ipad/")!,
                                    URL(string: "https://www.apple.com/jp/iphone/")!]
-        var dateArray = ["2017/06/11 02:21:58 +0000","2017/06/10 02:21:28 +0000","2017/06/09 02:21:53 +0000"]
+        var dateArray = ["2017/06/11 02:11:58 +0900","2017/06/10 02:45:28 +0900","2017/06/09 03:28:53 +0900"]
         var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
         
         var atc:Article!

@@ -18,10 +18,16 @@ class ReadWebViewController: UIViewController {
     @IBOutlet weak var loadButton: UIBarButtonItem!
     @IBOutlet weak var actionButton: UIBarButtonItem!
     
+    var originUrl: URL!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        let urlRequest = NSURLRequest(url: originUrl)
+        // urlをネットワーク接続が可能な状態にしている（らしい）
+        
+        webView.loadRequest(urlRequest as URLRequest)
+        // 実際にwebViewにurlからwebページを引っ張ってくる。
     }
 
     override func didReceiveMemoryWarning() {
