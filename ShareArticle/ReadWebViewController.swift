@@ -26,11 +26,7 @@ class ReadWebViewController: UIViewController {
         
         webView.delegate = self
         
-        let urlRequest = NSURLRequest(url: originUrl)
-        // urlをネットワーク接続が可能な状態にしている（らしい）
-        
-        webView.loadRequest(urlRequest as URLRequest)
-        // 実際にwebViewにurlからwebページを引っ張ってくる。
+        webView.loadRequest(URLRequest(url: originUrl))
         
         setAllControlButtonsStatus()
     }
@@ -63,9 +59,17 @@ class ReadWebViewController: UIViewController {
     
     private func showUiActivity() {
         let title = self.webView.stringByEvaluatingJavaScript(from: "document.title") ?? "no-title: cannot get title"
-        let postURL = self.webView.request?.url ?? URL(string: "https://www.google.co.jp/")!
-        print(postURL)
-        let activityItems: [Any] = [title, postURL]
+        guard let postUrl = self.webView.request?.url else {
+            print("self.webView.request?.urlがない: 読み込みが終わるまで待って。")
+            return
+        }
+        if String(describing: postUrl) == "" {
+            print("urlがない")
+            return
+        }
+//        let postUrl = self.webView.request?.url ?? originUrl
+        print("postUrl: \(postUrl)")
+        let activityItems: [Any] = [title, postUrl]
         let appActivity = [PostFromUIActivity()]
         let activitySheet = UIActivityViewController(activityItems: activityItems, applicationActivities: appActivity)
         let excludeActivity: [UIActivityType] = [

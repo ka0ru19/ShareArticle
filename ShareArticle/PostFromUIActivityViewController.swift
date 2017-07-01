@@ -31,19 +31,25 @@ class PostFromUIActivityViewController: UIViewController {
         
         let inputView = UIView(frame: CGRect(x: 0, y: 0, width: baseView.frame.width , height: baseView.frame.height))
         inputView.frame.origin = baseView.bounds.origin // ここだけはboundsを引いてくる
-        inputView.backgroundColor = UIColor.cyan
+        inputView.backgroundColor = UIColor(red: 255/255, green: 208/255, blue: 176/255, alpha: 1.0) // #ffd0b0: 薄い肌色
         
         /****** header、mainInput、optionの base view & separateBar view ******/
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: inputView.bounds.width , height: 36))
         headerView.frame.origin = inputView.frame.origin
-        headerView.backgroundColor = UIColor(red: 231/255, green: 183/255, blue: 119/255, alpha: 1.0)
+        headerView.backgroundColor = UIColor(red: 255/255, green: 159/255, blue: 128/255, alpha: 1.0) // #ff9e80: 肌色
         
         let mainHeadSeparateView = UIView(frame: CGRect(x: 0, y: 0, width: inputView.bounds.width, height: 1))
         mainHeadSeparateView.frame.origin = CGPoint(x: inputView.frame.origin.x, y: headerView.bottomY)
         mainHeadSeparateView.backgroundColor = UIColor.gray
         
+        let guideTextLabel = UILabel(frame: CGRect(x: 0, y: 0, width: inputView.bounds.width - 4 * 2, height: 20))
+        guideTextLabel.frame.origin = CGPoint(x: inputView.frame.origin.x + 4, y: mainHeadSeparateView.bottomY)
+        guideTextLabel.backgroundColor = UIColor.clear
+        guideTextLabel.text = "記事へのコメントも一緒に保存できるよ:D"
+        guideTextLabel.font = UIFont.systemFont(ofSize: CGFloat(12))
+        
         let mainInputView = UIView(frame: CGRect(x: 0, y: 0, width: inputView.bounds.width, height: 200))
-        mainInputView.frame.origin = CGPoint(x: inputView.frame.origin.x, y: mainHeadSeparateView.bottomY)
+        mainInputView.frame.origin = CGPoint(x: inputView.frame.origin.x, y: guideTextLabel.bottomY)
         
         /****** header view ******/
         let headerViewsHeight: CGFloat = 30
@@ -70,7 +76,8 @@ class PostFromUIActivityViewController: UIViewController {
         /****** mainInput view ******/
         textView.frame = CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: 180 - 4 * 2)
         textView.frame.origin = CGPoint(x: 4, y: 4)
-        textView.text = "ここにコメントを書く"
+        textView.text = ""
+        textView.becomeFirstResponder()
         
         /****** option view ******/
         
@@ -83,6 +90,7 @@ class PostFromUIActivityViewController: UIViewController {
         
         inputView.addSubview(headerView)
         inputView.addSubview(mainHeadSeparateView)
+        inputView.addSubview(guideTextLabel)
         inputView.addSubview(mainInputView)
         baseView.addSubview(inputView)
         self.view.addSubview(baseView)

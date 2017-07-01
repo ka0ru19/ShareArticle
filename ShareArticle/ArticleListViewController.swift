@@ -73,7 +73,15 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         cell.titleLabel.text = articleUdArray[indexPath.row]["title"] as? String ?? "no-title"
         let date: Date? = articleUdArray[indexPath.row]["date"] as? Date
         cell.timeLabel.text = date?.timeString() ?? "no-date"
-        cell.commentLabel.text = articleUdArray[indexPath.row]["comment"] as? String ?? "no-comment"
+        if let comment = articleUdArray[indexPath.row]["comment"] as? String {
+            if comment != "" {
+                cell.commentLabel.text = comment
+            } else {
+                cell.commentLabel.isHidden = true
+            }
+        } else {
+            print("articleUdArray[indexPath.row][\"comment\"]自体がnil: やばい")
+        }
         return cell
     }
     
@@ -135,6 +143,8 @@ extension ArticleListViewController {
         articleTableView.rowHeight = UITableViewAutomaticDimension
         articleTableView.estimatedRowHeight = 600
         articleTableView.sectionHeaderHeight = 20
+        articleTableView.tableFooterView = UIView(frame: .zero)
+        articleTableView.separatorInset = UIEdgeInsetsMake(0, 8, 0, 0) // 文字の頭に合わせている
         
         
         // 最初はtoolbarを下に隠しておく
