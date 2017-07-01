@@ -26,10 +26,10 @@ class ReadWebViewController: UIViewController {
         
         webView.delegate = self
         
-        let urlRequest = NSURLRequest(url: originUrl)
+        let urlRequest = URLRequest(url: originUrl)
         // urlをネットワーク接続が可能な状態にしている（らしい）
         
-        webView.loadRequest(urlRequest as URLRequest)
+        webView.loadRequest(urlRequest)
         // 実際にwebViewにurlからwebページを引っ張ってくる。
         
         setAllControlButtonsStatus()
