@@ -89,33 +89,14 @@ extension ReadWebViewController {
     }
     
     func setBackButtonStatus() {
-        if webView.canGoBack {
-            backButton.isEnabled = true
-            backButton.tintColor = UIColor.blue
-        } else {
-            backButton.isEnabled = false
-            backButton.tintColor = UIColor.gray
-        }
+        backButton.setState(isAvailable: webView.canGoBack)
     }
     
     func setNextButtonStatus() {
-        if webView.canGoForward {
-            nextButton.isEnabled = true
-            nextButton.tintColor = UIColor.blue
-        } else {
-            nextButton.isEnabled = false
-            nextButton.tintColor = UIColor.gray
-        }
-
+        nextButton.setState(isAvailable: webView.canGoForward)
     }
     func setStopButtonStatus() {
-        if webView.isLoading {
-            stopButton.isEnabled = true
-            stopButton.tintColor = UIColor.blue
-        } else {
-            stopButton.isEnabled = false
-            stopButton.tintColor = UIColor.gray
-        }
+        stopButton.setState(isAvailable: webView.isLoading)
     }
     
     
@@ -131,5 +112,14 @@ extension ReadWebViewController: UIWebViewDelegate {
     func webViewDidFinishLoad(_ webView: UIWebView) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
         setAllControlButtonsStatus()
+    }
+}
+
+private extension UIBarButtonItem {
+
+    func setState(isAvailable: Bool) {
+
+        self.isEnabled = isAvailable
+        self.tintColor = isAvailable ? UIColor.blue : UIColor.gray
     }
 }
