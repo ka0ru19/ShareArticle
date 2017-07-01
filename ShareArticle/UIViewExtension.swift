@@ -9,7 +9,6 @@
 import UIKit
 
 extension UIView {
-    
     var bottomX: CGFloat {
         get {
             return self.frame.origin.x + self.frame.size.width

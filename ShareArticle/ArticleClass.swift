@@ -10,13 +10,13 @@ import UIKit
 
 class Article {
     // title, url, date は必須。
-    var title: String!
-    var url: URL!
-    var date: Date!
-    var image: UIImage?
-    var comment: String?
+    var title: String! // 記事タイトル
+    var url: URL! // 記事リンク
+    var date: Date! // 記事の保存日時
+    var image: UIImage? // サムネイル
+    var comment: String? // ユーザが入力する記事に対するコメント
 
-    
+    // 初めて記事を保存するとき
     init?(title: String, url: URL) {
         self.title = title
         self.url = url
@@ -36,11 +36,11 @@ class Article {
         print("init Article done. title: \(self.title as String)") // "as 型名"がないとOptionalになる
     }
     
-    func addImage(image: UIImage?) {
+    func setImage(image: UIImage?) {
         self.image = image
     }
     
-    func addComment(comment: String?) {
+    func setComment(comment: String?) {
         self.comment = comment
     }
     

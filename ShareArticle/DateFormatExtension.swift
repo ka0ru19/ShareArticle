@@ -47,5 +47,5 @@ public extension Date {
 
 /* 使用例
 Date().string(format: "yyyy/MM/dd") // 2017/02/26
-Date(dateString: "2016-02-26T10:17:30Z")  // Date
+Date(dateString: "2016-02-26 10:17:30 +0900")  // Date
  */

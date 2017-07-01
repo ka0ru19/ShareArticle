@@ -23,6 +23,8 @@ class ReadWebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        webView.delegate = self
+        
         let urlRequest = NSURLRequest(url: originUrl)
         // urlをネットワーク接続が可能な状態にしている（らしい）
         
@@ -34,16 +36,36 @@ class ReadWebViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBAction func onTappedActionButton(_ sender: UIBarButtonItem) {
+        showUiActivity()
     }
-    */
+    
+    private func showUiActivity() {
+        let title = self.webView.stringByEvaluatingJavaScript(from: "document.title") ?? "no-title: cannot get title"
+        
+        let currentURL = self.webView.request?.url ?? URL(string: "https://www.google.co.jp/")!
+        print(currentURL)
+        let activityItems: [Any] = [title, currentURL]
+        let appActivity = [PostFromUIActivity()]
+        let activitySheet = UIActivityViewController(activityItems: activityItems, applicationActivities: appActivity)
+        let excludeActivity: [UIActivityType] = [
+            UIActivityType.print,
+            UIActivityType.postToWeibo,
+            UIActivityType.postToTencentWeibo
+        ]
+        activitySheet.excludedActivityTypes = excludeActivity
+        present(activitySheet, animated: true, completion: {() -> Void in
+        })
+    }
+}
 
+extension ReadWebViewController: UIWebViewDelegate {
+    func webViewDidStartLoad(_ webView: UIWebView) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    }
+    
+    func webViewDidFinishLoad(_ webView: UIWebView) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    }
 }

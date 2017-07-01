@@ -74,7 +74,11 @@
                                     <barButtonItem title="stop" id="Xdz-yx-Fb8"/>
                                     <barButtonItem title="load" id="C5l-Cq-mOg"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="be0-fR-Gz7"/>
-                                    <barButtonItem systemItem="action" id="0kW-WY-DKq"/>
+                                    <barButtonItem systemItem="action" id="0kW-WY-DKq">
+                                        <connections>
+                                            <action selector="onTappedActionButton:" destination="2IS-5V-m73" id="dOQ-ZV-6ry"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                             <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uui-Fg-4Bp">

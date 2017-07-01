@@ -73,6 +73,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         cell.titleLabel.text = articleUdArray[indexPath.row]["title"] as? String ?? "no-title"
         let date: Date? = articleUdArray[indexPath.row]["date"] as? Date
         cell.timeLabel.text = date?.timeString() ?? "no-date"
+        cell.commentLabel.text = articleUdArray[indexPath.row]["comment"] as? String ?? "no-comment"
         return cell
     }
     
