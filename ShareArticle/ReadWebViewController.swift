@@ -18,7 +18,8 @@ class ReadWebViewController: UIViewController {
     @IBOutlet weak var loadButton: UIBarButtonItem!
     @IBOutlet weak var actionButton: UIBarButtonItem!
     
-    var originUrl: URL!
+    var originUrl: URL! // 前のvcから引き継いでくる
+    var currentURL: URL!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,8 @@ class ReadWebViewController: UIViewController {
         
         webView.loadRequest(urlRequest as URLRequest)
         // 実際にwebViewにurlからwebページを引っ張ってくる。
+        
+        setAllControlButtonsStatus()
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,16 +40,32 @@ class ReadWebViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func onTappedBackButton(_ sender: UIBarButtonItem) {
+        if !webView.canGoBack { return }
+        webView.goBack() // 戻る
+    }
+    
+    @IBAction func onTappedNextButton(_ sender: UIBarButtonItem) {
+        if !webView.canGoForward { return }
+        webView.goForward() // 進む
+    }
+    @IBAction func onTappedStopButton(_ sender: UIBarButtonItem) {
+        webView.stopLoading() // 読み込み停止
+    }
+    
+    @IBAction func onTappedLoadButton(_ sender: UIBarButtonItem) {
+        webView.reload() // 再度読み込み
+    }
+    
     @IBAction func onTappedActionButton(_ sender: UIBarButtonItem) {
         showUiActivity()
     }
     
     private func showUiActivity() {
         let title = self.webView.stringByEvaluatingJavaScript(from: "document.title") ?? "no-title: cannot get title"
-        
-        let currentURL = self.webView.request?.url ?? URL(string: "https://www.google.co.jp/")!
-        print(currentURL)
-        let activityItems: [Any] = [title, currentURL]
+        let postURL = self.webView.request?.url ?? URL(string: "https://www.google.co.jp/")!
+        print(postURL)
+        let activityItems: [Any] = [title, postURL]
         let appActivity = [PostFromUIActivity()]
         let activitySheet = UIActivityViewController(activityItems: activityItems, applicationActivities: appActivity)
         let excludeActivity: [UIActivityType] = [
@@ -60,12 +79,57 @@ class ReadWebViewController: UIViewController {
     }
 }
 
+extension ReadWebViewController {
+    func setAllControlButtonsStatus() {
+        // webviewの状態に応じて、3つ全てのボタンの色と操作許可を変更
+        setBackButtonStatus()
+        setNextButtonStatus()
+        setStopButtonStatus()
+        
+    }
+    
+    func setBackButtonStatus() {
+        if webView.canGoBack {
+            backButton.isEnabled = true
+            backButton.tintColor = UIColor.blue
+        } else {
+            backButton.isEnabled = false
+            backButton.tintColor = UIColor.gray
+        }
+    }
+    
+    func setNextButtonStatus() {
+        if webView.canGoForward {
+            nextButton.isEnabled = true
+            nextButton.tintColor = UIColor.blue
+        } else {
+            nextButton.isEnabled = false
+            nextButton.tintColor = UIColor.gray
+        }
+
+    }
+    func setStopButtonStatus() {
+        if webView.isLoading {
+            stopButton.isEnabled = true
+            stopButton.tintColor = UIColor.blue
+        } else {
+            stopButton.isEnabled = false
+            stopButton.tintColor = UIColor.gray
+        }
+    }
+    
+    
+}
+
 extension ReadWebViewController: UIWebViewDelegate {
     func webViewDidStartLoad(_ webView: UIWebView) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        setAllControlButtonsStatus()
+        currentURL = self.webView.request?.url ?? URL(string: "https://www.google.co.jp/")!
     }
     
     func webViewDidFinishLoad(_ webView: UIWebView) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        setAllControlButtonsStatus()
     }
 }

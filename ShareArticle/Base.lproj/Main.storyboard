@@ -69,10 +69,26 @@
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
-                                    <barButtonItem title="back" id="rVb-sF-hrz"/>
-                                    <barButtonItem title="next" id="95Y-iw-BwT"/>
-                                    <barButtonItem title="stop" id="Xdz-yx-Fb8"/>
-                                    <barButtonItem title="load" id="C5l-Cq-mOg"/>
+                                    <barButtonItem title="back" id="rVb-sF-hrz">
+                                        <connections>
+                                            <action selector="onTappedBackButton:" destination="2IS-5V-m73" id="xkE-gr-hlt"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="next" id="95Y-iw-BwT">
+                                        <connections>
+                                            <action selector="onTappedNextButton:" destination="2IS-5V-m73" id="IRn-8V-QAC"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="stop" id="Xdz-yx-Fb8">
+                                        <connections>
+                                            <action selector="onTappedStopButton:" destination="2IS-5V-m73" id="pLd-cd-GJx"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="load" id="C5l-Cq-mOg">
+                                        <connections>
+                                            <action selector="onTappedLoadButton:" destination="2IS-5V-m73" id="Fbq-GX-i3c"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="be0-fR-Gz7"/>
                                     <barButtonItem systemItem="action" id="0kW-WY-DKq">
                                         <connections>
