@@ -62,7 +62,9 @@ class ReadWebViewController: UIViewController {
     }
     
     private func showUiActivity() {
-        guard let title = self.webView.stringByEvaluatingJavaScript(from: "document.title"), let postURL = self.webView.request?.url else {
+        guard
+            let title = self.webView.stringByEvaluatingJavaScript(from: "document.title"),
+            let postURL = self.webView.request?.url else {
 
             let alert = UIAlertController(title: "Error", message: "タイトルまたはリンクが取得できませんでした", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
