@@ -19,7 +19,7 @@ class ReadWebViewController: UIViewController {
     @IBOutlet weak var actionButton: UIBarButtonItem!
     
     var originUrl: URL! // 前のvcから引き継いでくる
-    var currentURL: URL!
+    var currentURL: URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,8 +62,15 @@ class ReadWebViewController: UIViewController {
     }
     
     private func showUiActivity() {
-        let title = self.webView.stringByEvaluatingJavaScript(from: "document.title") ?? "no-title: cannot get title"
-        let postURL = self.webView.request?.url ?? URL(string: "https://www.google.co.jp/")!
+        guard
+            let title = self.webView.stringByEvaluatingJavaScript(from: "document.title"),
+            let postURL = self.webView.request?.url else {
+
+            let alert = UIAlertController(title: "Error", message: "タイトルまたはリンクが取得できませんでした", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
         print(postURL)
         let activityItems: [Any] = [title, postURL]
         let appActivity = [PostFromUIActivity()]
@@ -125,7 +132,7 @@ extension ReadWebViewController: UIWebViewDelegate {
     func webViewDidStartLoad(_ webView: UIWebView) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         setAllControlButtonsStatus()
-        currentURL = self.webView.request?.url ?? URL(string: "https://www.google.co.jp/")!
+        currentURL = self.webView.request?.url
     }
     
     func webViewDidFinishLoad(_ webView: UIWebView) {
