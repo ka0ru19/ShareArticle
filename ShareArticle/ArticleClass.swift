@@ -23,7 +23,7 @@ class Article {
         date = Date()
     }
     
-    // udのdictionaryから端末で扱うためのデータ型に変換するメソッド
+    // udのdictionaryから端末で扱うためのデータ型に変換するメソッド // デバック用
     init?(title: String, urlString: String, dateString: String, imageNsData: NSData?, comment: String?) {
         // dateString -> "2017/06/22 12:34:56"
         self.title = title
@@ -34,6 +34,20 @@ class Article {
         }
         self.comment = comment
         print("init Article done. title: \(self.title as String)") // "as 型名"がないとOptionalになる
+    }
+    
+    // udのdictionaryから端末で扱うためのデータ型に変換するメソッド
+    init?(from udDict: Dictionary<String, Any>){
+        self.title = udDict["title"] as? String ?? "no-title"
+        self.url = URL(string: udDict["urlString"] as? String ?? String("https://www.apple.com/"))
+        self.date = udDict["date"] as! Date
+        if let imageDate = udDict["imageNsData"] as? Data {
+            self.image = UIImage(data: imageDate)
+        }
+        if let comment = udDict["comment"] as? String {
+            self.comment = comment
+        }
+        print("init Article done. title: \(self.title as String)")
     }
     
     func setImage(image: UIImage?) {

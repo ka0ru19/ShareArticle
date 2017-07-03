@@ -117,7 +117,7 @@ class PostFromUIActivityViewController: UIViewController {
         }
         
         postUdDic["title"] = postItem[0] as? String ?? "no-text"
-        postUdDic["urlString"] = String(describing: postItem[1] as! URL)
+        postUdDic["urlString"] = String(describing: postItem[1] as? URL ?? URL(string: "https://www.apple.com/")!)
         postUdDic["date"] = Date()
         postUdDic["comment"] = self.textView.text
         articleUdArray.append(postUdDic)

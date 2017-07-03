@@ -29,14 +29,13 @@ class ArticleListViewController: UIViewController {
         super.viewDidLoad()
         
         initDict()
-        loadPostArrayFromUd()
         initView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        loadPostArrayFromUd()
+        loadArticleArrayFromUd()
         articleTableView.reloadData()
-        }
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -48,8 +47,10 @@ class ArticleListViewController: UIViewController {
             nextVC.originUrl = self.selectedUrl
         }
     }
-
-    
+    @IBAction func onTappedChangeToMarkDownButton(_ sender: UIBarButtonItem) {
+        print(articleArray)
+        changeArticlesToMarkDown(targetArray: articleArray)
+    }
 }
 
 extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -123,7 +124,7 @@ extension ArticleListViewController {
         ud.set(articleUdArray, forKey: "articleUdArray")
     }
     
-    func loadPostArrayFromUd() {
+    func loadArticleArrayFromUd() {
         articleArray = []
         if let obj = ud.array(forKey: "articleUdArray") {
             articleUdArray = obj as? [Dictionary<String, Any>] ?? []
@@ -131,6 +132,12 @@ extension ArticleListViewController {
         } else {
             print("articleUdArray keyでヒットするobjがない")
         }
+        for articleUd in articleUdArray {
+            if let article = Article(from: articleUd) {
+                articleArray.append(article)
+            }
+        }
+        
     }
     
     func initView() {
@@ -151,6 +158,67 @@ extension ArticleListViewController {
         toolbar.frame.origin.y = self.articleTableView.bottomY
     }
     
+    // [記事]をマークダウン形式の文字列に変換
+    func changeArticlesToMarkDown(targetArray: [Article]) {
+        var markdownText: String = ""
+        var markdownSentence: String!
+        for article in targetArray {
+            let textStr = article.title ?? "no-title"
+            let urlStr = String(describing: article.url as URL) // asがないとoptinalになる
+            let commentStr = article.comment ?? ""
+            var commentStrBlock = ""
+            if commentStr != "" {
+                let sentenceArray: [String] = commentStr.components(separatedBy: "\n")
+                for sentence in sentenceArray {
+                    commentStrBlock += "  - " + sentence + "\n"
+                }
+            }
+            markdownSentence = "- [" + textStr + "](" + urlStr + ")\n" + commentStrBlock
+            markdownText += markdownSentence
+        }
+        
+        print(markdownText)
+        
+        let actionSheet = UIAlertController(title: "マークダウン形式で保存します", message: "出力先を選択してください", preferredStyle: UIAlertControllerStyle.actionSheet)
+        
+        let action1 = UIAlertAction(title: "クリップボードにコピーする", style: UIAlertActionStyle.default, handler: {
+            (action: UIAlertAction!) in
+            let board = UIPasteboard.general // クリップボード呼び出し
+            board.setValue(markdownText, forPasteboardType: "public.text") // クリップボードに貼り付け
+        })
+        
+        let action2 = UIAlertAction(title: "他のアプリに出力する", style: UIAlertActionStyle.default, handler: {
+            (action: UIAlertAction!) in
+            self.showUiActivity(text: markdownText)
+        })
+        
+        let cancel = UIAlertAction(title: "キャンセル", style: UIAlertActionStyle.cancel, handler: {
+            (action: UIAlertAction!) in
+            print("キャンセルをタップした時の処理")
+        })
+        
+        actionSheet.addAction(action1)
+        actionSheet.addAction(action2)
+        actionSheet.addAction(cancel)
+        
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    
+    func showUiActivity(text: String) {
+        let activityItems: [Any] = [text]
+        print(text)
+        let appActivity = [PostFromUIActivity()]
+        let activitySheet = UIActivityViewController(activityItems: activityItems, applicationActivities: appActivity)
+        let excludeActivity: [UIActivityType] = [
+            PostFromUIActivity().activityType!,
+            UIActivityType.print,
+            UIActivityType.postToWeibo,
+            UIActivityType.postToTencentWeibo
+        ]
+        activitySheet.excludedActivityTypes = excludeActivity
+        present(activitySheet, animated: true, completion: {() -> Void in
+        })
+    }
 }
 
 
