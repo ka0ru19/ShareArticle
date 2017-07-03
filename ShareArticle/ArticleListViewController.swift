@@ -10,7 +10,7 @@ import UIKit
 
 class ArticleListViewController: UIViewController {
     
-    @IBOutlet weak var outputButton: UIBarButtonItem!
+//    @IBOutlet weak var outputButton: UIBarButtonItem!
     @IBOutlet weak var articleTableView: UITableView!
     @IBOutlet weak var toolbar: UIToolbar!
     @IBOutlet weak var outputSelectedItemsButton: UIBarButtonItem!
@@ -22,6 +22,10 @@ class ArticleListViewController: UIViewController {
     
     var articleDateStringArray: [String] = [] // 記事の日付を管理する配列: セクションのタイトルで使う
     var articleByDateArray: [[Article]]  = [] // セクション分けして記事を表示するのに使う
+    
+    var checkedArticleByDateArray: [[Bool]] = []
+    
+    var isEditingTableView = false
     
     var selectedUrl: URL!
     
@@ -51,9 +55,23 @@ class ArticleListViewController: UIViewController {
             nextVC.originUrl = self.selectedUrl
         }
     }
+    
+    // 「出力」ボタン
+    func onTappedOutputButton(_ sender: UIBarButtonItem) {
+        isEditingTableView = !isEditingTableView // スイッチ
+        controlCheckedArticleArray()
+        setNavigationBarContents()
+    }
+    
+    // 「記事をマークダウンに変換」ボタン
     @IBAction func onTappedChangeToMarkDownButton(_ sender: UIBarButtonItem) {
         changeArticlesToMarkDown(targetArray: articleArray)
     }
+    
+    // Actionボタン
+    @IBAction func onTappedActionButton(_ sender: UIBarButtonItem) {
+    }
+    
 }
 
 extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -87,13 +105,27 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         }
         cell.thumbnailImageView.backgroundColor = UIColor.cyan
         
+        cell.accessoryType = .none
+        // セルが選択された時の背景色を消す
+        cell.selectionStyle = .none
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let urlStr = articleUdArray[indexPath.row]["urlString"] as? String ?? "no urlText value"
-        selectedUrl = URL(string: urlStr)
-        performSegue(withIdentifier: "toReadWebVC", sender: nil)
+        if isEditingTableView {
+            let cell = tableView.cellForRow(at: indexPath)
+            if cell?.accessoryType == .checkmark {
+                cell?.accessoryType = .none
+            } else {
+                cell?.accessoryType = .checkmark
+            }
+        } else {
+            let urlStr = articleUdArray[indexPath.row]["urlString"] as? String ?? "no urlText value"
+            selectedUrl = URL(string: urlStr)
+            performSegue(withIdentifier: "toReadWebVC", sender: nil)
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -111,11 +143,9 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
             setArticlesUdFromArray(from: articleByDateArray)
         }
     }
-    
 }
 
-
-extension ArticleListViewController {
+extension ArticleListViewController: UINavigationControllerDelegate {
     
     func initDict() { // デバック用にダミーデータを入れる
         ud.removeSuite(named: "articleUdArray")
@@ -198,9 +228,33 @@ extension ArticleListViewController {
         articleTableView.tableFooterView = UIView(frame: .zero)
         articleTableView.separatorInset = UIEdgeInsetsMake(0, 8, 0, 0) // 文字の頭に合わせている
         
+        setNavigationBarContents()
         
         // 最初はtoolbarを下に隠しておく
         toolbar.frame.origin.y = self.articleTableView.bottomY
+    }
+    
+    // isEditingTableViewに応じてnavigationControllerの要素を変更
+    func setNavigationBarContents() {
+        guard let navigationController = self.navigationController else {
+            print("self.navigationController?がない")
+            return
+        }
+        guard let navigationBarTopItem = navigationController.navigationBar.topItem else {
+            print("navigationController.navigationBar.topItem?がない")
+            return
+        }
+        
+        if isEditingTableView {
+            let rightBarButtonItem = UIBarButtonItem(title: "完了", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
+            self.navigationItem.rightBarButtonItem = rightBarButtonItem
+            navigationBarTopItem.title = "記事を選択"
+        } else {
+            let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
+            self.navigationItem.rightBarButtonItem = rightBarButtonItem
+            navigationBarTopItem.title = ""
+        }
+        
     }
     
     // [記事]をマークダウン形式の文字列に変換
@@ -277,5 +331,12 @@ extension ArticleListViewController {
         activitySheet.excludedActivityTypes = excludeActivity
         present(activitySheet, animated: true, completion: {() -> Void in
         })
+    }
+    
+    func controlCheckedArticleArray() {
+        //取得したメモリ空間は残して、配列のすべての要素を削除する。
+        checkedArticleByDateArray.removeAll(keepingCapacity: true)
+        
+        
     }
 }

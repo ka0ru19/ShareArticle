@@ -30,24 +30,25 @@
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Jo4-zf-beu"/>
-                                    <barButtonItem title="マークダウンに変換" id="LDY-vg-aWf">
+                                    <barButtonItem title="記事をマークダウンに変換" id="LDY-vg-aWf">
                                         <connections>
                                             <action selector="onTappedChangeToMarkDownButton:" destination="BYZ-38-t0r" id="TII-V7-oja"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="G4T-w8-qSd"/>
+                                    <barButtonItem systemItem="action" id="h1X-n0-hPX">
+                                        <connections>
+                                            <action selector="onTappedActionButton:" destination="BYZ-38-t0r" id="2h4-Hf-MEQ"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" id="p2c-2D-LUn">
-                        <barButtonItem key="rightBarButtonItem" title="編集" id="jRd-GW-V0N"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="p2c-2D-LUn"/>
                     <connections>
                         <outlet property="articleTableView" destination="g3C-El-CLa" id="MRS-qx-NIM"/>
-                        <outlet property="outputButton" destination="jRd-GW-V0N" id="Ibp-Z9-aFg"/>
                         <outlet property="outputSelectedItemsButton" destination="LDY-vg-aWf" id="QhG-Ue-slt"/>
                         <outlet property="toolbar" destination="qQe-eO-t6I" id="7iV-Nl-qDd"/>
                         <segue destination="2IS-5V-m73" kind="push" identifier="toReadWebVC" id="sv4-Fw-Trm"/>
