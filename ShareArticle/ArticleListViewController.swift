@@ -21,7 +21,7 @@ class ArticleListViewController: UIViewController {
     var articleArray: [Article] = []
     
     var articleDateStringArray: [String] = [] // 記事の日付を管理する配列: セクションのタイトルで使う
-    var articleArrayByDateArray: [[Article]]  = [] // セクション分けして記事を表示するのに使う
+    var articleByDateArray: [[Article]]  = [] // セクション分けして記事を表示するのに使う
     
     var selectedUrl: URL!
     
@@ -58,33 +58,35 @@ class ArticleListViewController: UIViewController {
 
 extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1 //dateArray.count 一旦セクション関係なし
+        return articleDateStringArray.count // セクションの数
     }
     
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return dateArray[section]
-//    }
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return articleDateStringArray[section]
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return articleArray.count
+        return articleByDateArray[section].count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "articleCell", for: indexPath) as! ArticleTableViewCell
-        cell.titleLabel.text = articleArray[indexPath.row].title
-        cell.urlLabel.text = String(describing: articleArray[indexPath.row].url as URL)
-        cell.timeLabel.text = articleArray[indexPath.row].date.timeString()
-        if let comment = articleArray[indexPath.row].comment {
+        
+        cell.titleLabel.text = articleByDateArray[indexPath.section][indexPath.row].title
+        cell.urlLabel.text = String(describing: articleByDateArray[indexPath.section][indexPath.row].url as URL)
+        cell.timeLabel.text = articleByDateArray[indexPath.section][indexPath.row].date.timeString()
+        if let comment = articleByDateArray[indexPath.section][indexPath.row].comment {
             if comment != "" {
                 cell.commentLabel.text = comment
             } else {
                 cell.commentLabel.isHidden = true
             }
         } else {
-            print("articleArray[indexPath.row][\"comment\"]自体がnil: やばい")
+            print("articleArrayByDateArray[indexRow.section][indexPath.row][\"comment\"]自体がnil: やばい")
         }
         cell.thumbnailImageView.backgroundColor = UIColor.cyan
+        
         return cell
     }
     
@@ -94,30 +96,45 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         performSegue(withIdentifier: "toReadWebVC", sender: nil)
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // スワイプで削除された時
+            articleByDateArray[indexPath.section].remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            if articleByDateArray[indexPath.section].count == 0 {
+                articleDateStringArray.remove(at: indexPath.section)
+                articleByDateArray.remove(at: indexPath.section)
+                tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
+            }
+            
+            setArticlesUdFromArray(from: articleByDateArray)
+        }
+    }
+    
 }
 
 
 extension ArticleListViewController {
     
-    func initDict() {
-        
+    func initDict() { // デバック用にダミーデータを入れる
         ud.removeSuite(named: "articleUdArray")
         articleUdArray = []
         
         var titleArray: [String] = ["mac","ipad","iphone"]
         var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
-                                   URL(string: "https://www.apple.com/jp/ipad/")!,
-                                   URL(string: "https://www.apple.com/jp/iphone/")!]
+                               URL(string: "https://www.apple.com/jp/ipad/")!,
+                               URL(string: "https://www.apple.com/jp/iphone/")!]
         var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
         var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
         
         var atc:Article!
         for i in 0 ..< titleArray.count {
             atc = Article(title: titleArray[i],
-                                 urlString: String(describing: urlArray[i] as URL),
-                                 dateString: dateArray[i],
-                                 imageNsData: nil,
-                                 comment: commentArray[i])
+                          urlString: String(describing: urlArray[i] as URL),
+                          dateString: dateArray[i],
+                          imageNsData: nil,
+                          comment: commentArray[i])
             
             articleUdArray.append(atc.change2UdDict())
         }
@@ -151,11 +168,11 @@ extension ArticleListViewController {
         var currentDateString: String = articleArray[0].date.dateString() // "yyyy/MM/dd"
         var currentArticleArray: [Article] = []
         articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
-        articleArrayByDateArray = [] // [[Article]]
+        articleByDateArray = [] // [[Article]]
         for article in articleArray {
             let thisDateString = article.date.dateString()
             if currentDateString != thisDateString {
-                articleArrayByDateArray.append(currentArticleArray)
+                articleByDateArray.append(currentArticleArray)
                 currentArticleArray = []
                 currentDateString = thisDateString
                 articleDateStringArray.append(currentDateString)
@@ -163,14 +180,13 @@ extension ArticleListViewController {
             currentArticleArray.append(article)
         }
         if currentArticleArray.count > 0 {
-            articleArrayByDateArray.append(currentArticleArray)
+            articleByDateArray.append(currentArticleArray)
         }
         print(articleDateStringArray)
-        print(articleArrayByDateArray)
+        print(articleByDateArray)
     }
     
     func initView() {
-        
         articleTableView.delegate = self
         articleTableView.dataSource = self
         articleTableView.register(UINib(nibName: "ArticleTableViewCell", bundle: nil),
@@ -231,6 +247,20 @@ extension ArticleListViewController {
         actionSheet.addAction(cancel)
         
         self.present(actionSheet, animated: true, completion: nil)
+    }
+    
+    // [[Article]]からudに保存する
+    func setArticlesUdFromArray(from targetArrayOfArray: [[Article]]) {
+        articleArray = targetArrayOfArray.joined().map {$0} // 結合: [[Article]] -> [Article]
+        
+        ud.removeSuite(named: "articleUdArray")
+        articleUdArray = []
+        
+        for article in articleArray {
+            articleUdArray.append(article.change2UdDict())
+        }
+        
+        ud.set(articleUdArray, forKey: "articleUdArray")
     }
     
     func showUiActivity(text: String) {
