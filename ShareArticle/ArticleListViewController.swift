@@ -18,7 +18,7 @@ class ArticleListViewController: UIViewController {
     let ud = UserDefaults.standard
     
     var articleDictionary: Dictionary<String, [Article]> = [:]
-    var articleArray: [Article] = []
+//    var articleArray: [Article] = []
     
     var articleDateStringArray: [String] = [] // 記事の日付を管理する配列: セクションのタイトルで使う
     var articleByDateArray: [[Article]]  = [] // セクション分けして記事を表示するのに使う
@@ -59,13 +59,14 @@ class ArticleListViewController: UIViewController {
     // 「出力」ボタン
     func onTappedOutputButton(_ sender: UIBarButtonItem) {
         isEditingTableView = !isEditingTableView // スイッチ
+        articleTableView.reloadData()
         controlCheckedArticleArray()
         setNavigationBarContents()
     }
     
     // 「記事をマークダウンに変換」ボタン
     @IBAction func onTappedChangeToMarkDownButton(_ sender: UIBarButtonItem) {
-        changeArticlesToMarkDown(targetArray: articleArray)
+        changeArticlesToMarkDown()
     }
     
     // Actionボタン
@@ -114,6 +115,8 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditingTableView {
+            checkedArticleByDateArray[indexPath.section][indexPath.row] = !checkedArticleByDateArray[indexPath.section][indexPath.row]
+            
             let cell = tableView.cellForRow(at: indexPath)
             if cell?.accessoryType == .checkmark {
                 cell?.accessoryType = .none
@@ -142,6 +145,10 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
             
             setArticlesUdFromArray(from: articleByDateArray)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return !isEditingTableView // 出力記事の選択中はスワイプ削除禁止
     }
 }
 
@@ -174,7 +181,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
     }
     
     func loadArticleArrayFromUd() {
-        articleArray = []
+        var articleArray: [Article] = []
         if let obj = ud.array(forKey: "articleUdArray") {
             articleUdArray = obj as? [Dictionary<String, Any>] ?? []
             print(articleUdArray)
@@ -212,6 +219,8 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         if currentArticleArray.count > 0 {
             articleByDateArray.append(currentArticleArray)
         }
+        
+        articleArray.removeAll(keepingCapacity: true)
         print(articleDateStringArray)
         print(articleByDateArray)
     }
@@ -258,7 +267,17 @@ extension ArticleListViewController: UINavigationControllerDelegate {
     }
     
     // [記事]をマークダウン形式の文字列に変換
-    func changeArticlesToMarkDown(targetArray: [Article]) {
+    func changeArticlesToMarkDown() {
+        // 選択された記事のみを書き出す
+        var targetArray: [Article] = []
+        for d in 0 ..< articleByDateArray.count {
+            for a in 0 ..< articleByDateArray[d].count {
+                if checkedArticleByDateArray[d][a] {
+                    targetArray.append(articleByDateArray[d][a])
+                }
+            }
+         }
+        
         var markdownText: String = ""
         var markdownSentence: String!
         for article in targetArray {
@@ -278,7 +297,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         
         print(markdownText)
         
-        let actionSheet = UIAlertController(title: "マークダウン形式で保存します", message: "出力先を選択してください", preferredStyle: UIAlertControllerStyle.actionSheet)
+        let actionSheet = UIAlertController(title: "マークダウン形式で保存します", message: "出力先を選択してください", preferredStyle: .actionSheet)
         
         let action1 = UIAlertAction(title: "クリップボードにコピーする", style: UIAlertActionStyle.default, handler: {
             (action: UIAlertAction!) in
@@ -305,7 +324,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
     
     // [[Article]]からudに保存する
     func setArticlesUdFromArray(from targetArrayOfArray: [[Article]]) {
-        articleArray = targetArrayOfArray.joined().map {$0} // 結合: [[Article]] -> [Article]
+        let articleArray = targetArrayOfArray.joined().map {$0} // 結合: [[Article]] -> [Article]
         
         ud.removeSuite(named: "articleUdArray")
         articleUdArray = []
@@ -334,9 +353,23 @@ extension ArticleListViewController: UINavigationControllerDelegate {
     }
     
     func controlCheckedArticleArray() {
+        if !isEditingTableView { return }
+        
         //取得したメモリ空間は残して、配列のすべての要素を削除する。
         checkedArticleByDateArray.removeAll(keepingCapacity: true)
         
+        // 全てfalseでarticleByDateArrayと同じ要素構成の[[Bool]]配列を作成
+        var tmepBoolArray: [Bool] = []
+        for d in 0 ..< articleByDateArray.count {
+            for a in 0 ..< articleByDateArray[d].count {
+                tmepBoolArray.append(false)
+                if a == articleByDateArray[d].count - 1 {
+                    checkedArticleByDateArray.append(tmepBoolArray)
+                    tmepBoolArray.removeAll(keepingCapacity: true)
+                }
+            }
+        }
         
+        print(checkedArticleByDateArray)
     }
 }
