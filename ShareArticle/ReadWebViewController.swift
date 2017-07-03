@@ -72,7 +72,7 @@ class ReadWebViewController: UIViewController {
             return
         }
         if String(describing: postUrl) == "" {
-            print("urlがない")
+            print("urlが\"\"") // urlが""
             return
         }
 //        let postUrl = self.webView.request?.url ?? originUrl
@@ -129,8 +129,6 @@ extension ReadWebViewController {
             stopButton.tintColor = UIColor.gray
         }
     }
-    
-    
 }
 
 extension ReadWebViewController: UIWebViewDelegate {
