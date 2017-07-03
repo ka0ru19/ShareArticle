@@ -63,25 +63,23 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
 //    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return articleUdArray.count // のちのちarticleArrayにしないといけない日がくるかも
+        return articleArray.count // のちのちarticleArrayにしないといけない日がくるかも
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "articleCell", for: indexPath) as! ArticleTableViewCell
-        cell.thumbnailImageView.backgroundColor = UIColor(colorLiteralRed: 0, green: 0, blue: 1, alpha: 0.5)
-        cell.urlLabel.text = articleUdArray[indexPath.row]["urlString"] as? String ?? "no-url"
-        cell.titleLabel.text = articleUdArray[indexPath.row]["title"] as? String ?? "no-title"
-        let date: Date? = articleUdArray[indexPath.row]["date"] as? Date
-        cell.timeLabel.text = date?.timeString() ?? "no-date"
-        if let comment = articleUdArray[indexPath.row]["comment"] as? String {
+        cell.titleLabel.text = articleArray[indexPath.row].title
+        cell.urlLabel.text = String(describing: articleArray[indexPath.row].url)
+        cell.timeLabel.text = articleArray[indexPath.row].date.timeString()
+        if let comment = articleArray[indexPath.row].comment {
             if comment != "" {
                 cell.commentLabel.text = comment
             } else {
                 cell.commentLabel.isHidden = true
             }
         } else {
-            print("articleUdArray[indexPath.row][\"comment\"]自体がnil: やばい")
+            print("articleArray[indexPath.row][\"comment\"]自体がnil: やばい")
         }
         return cell
     }
@@ -106,7 +104,7 @@ extension ArticleListViewController {
         var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
                                    URL(string: "https://www.apple.com/jp/ipad/")!,
                                    URL(string: "https://www.apple.com/jp/iphone/")!]
-        var dateArray = ["2017/06/11 02:11:58 +0900","2017/06/10 02:45:28 +0900","2017/06/09 03:28:53 +0900"]
+        var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
         var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
         
         var atc:Article!
@@ -132,12 +130,15 @@ extension ArticleListViewController {
         } else {
             print("articleUdArray keyでヒットするobjがない")
         }
+        
+        // articleArrayに代入
         for articleUd in articleUdArray {
             if let article = Article(from: articleUd) {
                 articleArray.append(article)
             }
         }
-        
+        // 日付でソート(新しい順)
+        articleArray.sort { $1.date < $0.date }
     }
     
     func initView() {
