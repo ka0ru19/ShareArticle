@@ -10,7 +10,7 @@ import UIKit
 
 class ArticleListViewController: UIViewController {
     
-//    @IBOutlet weak var outputButton: UIBarButtonItem!
+    //    @IBOutlet weak var outputButton: UIBarButtonItem!
     @IBOutlet weak var articleTableView: UITableView!
     @IBOutlet weak var toolbar: UIToolbar!
     @IBOutlet weak var outputSelectedItemsButton: UIBarButtonItem!
@@ -18,7 +18,7 @@ class ArticleListViewController: UIViewController {
     let ud = UserDefaults.standard
     
     var articleDictionary: Dictionary<String, [Article]> = [:]
-//    var articleArray: [Article] = []
+    //    var articleArray: [Article] = []
     
     var articleDateStringArray: [String] = [] // 記事の日付を管理する配列: セクションのタイトルで使う
     var articleByDateArray: [[Article]]  = [] // セクション分けして記事を表示するのに使う
@@ -54,6 +54,11 @@ class ArticleListViewController: UIViewController {
             let nextVC = segue.destination as! ReadWebViewController
             nextVC.originUrl = self.selectedUrl
         }
+    }
+    
+    // Addボタン
+    func onTappedAddButton(_ sender: UIBarButtonItem) {
+        showUrlTextInputAlert()
     }
     
     // 「出力」ボタン
@@ -133,7 +138,7 @@ extension ArticleListViewController {
         
         self.present(actionSheet, animated: true, completion: nil)
     }
-
+    
     // 選択された記事を管理する
     func controlCheckedArticleArray() {
         if !isEditingTableView { return }
@@ -294,8 +299,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
                 cell?.accessoryType = .checkmark
             }
         } else {
-            let urlStr = articleUdArray[indexPath.row]["urlString"] as? String ?? "no urlText value"
-            selectedUrl = URL(string: urlStr)
+            selectedUrl = articleByDateArray[indexPath.section][indexPath.row].url as URL
             performSegue(withIdentifier: "toReadWebVC", sender: nil)
         }
         
@@ -371,10 +375,13 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         }
         
         if isEditingTableView {
+            self.navigationItem.leftBarButtonItem = nil
             let rightBarButtonItem = UIBarButtonItem(title: "完了", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
             navigationBarTopItem.title = "記事を選択"
         } else {
+            let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(onTappedAddButton(_:)))
+            self.navigationItem.leftBarButtonItem = leftBarButtonItem
             let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
             navigationBarTopItem.title = ""
@@ -395,5 +402,67 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         activitySheet.excludedActivityTypes = excludeActivity
         present(activitySheet, animated: true, completion: {() -> Void in
         })
+    }
+    
+    func showUrlTextInputAlert() {
+        // テキストフィールド付きアラート表示
+        let alert = UIAlertController(title: "URLからページを開きます", message: "URLを入力してください", preferredStyle: .alert)
+        
+        // 「開く」ボタンの設定
+        let openAction = UIAlertAction(title: "開く", style: .default, handler: {
+            (action:UIAlertAction!) -> Void in
+            if let textFields = alert.textFields {
+                for textField in textFields {
+                    let textFieldText = textField.text ?? ""
+                    let urlString = textFieldText != "" ? textFieldText : "https://www.google.com/"
+                    print(urlString)
+                    self.requestOpenWebView(urlString: urlString)
+                }
+            }
+        })
+        alert.addAction(openAction)
+        
+        // キャンセルボタンの設定
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        // テキストフィールドを追加
+        alert.addTextField(configurationHandler: {(textField: UITextField!) -> Void in
+            textField.placeholder = "https://www.google.com/"
+        })
+        
+        alert.view.setNeedsLayout() // シミュレータの種類によっては、これがないと警告が発生
+        
+        // アラートを画面に表示
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func showCannotOpenUrlAlert() {
+        // 任意のurlを開けなかったときのalert
+        let alert = UIAlertController(title: "ページを開けませんでした", message: "URLが正しくありませんでした", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alert, animated: true, completion: nil)
+    }
+}
+
+extension ArticleListViewController {
+    
+    func requestOpenWebView(urlString: String) {
+        if verifyUrl(urlString: urlString) {
+            selectedUrl = URL(string: urlString)
+            performSegue(withIdentifier: "toReadWebVC", sender: nil)
+        } else {
+            showCannotOpenUrlAlert()
+            print("urlが正しくありませんでした")
+        }
+    }
+    
+    func verifyUrl (urlString: String?) -> Bool {
+        if let urlString = urlString {
+            if let url  = URL(string: urlString) {
+                return UIApplication.shared.canOpenURL(url)
+            }
+        }
+        return false
     }
 }

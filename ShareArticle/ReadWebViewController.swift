@@ -35,6 +35,7 @@ class ReadWebViewController: UIViewController {
         self.webView.delegate = nil
         self.webView.stopLoading()
         self.webView.loadHTMLString("", baseURL: nil)
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
         print("deinit ReadWebViewController")
     }
 
@@ -136,7 +137,7 @@ extension ReadWebViewController: UIWebViewDelegate {
     func webViewDidStartLoad(_ webView: UIWebView) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         setAllControlButtonsStatus()
-        currentURL = self.webView.request?.url ?? URL(string: "https://www.google.co.jp/")!
+        currentURL = self.webView.request?.url ?? URL(string: "https://www.google.com/")!
     }
     
     func webViewDidFinishLoad(_ webView: UIWebView) {
