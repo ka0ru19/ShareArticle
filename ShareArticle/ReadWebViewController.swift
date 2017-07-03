@@ -30,6 +30,13 @@ class ReadWebViewController: UIViewController {
         
         setAllControlButtonsStatus()
     }
+    
+    deinit {
+        self.webView.delegate = nil
+        self.webView.stopLoading()
+        self.webView.loadHTMLString("", baseURL: nil)
+        print("deinit ReadWebViewController")
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
