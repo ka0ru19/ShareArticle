@@ -60,6 +60,7 @@ class ArticleListViewController: UIViewController {
     func onTappedOutputButton(_ sender: UIBarButtonItem) {
         isEditingTableView = !isEditingTableView // スイッチ
         articleTableView.reloadData()
+        animateToolBar()
         controlCheckedArticleArray()
         setNavigationBarContents()
     }
@@ -75,6 +76,175 @@ class ArticleListViewController: UIViewController {
     
 }
 
+// データ操作
+extension ArticleListViewController {
+    // [記事]をマークダウン形式の文字列に変換
+    func changeArticlesToMarkDown() {
+        // 選択された記事のみを書き出す
+        var targetArray: [Article] = []
+        for d in 0 ..< articleByDateArray.count {
+            for a in 0 ..< articleByDateArray[d].count {
+                if checkedArticleByDateArray[d][a] {
+                    targetArray.append(articleByDateArray[d][a])
+                }
+            }
+        }
+        
+        var markdownText: String = ""
+        var markdownSentence: String!
+        for article in targetArray {
+            let textStr = article.title ?? "no-title"
+            let urlStr = String(describing: article.url as URL) // asがないとoptinalになる
+            let commentStr = article.comment ?? ""
+            var commentStrBlock = ""
+            if commentStr != "" {
+                let sentenceArray: [String] = commentStr.components(separatedBy: "\n")
+                for sentence in sentenceArray {
+                    commentStrBlock += "  - " + sentence + "\n"
+                }
+            }
+            markdownSentence = "- [" + textStr + "](" + urlStr + ")\n" + commentStrBlock
+            markdownText += markdownSentence
+        }
+        
+        print(markdownText)
+        
+        let actionSheet = UIAlertController(title: "マークダウン形式で保存します", message: "出力先を選択してください", preferredStyle: .actionSheet)
+        
+        let action1 = UIAlertAction(title: "クリップボードにコピーする", style: UIAlertActionStyle.default, handler: {
+            (action: UIAlertAction!) in
+            let board = UIPasteboard.general // クリップボード呼び出し
+            board.setValue(markdownText, forPasteboardType: "public.text") // クリップボードに貼り付け
+        })
+        
+        let action2 = UIAlertAction(title: "他のアプリに出力する", style: UIAlertActionStyle.default, handler: {
+            (action: UIAlertAction!) in
+            self.showUiActivity(text: markdownText)
+        })
+        
+        let cancel = UIAlertAction(title: "キャンセル", style: UIAlertActionStyle.cancel, handler: {
+            (action: UIAlertAction!) in
+            print("キャンセルをタップした時の処理")
+        })
+        
+        actionSheet.addAction(action1)
+        actionSheet.addAction(action2)
+        actionSheet.addAction(cancel)
+        
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+
+    // 選択された記事を管理する
+    func controlCheckedArticleArray() {
+        if !isEditingTableView { return }
+        
+        //取得したメモリ空間は残して、配列のすべての要素を削除する。
+        checkedArticleByDateArray.removeAll(keepingCapacity: true)
+        
+        // 全てfalseでarticleByDateArrayと同じ要素構成の[[Bool]]配列を作成
+        var tmepBoolArray: [Bool] = []
+        for d in 0 ..< articleByDateArray.count {
+            for a in 0 ..< articleByDateArray[d].count {
+                tmepBoolArray.append(false)
+                if a == articleByDateArray[d].count - 1 {
+                    checkedArticleByDateArray.append(tmepBoolArray)
+                    tmepBoolArray.removeAll(keepingCapacity: true)
+                }
+            }
+        }
+        print(checkedArticleByDateArray)
+    }
+}
+
+// データベース連携操作
+extension ArticleListViewController {
+    func initDict() { // デバック用にダミーデータを入れる
+        ud.removeSuite(named: "articleUdArray")
+        articleUdArray = []
+        
+        var titleArray: [String] = ["mac","ipad","iphone"]
+        var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
+                               URL(string: "https://www.apple.com/jp/ipad/")!,
+                               URL(string: "https://www.apple.com/jp/iphone/")!]
+        var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
+        var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
+        
+        var atc:Article!
+        for i in 0 ..< titleArray.count {
+            atc = Article(title: titleArray[i],
+                          urlString: String(describing: urlArray[i] as URL),
+                          dateString: dateArray[i],
+                          imageNsData: nil,
+                          comment: commentArray[i])
+            
+            articleUdArray.append(atc.change2UdDict())
+        }
+        
+        print(articleUdArray)
+        ud.set(articleUdArray, forKey: "articleUdArray")
+    }
+    
+    func loadArticleArrayFromUd() {
+        var articleArray: [Article] = []
+        if let obj = ud.array(forKey: "articleUdArray") {
+            articleUdArray = obj as? [Dictionary<String, Any>] ?? []
+            print(articleUdArray)
+        } else {
+            print("articleUdArray keyでヒットするobjがない")
+        }
+        
+        // articleArrayに代入
+        for articleUd in articleUdArray {
+            if let article = Article(from: articleUd) {
+                articleArray.append(article)
+            }
+        }
+        
+        if articleArray.count == 0 { return }
+        
+        // 日付でソート(新しい順)
+        articleArray.sort { $1.date < $0.date }
+        
+        // セクションわけのために日付ごとに記事を分ける
+        var currentDateString: String = articleArray[0].date.dateString() // "yyyy/MM/dd"
+        var currentArticleArray: [Article] = []
+        articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
+        articleByDateArray = [] // [[Article]]
+        for article in articleArray {
+            let thisDateString = article.date.dateString()
+            if currentDateString != thisDateString {
+                articleByDateArray.append(currentArticleArray)
+                currentArticleArray = []
+                currentDateString = thisDateString
+                articleDateStringArray.append(currentDateString)
+            }
+            currentArticleArray.append(article)
+        }
+        if currentArticleArray.count > 0 {
+            articleByDateArray.append(currentArticleArray)
+        }
+        
+        articleArray.removeAll(keepingCapacity: true)
+        print(articleDateStringArray)
+        print(articleByDateArray)
+    }
+    
+    // [[Article]]からudに保存する
+    func setArticlesUdFromArray(from targetArrayOfArray: [[Article]]) {
+        let articleArray = targetArrayOfArray.joined().map {$0} // 結合: [[Article]] -> [Article]
+        
+        ud.removeSuite(named: "articleUdArray")
+        articleUdArray = []
+        
+        for article in articleArray {
+            articleUdArray.append(article.change2UdDict())
+        }
+        
+        ud.set(articleUdArray, forKey: "articleUdArray")
+    }
+}
+
+// tableView操作
 extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return articleDateStringArray.count // セクションの数
@@ -152,78 +322,8 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
     }
 }
 
+// view操作
 extension ArticleListViewController: UINavigationControllerDelegate {
-    
-    func initDict() { // デバック用にダミーデータを入れる
-        ud.removeSuite(named: "articleUdArray")
-        articleUdArray = []
-        
-        var titleArray: [String] = ["mac","ipad","iphone"]
-        var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
-                               URL(string: "https://www.apple.com/jp/ipad/")!,
-                               URL(string: "https://www.apple.com/jp/iphone/")!]
-        var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
-        var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
-        
-        var atc:Article!
-        for i in 0 ..< titleArray.count {
-            atc = Article(title: titleArray[i],
-                          urlString: String(describing: urlArray[i] as URL),
-                          dateString: dateArray[i],
-                          imageNsData: nil,
-                          comment: commentArray[i])
-            
-            articleUdArray.append(atc.change2UdDict())
-        }
-        
-        print(articleUdArray)
-        ud.set(articleUdArray, forKey: "articleUdArray")
-    }
-    
-    func loadArticleArrayFromUd() {
-        var articleArray: [Article] = []
-        if let obj = ud.array(forKey: "articleUdArray") {
-            articleUdArray = obj as? [Dictionary<String, Any>] ?? []
-            print(articleUdArray)
-        } else {
-            print("articleUdArray keyでヒットするobjがない")
-        }
-        
-        // articleArrayに代入
-        for articleUd in articleUdArray {
-            if let article = Article(from: articleUd) {
-                articleArray.append(article)
-            }
-        }
-        
-        if articleArray.count == 0 { return }
-        
-        // 日付でソート(新しい順)
-        articleArray.sort { $1.date < $0.date }
-        
-        // セクションわけのために日付ごとに記事を分ける
-        var currentDateString: String = articleArray[0].date.dateString() // "yyyy/MM/dd"
-        var currentArticleArray: [Article] = []
-        articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
-        articleByDateArray = [] // [[Article]]
-        for article in articleArray {
-            let thisDateString = article.date.dateString()
-            if currentDateString != thisDateString {
-                articleByDateArray.append(currentArticleArray)
-                currentArticleArray = []
-                currentDateString = thisDateString
-                articleDateStringArray.append(currentDateString)
-            }
-            currentArticleArray.append(article)
-        }
-        if currentArticleArray.count > 0 {
-            articleByDateArray.append(currentArticleArray)
-        }
-        
-        articleArray.removeAll(keepingCapacity: true)
-        print(articleDateStringArray)
-        print(articleByDateArray)
-    }
     
     func initView() {
         articleTableView.delegate = self
@@ -240,7 +340,23 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         setNavigationBarContents()
         
         // 最初はtoolbarを下に隠しておく
-        toolbar.frame.origin.y = self.articleTableView.bottomY
+        toolbar.frame.origin.y = self.view.bottomY
+    }
+    
+    func animateToolBar() {
+        if isEditingTableView {
+            // 編集モード
+            UIView.animate(withDuration: 0.2, animations: {
+                self.articleTableView.frame.size.height -= self.toolbar.frame.size.height
+                self.toolbar.frame.origin.y = self.view.bottomY - self.toolbar.frame.size.height
+            })
+        } else {
+            //通常モード
+            UIView.animate(withDuration: 0.2, animations: {
+                self.articleTableView.frame.size.height += self.toolbar.frame.size.height
+                self.toolbar.frame.origin.y = self.view.bottomY
+            })
+        }
     }
     
     // isEditingTableViewに応じてnavigationControllerの要素を変更
@@ -263,77 +379,6 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
             navigationBarTopItem.title = ""
         }
-        
-    }
-    
-    // [記事]をマークダウン形式の文字列に変換
-    func changeArticlesToMarkDown() {
-        // 選択された記事のみを書き出す
-        var targetArray: [Article] = []
-        for d in 0 ..< articleByDateArray.count {
-            for a in 0 ..< articleByDateArray[d].count {
-                if checkedArticleByDateArray[d][a] {
-                    targetArray.append(articleByDateArray[d][a])
-                }
-            }
-         }
-        
-        var markdownText: String = ""
-        var markdownSentence: String!
-        for article in targetArray {
-            let textStr = article.title ?? "no-title"
-            let urlStr = String(describing: article.url as URL) // asがないとoptinalになる
-            let commentStr = article.comment ?? ""
-            var commentStrBlock = ""
-            if commentStr != "" {
-                let sentenceArray: [String] = commentStr.components(separatedBy: "\n")
-                for sentence in sentenceArray {
-                    commentStrBlock += "  - " + sentence + "\n"
-                }
-            }
-            markdownSentence = "- [" + textStr + "](" + urlStr + ")\n" + commentStrBlock
-            markdownText += markdownSentence
-        }
-        
-        print(markdownText)
-        
-        let actionSheet = UIAlertController(title: "マークダウン形式で保存します", message: "出力先を選択してください", preferredStyle: .actionSheet)
-        
-        let action1 = UIAlertAction(title: "クリップボードにコピーする", style: UIAlertActionStyle.default, handler: {
-            (action: UIAlertAction!) in
-            let board = UIPasteboard.general // クリップボード呼び出し
-            board.setValue(markdownText, forPasteboardType: "public.text") // クリップボードに貼り付け
-        })
-        
-        let action2 = UIAlertAction(title: "他のアプリに出力する", style: UIAlertActionStyle.default, handler: {
-            (action: UIAlertAction!) in
-            self.showUiActivity(text: markdownText)
-        })
-        
-        let cancel = UIAlertAction(title: "キャンセル", style: UIAlertActionStyle.cancel, handler: {
-            (action: UIAlertAction!) in
-            print("キャンセルをタップした時の処理")
-        })
-        
-        actionSheet.addAction(action1)
-        actionSheet.addAction(action2)
-        actionSheet.addAction(cancel)
-        
-        self.present(actionSheet, animated: true, completion: nil)
-    }
-    
-    // [[Article]]からudに保存する
-    func setArticlesUdFromArray(from targetArrayOfArray: [[Article]]) {
-        let articleArray = targetArrayOfArray.joined().map {$0} // 結合: [[Article]] -> [Article]
-        
-        ud.removeSuite(named: "articleUdArray")
-        articleUdArray = []
-        
-        for article in articleArray {
-            articleUdArray.append(article.change2UdDict())
-        }
-        
-        ud.set(articleUdArray, forKey: "articleUdArray")
     }
     
     func showUiActivity(text: String) {
@@ -350,26 +395,5 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         activitySheet.excludedActivityTypes = excludeActivity
         present(activitySheet, animated: true, completion: {() -> Void in
         })
-    }
-    
-    func controlCheckedArticleArray() {
-        if !isEditingTableView { return }
-        
-        //取得したメモリ空間は残して、配列のすべての要素を削除する。
-        checkedArticleByDateArray.removeAll(keepingCapacity: true)
-        
-        // 全てfalseでarticleByDateArrayと同じ要素構成の[[Bool]]配列を作成
-        var tmepBoolArray: [Bool] = []
-        for d in 0 ..< articleByDateArray.count {
-            for a in 0 ..< articleByDateArray[d].count {
-                tmepBoolArray.append(false)
-                if a == articleByDateArray[d].count - 1 {
-                    checkedArticleByDateArray.append(tmepBoolArray)
-                    tmepBoolArray.removeAll(keepingCapacity: true)
-                }
-            }
-        }
-        
-        print(checkedArticleByDateArray)
     }
 }
