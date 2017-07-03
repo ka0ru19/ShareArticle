@@ -64,10 +64,11 @@ class ArticleListViewController: UIViewController {
     // 「出力」ボタン
     func onTappedOutputButton(_ sender: UIBarButtonItem) {
         isEditingTableView = !isEditingTableView // スイッチ
-        articleTableView.reloadData()
+        
         animateToolBar()
         controlCheckedArticleArray()
         setNavigationBarContents()
+        articleTableView.reloadData()
     }
     
     // 「記事をマークダウンに変換」ボタン
@@ -150,7 +151,7 @@ extension ArticleListViewController {
         var tmepBoolArray: [Bool] = []
         for d in 0 ..< articleByDateArray.count {
             for a in 0 ..< articleByDateArray[d].count {
-                tmepBoolArray.append(false)
+                tmepBoolArray.append(true)
                 if a == articleByDateArray[d].count - 1 {
                     checkedArticleByDateArray.append(tmepBoolArray)
                     tmepBoolArray.removeAll(keepingCapacity: true)
@@ -281,7 +282,11 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         }
         cell.thumbnailImageView.backgroundColor = UIColor.cyan
         
-        cell.accessoryType = .none
+        if isEditingTableView {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
         // セルが選択された時の背景色を消す
         cell.selectionStyle = .none
         
@@ -293,10 +298,10 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
             checkedArticleByDateArray[indexPath.section][indexPath.row] = !checkedArticleByDateArray[indexPath.section][indexPath.row]
             
             let cell = tableView.cellForRow(at: indexPath)
-            if cell?.accessoryType == .checkmark {
-                cell?.accessoryType = .none
-            } else {
+            if checkedArticleByDateArray[indexPath.section][indexPath.row] {
                 cell?.accessoryType = .checkmark
+            } else {
+                cell?.accessoryType = .none
             }
         } else {
             selectedUrl = articleByDateArray[indexPath.section][indexPath.row].url as URL
