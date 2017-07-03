@@ -18,11 +18,15 @@ class ArticleListViewController: UIViewController {
     let ud = UserDefaults.standard
     
     var articleDictionary: Dictionary<String, [Article]> = [:]
+    var articleArray: [Article] = []
+    
+    var articleDateStringArray: [String] = [] // 記事の日付を管理する配列: セクションのタイトルで使う
+    var articleArrayByDateArray: [[Article]]  = [] // セクション分けして記事を表示するのに使う
     
     var selectedUrl: URL!
     
+    // デバック用のダミーデータ
     var dateArray = ["2017/06/11","2017/06/10","2017/06/09"]
-    var articleArray: [Article] = []
     var articleUdArray: [Dictionary<String, Any>] = [] // udで保存するために型変換した記事配列
     
     override func viewDidLoad() {
@@ -48,7 +52,6 @@ class ArticleListViewController: UIViewController {
         }
     }
     @IBAction func onTappedChangeToMarkDownButton(_ sender: UIBarButtonItem) {
-        print(articleArray)
         changeArticlesToMarkDown(targetArray: articleArray)
     }
 }
@@ -63,14 +66,14 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
 //    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return articleArray.count // のちのちarticleArrayにしないといけない日がくるかも
+        return articleArray.count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "articleCell", for: indexPath) as! ArticleTableViewCell
         cell.titleLabel.text = articleArray[indexPath.row].title
-        cell.urlLabel.text = String(describing: articleArray[indexPath.row].url)
+        cell.urlLabel.text = String(describing: articleArray[indexPath.row].url as URL)
         cell.timeLabel.text = articleArray[indexPath.row].date.timeString()
         if let comment = articleArray[indexPath.row].comment {
             if comment != "" {
@@ -81,6 +84,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         } else {
             print("articleArray[indexPath.row][\"comment\"]自体がnil: やばい")
         }
+        cell.thumbnailImageView.backgroundColor = UIColor.cyan
         return cell
     }
     
@@ -137,8 +141,32 @@ extension ArticleListViewController {
                 articleArray.append(article)
             }
         }
+        
+        if articleArray.count == 0 { return }
+        
         // 日付でソート(新しい順)
         articleArray.sort { $1.date < $0.date }
+        
+        // セクションわけのために日付ごとに記事を分ける
+        var currentDateString: String = articleArray[0].date.dateString() // "yyyy/MM/dd"
+        var currentArticleArray: [Article] = []
+        articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
+        articleArrayByDateArray = [] // [[Article]]
+        for article in articleArray {
+            let thisDateString = article.date.dateString()
+            if currentDateString != thisDateString {
+                articleArrayByDateArray.append(currentArticleArray)
+                currentArticleArray = []
+                currentDateString = thisDateString
+                articleDateStringArray.append(currentDateString)
+            }
+            currentArticleArray.append(article)
+        }
+        if currentArticleArray.count > 0 {
+            articleArrayByDateArray.append(currentArticleArray)
+        }
+        print(articleDateStringArray)
+        print(articleArrayByDateArray)
     }
     
     func initView() {
@@ -221,27 +249,3 @@ extension ArticleListViewController {
         })
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
