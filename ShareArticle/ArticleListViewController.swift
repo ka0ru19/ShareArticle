@@ -29,14 +29,12 @@ class ArticleListViewController: UIViewController {
     
     var selectedUrl: URL!
     
-    // デバック用のダミーデータ
-    var dateArray = ["2017/06/11","2017/06/10","2017/06/09"]
     var articleUdArray: [Dictionary<String, Any>] = [] // udで保存するために型変換した記事配列
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initDict()
+//        initDict() // データベースの初期化、ダミーデータの挿入
         initView()
     }
     
@@ -168,6 +166,7 @@ extension ArticleListViewController {
         ud.removeSuite(named: "articleUdArray")
         articleUdArray = []
         
+        // デバック用のダミーデータ
         var titleArray: [String] = ["mac","ipad","iphone"]
         var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
                                URL(string: "https://www.apple.com/jp/ipad/")!,

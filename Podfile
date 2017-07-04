@@ -6,5 +6,6 @@ target 'ShareArticle' do
   use_frameworks!
 
   # Pods for ShareArticle
+  pod 'OpenGraph'
 
 end

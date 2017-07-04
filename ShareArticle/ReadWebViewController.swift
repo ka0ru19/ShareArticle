@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import OpenGraph
 
 class ReadWebViewController: UIViewController {
 
@@ -66,8 +67,7 @@ class ReadWebViewController: UIViewController {
     }
     
     private func showUiActivity() {
-        let title = self.webView.stringByEvaluatingJavaScript(from: "document.title") ?? "no-title: cannot get title"
-        guard let postUrl = self.webView.request?.url else {
+                guard let postUrl = self.webView.request?.url else {
             print("self.webView.request?.urlがない: 読み込みが終わるまで待って。")
             return
         }
@@ -75,6 +75,9 @@ class ReadWebViewController: UIViewController {
             print("urlが\"\"") // urlが""
             return
         }
+        
+        let title = self.webView.stringByEvaluatingJavaScript(from: "document.title") ?? "no-title: cannot get title"
+        
 //        let postUrl = self.webView.request?.url ?? originUrl
         print("postUrl: \(postUrl)")
         let activityItems: [Any] = [title, postUrl]
@@ -88,6 +91,18 @@ class ReadWebViewController: UIViewController {
         activitySheet.excludedActivityTypes = excludeActivity
         present(activitySheet, animated: true, completion: {() -> Void in
         })
+    }
+    
+    func getImageUrl(fromUrl url: URL){
+        // urlからサムネイル画像のurlを非同期で取得
+        OpenGraph.fetch(url: url) { og, error in
+            // 非同期で返ってくる
+            if let imageUrlString = og?[.image] {
+                print(imageUrlString) // => og:image of the web site
+            } else if let err = error {
+                print("no-imageUrlString-error: \(err)")
+            }
+        }
     }
 }
 
