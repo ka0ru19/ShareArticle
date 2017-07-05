@@ -10,7 +10,7 @@ import UIKit
 import OpenGraph
 
 class ReadWebViewController: UIViewController {
-
+    
     @IBOutlet weak var webView: UIWebView!
     
     @IBOutlet weak var backButton: UIBarButtonItem!
@@ -39,12 +39,12 @@ class ReadWebViewController: UIViewController {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
         print("deinit ReadWebViewController")
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     @IBAction func onTappedBackButton(_ sender: UIBarButtonItem) {
         if !webView.canGoBack { return }
         webView.goBack() // 戻る
@@ -67,7 +67,7 @@ class ReadWebViewController: UIViewController {
     }
     
     private func showUiActivity() {
-                guard let postUrl = self.webView.request?.url else {
+        guard let postUrl = self.webView.request?.url else {
             print("self.webView.request?.urlがない: 読み込みが終わるまで待って。")
             return
         }
@@ -78,8 +78,9 @@ class ReadWebViewController: UIViewController {
         
         let title = self.webView.stringByEvaluatingJavaScript(from: "document.title") ?? "no-title: cannot get title"
         
-//        let postUrl = self.webView.request?.url ?? originUrl
+        getImageUrl(fromUrl: postUrl)
         print("postUrl: \(postUrl)")
+        
         let activityItems: [Any] = [title, postUrl]
         let appActivity = [PostFromUIActivity()]
         let activitySheet = UIActivityViewController(activityItems: activityItems, applicationActivities: appActivity)
@@ -106,27 +107,15 @@ class ReadWebViewController: UIViewController {
     }
 }
 
-extension ReadWebViewController {
+private extension ReadWebViewController {
     func setAllControlButtonsStatus() {
         // webviewの状態に応じて、3つ全てのボタンの色と操作許可を変更
-        setBackButtonStatus()
-        setNextButtonStatus()
-        setStopButtonStatus()
+        backButton.setState(isAvailable: webView.canGoBack)
+        nextButton.setState(isAvailable: webView.canGoForward)
+        stopButton.setState(isAvailable: webView.isLoading)
         
     }
-    
-    func setBackButtonStatus() {
-        backButton.setState(isAvailable: webView.canGoBack)
-    }
-    
-    func setNextButtonStatus() {
-        nextButton.setState(isAvailable: webView.canGoForward)
-    }
-    func setStopButtonStatus() {
-        stopButton.setState(isAvailable: webView.isLoading)
-    }
 }
-
 extension ReadWebViewController: UIWebViewDelegate {
     func webViewDidStartLoad(_ webView: UIWebView) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -141,9 +130,7 @@ extension ReadWebViewController: UIWebViewDelegate {
 }
 
 private extension UIBarButtonItem {
-
     func setState(isAvailable: Bool) {
-
         self.isEnabled = isAvailable
         self.tintColor = isAvailable ? UIColor.blue : UIColor.gray
     }
