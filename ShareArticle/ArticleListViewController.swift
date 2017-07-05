@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AlamofireImage
+import OpenGraph
 
 class ArticleListViewController: UIViewController {
     
@@ -34,7 +36,7 @@ class ArticleListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        initDict() // データベースの初期化、ダミーデータの挿入
+        //        initDict() // データベースの初期化、ダミーデータの挿入
         initView()
     }
     
@@ -54,12 +56,12 @@ class ArticleListViewController: UIViewController {
         }
     }
     
-    // Addボタン
+    // MARK: Addボタン
     func onTappedAddButton(_ sender: UIBarButtonItem) {
         showUrlTextInputAlert()
     }
     
-    // 「出力」ボタン
+    // MARK: 「出力」ボタン
     func onTappedOutputButton(_ sender: UIBarButtonItem) {
         isEditingTableView = !isEditingTableView // スイッチ
         
@@ -69,20 +71,20 @@ class ArticleListViewController: UIViewController {
         articleTableView.reloadData()
     }
     
-    // 「記事をマークダウンに変換」ボタン
+    // MARK: 「記事をマークダウンに変換」ボタン
     @IBAction func onTappedChangeToMarkDownButton(_ sender: UIBarButtonItem) {
         changeArticlesToMarkDown()
     }
     
-    // Actionボタン
+    // MARK: Actionボタン
     @IBAction func onTappedActionButton(_ sender: UIBarButtonItem) {
     }
     
 }
 
-// データ操作
+// MARK: - データ操作
 extension ArticleListViewController {
-    // [記事]をマークダウン形式の文字列に変換
+    // MARK: [記事]をマークダウン形式の文字列に変換
     func changeArticlesToMarkDown() {
         // 選択された記事のみを書き出す
         var targetArray: [Article] = []
@@ -138,7 +140,7 @@ extension ArticleListViewController {
         self.present(actionSheet, animated: true, completion: nil)
     }
     
-    // 選択された記事を管理する
+    // MARK: 選択された記事を管理する
     func controlCheckedArticleArray() {
         if !isEditingTableView { return }
         
@@ -189,6 +191,7 @@ extension ArticleListViewController {
         ud.set(articleUdArray, forKey: "articleUdArray")
     }
     
+    // MARK: udから読み込む
     func loadArticleArrayFromUd() {
         var articleArray: [Article] = []
         if let obj = ud.array(forKey: "articleUdArray") {
@@ -249,7 +252,7 @@ extension ArticleListViewController {
     }
 }
 
-// tableView操作
+// MARK: - tableView操作
 extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return articleDateStringArray.count // セクションの数
@@ -268,7 +271,8 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         let cell = tableView.dequeueReusableCell(withIdentifier: "articleCell", for: indexPath) as! ArticleTableViewCell
         
         cell.titleLabel.text = articleByDateArray[indexPath.section][indexPath.row].title
-        cell.urlLabel.text = String(describing: articleByDateArray[indexPath.section][indexPath.row].url as URL)
+        let url = articleByDateArray[indexPath.section][indexPath.row].url as URL
+        cell.urlLabel.text = String(describing: url)
         cell.timeLabel.text = articleByDateArray[indexPath.section][indexPath.row].date.timeString()
         if let comment = articleByDateArray[indexPath.section][indexPath.row].comment {
             if comment != "" {
@@ -280,6 +284,8 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
             print("articleArrayByDateArray[indexRow.section][indexPath.row][\"comment\"]自体がnil: やばい")
         }
         cell.thumbnailImageView.backgroundColor = UIColor.cyan
+        requestSetImage(imageView: cell.thumbnailImageView, imageUrl: url)
+        
         
         if isEditingTableView {
             cell.accessoryType = .checkmark
@@ -330,7 +336,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
     }
 }
 
-// view操作
+// MARK: - view操作
 extension ArticleListViewController: UINavigationControllerDelegate {
     
     func initView() {
@@ -367,7 +373,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         }
     }
     
-    // isEditingTableViewに応じてnavigationControllerの要素を変更
+    // MARK: isEditingTableViewに応じてnavigationControllerの要素を変更
     func setNavigationBarContents() {
         guard let navigationController = self.navigationController else {
             print("self.navigationController?がない")
@@ -409,7 +415,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
     }
     
     func showUrlTextInputAlert() {
-        // テキストフィールド付きアラート表示
+        // MARK: テキストフィールド付きアラート表示
         let alert = UIAlertController(title: "URLからページを開きます", message: "URLを入力してください", preferredStyle: .alert)
         
         // 「開く」ボタンの設定
@@ -442,13 +448,14 @@ extension ArticleListViewController: UINavigationControllerDelegate {
     }
     
     func showCannotOpenUrlAlert() {
-        // 任意のurlを開けなかったときのalert
+        // MARK: 任意のurlを開けなかったときのalert
         let alert = UIAlertController(title: "ページを開けませんでした", message: "URLが正しくありませんでした", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         self.present(alert, animated: true, completion: nil)
     }
 }
 
+// MARK: - urlのバリデーションなど
 extension ArticleListViewController {
     
     func requestOpenWebView(urlString: String) {
@@ -458,6 +465,40 @@ extension ArticleListViewController {
         } else {
             showCannotOpenUrlAlert()
             print("urlが正しくありませんでした")
+        }
+    }
+    
+//    func getImageUrl0(fromUrl url: URL) -> URL {
+//        // urlからサムネイル画像のurlを非同期で取得
+//        OpenGraph.fetch(url: url) { og, error in
+//            // 非同期で返ってくる
+//            if let imageUrlString = og?[.image] {
+//                print(imageUrlString) // => og:image of the web site
+//                return URL(string: imageUrlString)
+//            } else if let err = error {
+//                print("no-imageUrlString-error: \(err)")
+//            }
+//        }
+//    }
+//    
+    //    }
+
+    
+    func requestSetImage(imageView iv: UIImageView, imageUrl iu: URL) {
+        // urlからサムネイル画像のurlを非同期で取得してimageviewに表示
+        OpenGraph.fetch(url: iu) { og, error in
+            // 非同期で返ってくる
+            
+            guard let imageUrlString = og?[.image] else {
+                print("no-imageUrlString")
+                return
+            }
+            
+            guard let imageUrl = URL(string: imageUrlString) else {
+                return
+            }
+            
+            iv.af_setImage(withURL: imageUrl)
         }
     }
     

@@ -7,5 +7,6 @@ target 'ShareArticle' do
 
   # Pods for ShareArticle
   pod 'OpenGraph'
+  pod 'AlamofireImage', '~> 3.1'
 
 end

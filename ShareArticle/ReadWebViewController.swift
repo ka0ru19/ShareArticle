@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import OpenGraph
+
 
 class ReadWebViewController: UIViewController {
     
@@ -78,7 +78,6 @@ class ReadWebViewController: UIViewController {
         
         let title = self.webView.stringByEvaluatingJavaScript(from: "document.title") ?? "no-title: cannot get title"
         
-        getImageUrl(fromUrl: postUrl)
         print("postUrl: \(postUrl)")
         
         let activityItems: [Any] = [title, postUrl]
@@ -94,18 +93,7 @@ class ReadWebViewController: UIViewController {
         })
     }
     
-    func getImageUrl(fromUrl url: URL){
-        // urlからサムネイル画像のurlを非同期で取得
-        OpenGraph.fetch(url: url) { og, error in
-            // 非同期で返ってくる
-            if let imageUrlString = og?[.image] {
-                print(imageUrlString) // => og:image of the web site
-            } else if let err = error {
-                print("no-imageUrlString-error: \(err)")
-            }
-        }
     }
-}
 
 private extension ReadWebViewController {
     func setAllControlButtonsStatus() {
