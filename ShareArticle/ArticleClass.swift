@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AlamofireImage
+import OpenGraph
 
 class Article {
     // title, url, date は必須。
@@ -15,7 +17,7 @@ class Article {
     var date: Date! // 記事の保存日時
     var image: UIImage? // サムネイル
     var comment: String? // ユーザが入力する記事に対するコメント
-
+    
     // 初めて記事を保存するとき
     init?(title: String, url: URL) {
         self.title = title
@@ -30,7 +32,7 @@ class Article {
         self.url = URL(string: urlString)
         self.date = Date(dateString: dateString)
         if let data = imageNsData{
-        self.image = UIImage(data: data as Data)
+            self.image = UIImage(data: data as Data)
         }
         self.comment = comment
         print("init Article done. title: \(self.title as String)") // "as 型名"がないとOptionalになる
@@ -71,4 +73,39 @@ class Article {
         print("changed to ud Dict: \(dict)")
         return dict
     }
+}
+
+extension Article {
+    func requestSetImage(imageView iv: UIImageView?) {
+        // MARK: urlからサムネイル画像のurlを非同期で取得してimageviewに表示
+        OpenGraph.fetch(url: self.url) { og, error in
+            // 非同期で返ってくる
+            
+            guard let imageUrlString = og?[.image] else {
+                print("no-imageUrlString")
+                return
+            }
+            
+            guard let imageUrl = URL(string: imageUrlString) else {
+                return
+            }
+            
+            iv?.af_setImage(withURL: imageUrl) // 廃止
+            //      ImageDownloader().download(URLRequest(url: imageUrl), completion: { response in
+            //        if let image = response.result.value {
+            //          iv?.image = image
+            //          self.image = image
+            //        }
+            //      })
+            
+//            Alamofire.request(imageUrl, method: .get).responseImage { response in
+//                guard let image = response.result.value else { return }
+//                iv?.image = image
+//                self.image = image
+//                
+//                
+//            }
+        }
+    }
+    
 }

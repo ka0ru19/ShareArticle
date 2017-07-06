@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import AlamofireImage
-import OpenGraph
 
 class ArticleListViewController: UIViewController {
     
@@ -266,15 +264,16 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         return articleByDateArray[section].count
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "articleCell", for: indexPath) as! ArticleTableViewCell
+        let article = articleByDateArray[indexPath.section][indexPath.row]
         
-        cell.titleLabel.text = articleByDateArray[indexPath.section][indexPath.row].title
-        let url = articleByDateArray[indexPath.section][indexPath.row].url as URL
+        cell.titleLabel.text = article.title
+        cell.titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        let url = article.url as URL
         cell.urlLabel.text = String(describing: url)
-        cell.timeLabel.text = articleByDateArray[indexPath.section][indexPath.row].date.timeString()
-        if let comment = articleByDateArray[indexPath.section][indexPath.row].comment {
+        cell.timeLabel.text = article.date.timeString()
+        if let comment = article.comment {
             if comment != "" {
                 cell.commentLabel.text = comment
             } else {
@@ -283,9 +282,12 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         } else {
             print("articleArrayByDateArray[indexRow.section][indexPath.row][\"comment\"]自体がnil: やばい")
         }
-        cell.thumbnailImageView.backgroundColor = UIColor.cyan
-        requestSetImage(imageView: cell.thumbnailImageView, imageUrl: url)
         
+        if let image = article.image {
+            cell.thumbnailImageView.image = image
+        } else {
+            article.requestSetImage(imageView: cell.thumbnailImageView)
+        }
         
         if isEditingTableView {
             cell.accessoryType = .checkmark
@@ -467,41 +469,7 @@ extension ArticleListViewController {
             print("urlが正しくありませんでした")
         }
     }
-    
-//    func getImageUrl0(fromUrl url: URL) -> URL {
-//        // urlからサムネイル画像のurlを非同期で取得
-//        OpenGraph.fetch(url: url) { og, error in
-//            // 非同期で返ってくる
-//            if let imageUrlString = og?[.image] {
-//                print(imageUrlString) // => og:image of the web site
-//                return URL(string: imageUrlString)
-//            } else if let err = error {
-//                print("no-imageUrlString-error: \(err)")
-//            }
-//        }
-//    }
-//    
-    //    }
-
-    
-    func requestSetImage(imageView iv: UIImageView, imageUrl iu: URL) {
-        // urlからサムネイル画像のurlを非同期で取得してimageviewに表示
-        OpenGraph.fetch(url: iu) { og, error in
-            // 非同期で返ってくる
-            
-            guard let imageUrlString = og?[.image] else {
-                print("no-imageUrlString")
-                return
-            }
-            
-            guard let imageUrl = URL(string: imageUrlString) else {
-                return
-            }
-            
-            iv.af_setImage(withURL: imageUrl)
-        }
-    }
-    
+  
     func verifyUrl (urlString: String?) -> Bool {
         if let urlString = urlString {
             if let url  = URL(string: urlString) {
