@@ -10,7 +10,6 @@ import UIKit
 
 class ArticleListViewController: UIViewController {
     
-    //    @IBOutlet weak var outputButton: UIBarButtonItem!
     @IBOutlet weak var articleTableView: UITableView!
     @IBOutlet weak var toolbar: UIToolbar!
     @IBOutlet weak var outputSelectedItemsButton: UIBarButtonItem!
@@ -191,7 +190,7 @@ extension ArticleListViewController {
     
     // MARK: udから読み込む
     func loadArticleArrayFromUd() {
-        var articleArray: [Article] = []
+        
         if let obj = ud.array(forKey: "articleUdArray") {
             articleUdArray = obj as? [Dictionary<String, Any>] ?? []
             print(articleUdArray)
@@ -200,6 +199,7 @@ extension ArticleListViewController {
         }
         
         // articleArrayに代入
+        var articleArray: [Article] = [] // udから全ての記事を持ってくる
         for articleUd in articleUdArray {
             if let article = Article(from: articleUd) {
                 articleArray.append(article)
@@ -215,11 +215,12 @@ extension ArticleListViewController {
         var currentDateString: String = articleArray[0].date.dateString() // "yyyy/MM/dd"
         var currentArticleArray: [Article] = []
         articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
-        articleByDateArray = [] // [[Article]]
+        
+        var newArticleByDateArray:[[Article]] = [] // [[Article]]
         for article in articleArray {
             let thisDateString = article.date.dateString()
             if currentDateString != thisDateString {
-                articleByDateArray.append(currentArticleArray)
+                newArticleByDateArray.append(currentArticleArray)
                 currentArticleArray = []
                 currentDateString = thisDateString
                 articleDateStringArray.append(currentDateString)
@@ -227,10 +228,14 @@ extension ArticleListViewController {
             currentArticleArray.append(article)
         }
         if currentArticleArray.count > 0 {
-            articleByDateArray.append(currentArticleArray)
+            newArticleByDateArray.append(currentArticleArray)
         }
         
+        articleByDateArray = newArticleByDateArray
+        
+        newArticleByDateArray.removeAll(keepingCapacity: true)
         articleArray.removeAll(keepingCapacity: true)
+        
         print(articleDateStringArray)
         print(articleByDateArray)
     }
