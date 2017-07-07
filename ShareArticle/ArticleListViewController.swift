@@ -40,7 +40,7 @@ class ArticleListViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         loadArticleArrayFromUd()
-        articleTableView.reloadData()
+        articleTableView.reloadData() // 毎回reloadする必要はないよね
     }
     
     override func didReceiveMemoryWarning() {
@@ -160,7 +160,7 @@ extension ArticleListViewController {
     }
 }
 
-// データベース連携操作
+// MARK: - データベース連携操作
 extension ArticleListViewController {
     func initDict() { // デバック用にダミーデータを入れる
         ud.removeSuite(named: "articleUdArray")
@@ -280,13 +280,14 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
                 cell.commentLabel.isHidden = true
             }
         } else {
-            print("articleArrayByDateArray[indexRow.section][indexPath.row][\"comment\"]自体がnil: やばい")
+            print("article.comment自体がnil: やばい")
         }
         
         if let image = article.image {
             cell.thumbnailImageView.image = image
         } else {
-            article.requestSetImage(imageView: cell.thumbnailImageView)
+            cell.thumbnailImageView.image = nil
+            article.requestSetImage(imageView: cell.thumbnailImageView, tableView: self.articleTableView)
         }
         
         if isEditingTableView {
@@ -419,6 +420,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
     func showUrlTextInputAlert() {
         // MARK: テキストフィールド付きアラート表示
         let alert = UIAlertController(title: "URLからページを開きます", message: "URLを入力してください", preferredStyle: .alert)
+        let placeholderText = "https://www.google.com/"
         
         // 「開く」ボタンの設定
         let openAction = UIAlertAction(title: "開く", style: .default, handler: {
@@ -426,7 +428,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             if let textFields = alert.textFields {
                 for textField in textFields {
                     let textFieldText = textField.text ?? ""
-                    let urlString = textFieldText != "" ? textFieldText : "https://www.google.com/"
+                    let urlString = textFieldText != "" ? textFieldText : placeholderText
                     print(urlString)
                     self.requestOpenWebView(urlString: urlString)
                 }
@@ -440,7 +442,8 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         
         // テキストフィールドを追加
         alert.addTextField(configurationHandler: {(textField: UITextField!) -> Void in
-            textField.placeholder = "https://www.google.com/"
+            textField.attributedPlaceholder = NSAttributedString(string: placeholderText,
+                                                                 attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         })
         
         alert.view.setNeedsLayout() // シミュレータの種類によっては、これがないと警告が発生

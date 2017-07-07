@@ -76,7 +76,7 @@ class Article {
 }
 
 extension Article {
-    func requestSetImage(imageView iv: UIImageView?) {
+    func requestSetImage(imageView iv: UIImageView?, tableView tv: UITableView) {
         // MARK: urlからサムネイル画像のurlを非同期で取得してimageviewに表示
         OpenGraph.fetch(url: self.url) { og, error in
             // 非同期で返ってくる
@@ -90,21 +90,22 @@ extension Article {
                 return
             }
             
-            iv?.af_setImage(withURL: imageUrl) // 廃止
-            //      ImageDownloader().download(URLRequest(url: imageUrl), completion: { response in
-            //        if let image = response.result.value {
-            //          iv?.image = image
-            //          self.image = image
-            //        }
-            //      })
-            
-//            Alamofire.request(imageUrl, method: .get).responseImage { response in
-//                guard let image = response.result.value else { return }
-//                iv?.image = image
-//                self.image = image
-//                
-//                
-//            }
+            iv?.af_setImage(withURL: imageUrl,
+                            placeholderImage: nil,
+                            filter: nil,
+                            progress: nil,
+                            progressQueue: DispatchQueue.main,
+                            imageTransition: .noTransition,
+                            runImageTransitionIfCached: false,
+                            completion: { response in
+                                
+                                tv.reloadData() // tableViewをreloadする
+                                guard let image = response.result.value else {
+                                    print("サムネイルの取得に失敗")
+                                    return
+                                }
+                                self.image = image
+            })
         }
     }
     
