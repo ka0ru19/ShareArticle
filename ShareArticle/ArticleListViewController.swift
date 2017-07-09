@@ -177,13 +177,12 @@ extension ArticleListViewController {
             atc = Article(title: titleArray[i],
                           urlString: String(describing: urlArray[i] as URL),
                           dateString: dateArray[i],
-                          imageNsData: nil,
                           comment: commentArray[i])
             
             articleUdArray.append(atc.change2UdDict())
         }
         
-        print(articleUdArray)
+//        print(articleUdArray)
         ud.set(articleUdArray, forKey: "articleUdArray")
     }
     
@@ -192,7 +191,7 @@ extension ArticleListViewController {
         
         if let obj = ud.array(forKey: "articleUdArray") {
             articleUdArray = obj as? [Dictionary<String, Any>] ?? []
-            print(articleUdArray)
+//            print(articleUdArray)
         } else {
             print("articleUdArray keyでヒットするobjがない")
         }
@@ -235,8 +234,8 @@ extension ArticleListViewController {
         newArticleByDateArray.removeAll(keepingCapacity: true)
         articleArray.removeAll(keepingCapacity: true)
         
-        print(articleDateStringArray)
-        print(articleByDateArray)
+//        print(articleDateStringArray)
+//        print(articleByDateArray)
     }
     
     // [[Article]]からudに保存する
@@ -291,7 +290,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
             cell.thumbnailImageView.image = image
         } else {
             cell.thumbnailImageView.image = nil
-            article.requestSetImage(imageView: cell.thumbnailImageView, tableView: self.articleTableView)
+            article.requestSetImageOnTableView(imageView: cell.thumbnailImageView, tableView: self.articleTableView)
         }
         
         if isEditingTableView {
@@ -407,7 +406,6 @@ extension ArticleListViewController: UINavigationControllerDelegate {
     
     func showUiActivity(text: String) {
         let activityItems: [Any] = [text]
-        print(text)
         let appActivity = [PostFromUIActivity()]
         let activitySheet = UIActivityViewController(activityItems: activityItems, applicationActivities: appActivity)
         let excludeActivity: [UIActivityType] = [

@@ -26,14 +26,11 @@ class Article {
     }
     
     // udのdictionaryから端末で扱うためのデータ型に変換するメソッド // デバック用
-    init?(title: String, urlString: String, dateString: String, imageNsData: NSData?, comment: String?) {
+    init?(title: String, urlString: String, dateString: String, comment: String?) {
         // dateString -> "2017/06/22 12:34:56"
         self.title = title
         self.url = URL(string: urlString)
         self.date = Date(dateString: dateString)
-        if let data = imageNsData{
-            self.image = UIImage(data: data as Data)
-        }
         self.comment = comment
         print("init Article done. title: \(self.title as String)") // "as 型名"がないとOptionalになる
     }
@@ -43,9 +40,6 @@ class Article {
         self.title = udDict["title"] as? String ?? "no-title"
         self.url = URL(string: udDict["urlString"] as? String ?? String("https://www.apple.com/"))
         self.date = udDict["date"] as! Date
-        if let imageDate = udDict["imageNsData"] as? Data {
-            self.image = UIImage(data: imageDate)
-        }
         if let comment = udDict["comment"] as? String {
             self.comment = comment
         }
@@ -66,9 +60,6 @@ class Article {
         dict["title"] = self.title
         dict["urlString"] = String(describing: self.url as URL) // "as URL"がないとOptional
         dict["date"] = self.date
-        if let img = self.image {
-            dict["imageNsData"] = UIImageJPEGRepresentation(img, 1.0) as Data?
-        }
         dict["comment"] = self.comment
         print("changed to ud Dict: \(dict)")
         return dict
@@ -76,7 +67,7 @@ class Article {
 }
 
 extension Article {
-    func requestSetImage(imageView iv: UIImageView?, tableView tv: UITableView) {
+    func requestSetImageOnTableView(imageView iv: UIImageView?, tableView tv: UITableView) {
         // MARK: urlからサムネイル画像のurlを非同期で取得してimageviewに表示
         OpenGraph.fetch(url: self.url) { og, error in
             // 非同期で返ってくる
@@ -101,9 +92,10 @@ extension Article {
                                 
                                 tv.reloadData() // tableViewをreloadする
                                 guard let image = response.result.value else {
-                                    print("サムネイルの取得に失敗")
+                                    print("サムネイルの取得に失敗: \(self.title as String)")
                                     return
                                 }
+                                print("サムネイルの取得完了: \(self.title as String)")
                                 self.image = image
             })
         }
