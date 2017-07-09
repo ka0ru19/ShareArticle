@@ -137,3 +137,10 @@ extension Article {
         }
     }
 }
+
+extension Array where Element: Article {
+    // [Article]同士を比較して差分だけ追加、削除するメソッドを作る
+    func replace(newArray nArray: [Article]) {
+        
+    }
+}
