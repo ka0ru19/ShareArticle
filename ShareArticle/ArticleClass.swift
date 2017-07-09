@@ -101,4 +101,39 @@ extension Article {
         }
     }
     
+    func requestSetImage(reloadTargetTableView rttv: UITableView?) {
+        // MARK: urlからサムネイル画像のurlを非同期で取得してself.imageにセット
+        OpenGraph.fetch(url: self.url) { og, error in
+            // 非同期で返ってくる
+            
+            guard let imageUrlString = og?[.image] else {
+                print("no-imageUrlString")
+                return
+            }
+            
+            guard let imageUrl = URL(string: imageUrlString) else {
+                return
+            }
+            
+            let CACHE_SEC : TimeInterval = 2 * 60; //2分キャッシュ
+            let req = URLRequest(url: imageUrl,
+                                 cachePolicy: .returnCacheDataElseLoad,
+                                 timeoutInterval: CACHE_SEC);
+            let conf =  URLSessionConfiguration.default;
+            let session = URLSession(configuration: conf, delegate: nil, delegateQueue: OperationQueue.main);
+            
+            session.dataTask(with: req, completionHandler:
+                { (data, resp, err) in
+                    if let imageData = data {
+                        self.image = UIImage(data: imageData)
+                        print("サムネイルの取得完了: \(self.title as String)")
+                        rttv?.reloadData()
+                    }
+                    if (error != nil) {
+                        print("【警告】サムネイルの取得に失敗: \(self.title as String)")
+                        print("AsyncImageView:Error \(String(describing: err?.localizedDescription))");
+                    }
+            }).resume();
+        }
+    }
 }

@@ -200,6 +200,7 @@ extension ArticleListViewController {
         var articleArray: [Article] = [] // udから全ての記事を持ってくる
         for articleUd in articleUdArray {
             if let article = Article(from: articleUd) {
+                article.requestSetImage(reloadTargetTableView: self.articleTableView)
                 articleArray.append(article)
             }
         }
@@ -290,7 +291,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
             cell.thumbnailImageView.image = image
         } else {
             cell.thumbnailImageView.image = nil
-            article.requestSetImageOnTableView(imageView: cell.thumbnailImageView, tableView: self.articleTableView)
+//            article.requestSetImageOnTableView(imageView: cell.thumbnailImageView, tableView: self.articleTableView)
         }
         
         if isEditingTableView {
