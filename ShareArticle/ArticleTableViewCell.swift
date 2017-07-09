@@ -16,11 +16,20 @@ class ArticleTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var commentLabel: UILabel!
     
+    @IBOutlet weak var articleStackViewBaseView: UIView!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         
-        thumbnailImageView.contentMode = .scaleAspectFit
+        
+        articleStackViewBaseView.layer.borderWidth = 0.5
+        articleStackViewBaseView.layer.borderColor = UIColor.black.cgColor
+        articleStackViewBaseView.layer.cornerRadius = 4.0
+        articleStackViewBaseView.clipsToBounds = true
+        thumbnailImageView.contentMode = .scaleAspectFill
+        thumbnailImageView.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

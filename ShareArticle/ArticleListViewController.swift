@@ -17,7 +17,6 @@ class ArticleListViewController: UIViewController {
     let ud = UserDefaults.standard
     
     var articleDictionary: Dictionary<String, [Article]> = [:]
-    //    var articleArray: [Article] = []
     
     var articleDateStringArray: [String] = [] // 記事の日付を管理する配列: セクションのタイトルで使う
     var articleByDateArray: [[Article]]  = [] // セクション分けして記事を表示するのに使う
