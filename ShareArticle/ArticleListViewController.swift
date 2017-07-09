@@ -291,16 +291,19 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
             cell.thumbnailImageView.image = image
         } else {
             cell.thumbnailImageView.image = nil
-//            article.requestSetImageOnTableView(imageView: cell.thumbnailImageView, tableView: self.articleTableView)
+            print("サムネイルなし: \(indexPath.row): \(article.title)")
         }
         
         if isEditingTableView {
-            cell.accessoryType = .checkmark
+            cell.isCheckd = true
+            
         } else {
-            cell.accessoryType = .none
+            cell.isCheckd = false
         }
+        cell.setCheck(isSetCheck: cell.isCheckd)
         // セルが選択された時の背景色を消す
         cell.selectionStyle = .none
+        
         
         return cell
     }
@@ -309,12 +312,14 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         if isEditingTableView {
             checkedArticleByDateArray[indexPath.section][indexPath.row] = !checkedArticleByDateArray[indexPath.section][indexPath.row]
             
-            let cell = tableView.cellForRow(at: indexPath)
+            let cell = tableView.cellForRow(at: indexPath) as! ArticleTableViewCell
             if checkedArticleByDateArray[indexPath.section][indexPath.row] {
-                cell?.accessoryType = .checkmark
+                cell.isCheckd = true
             } else {
-                cell?.accessoryType = .none
+                cell.isCheckd = false
             }
+            cell.setCheck(isSetCheck: cell.isCheckd)
+
         } else {
             selectedUrl = articleByDateArray[indexPath.section][indexPath.row].url as URL
             performSegue(withIdentifier: "toReadWebVC", sender: nil)
