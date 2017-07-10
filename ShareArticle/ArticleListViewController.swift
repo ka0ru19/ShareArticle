@@ -62,7 +62,7 @@ class ArticleListViewController: UIViewController {
         isEditingTableView = !isEditingTableView // スイッチ
         
         animateToolBar()
-        controlCheckedArticleArray()
+        controlCheckedArticleArray(isCheckAll: false)
         setNavigationBarContents()
         articleTableView.reloadData()
     }
@@ -137,7 +137,7 @@ extension ArticleListViewController {
     }
     
     // MARK: 選択された記事を管理する
-    func controlCheckedArticleArray() {
+    func controlCheckedArticleArray(isCheckAll: Bool) {
         if !isEditingTableView { return }
         
         //取得したメモリ空間は残して、配列のすべての要素を削除する。
@@ -147,7 +147,7 @@ extension ArticleListViewController {
         var tmepBoolArray: [Bool] = []
         for d in 0 ..< articleByDateArray.count {
             for a in 0 ..< articleByDateArray[d].count {
-                tmepBoolArray.append(true)
+                tmepBoolArray.append(isCheckAll)
                 if a == articleByDateArray[d].count - 1 {
                     checkedArticleByDateArray.append(tmepBoolArray)
                     tmepBoolArray.removeAll(keepingCapacity: true)
@@ -295,32 +295,27 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         }
         
         if isEditingTableView {
-            cell.isCheckd = true
-            
+            cell.setCheck(isSetCheck: checkedArticleByDateArray[indexPath.section][indexPath.row])
         } else {
-            cell.isCheckd = false
+            cell.setNoCheck()
         }
-        cell.setCheck(isSetCheck: cell.isCheckd)
+        
         // セルが選択された時の背景色を消す
         cell.selectionStyle = .none
-        
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditingTableView {
+            // 出力中のとき
             checkedArticleByDateArray[indexPath.section][indexPath.row] = !checkedArticleByDateArray[indexPath.section][indexPath.row]
             
             let cell = tableView.cellForRow(at: indexPath) as! ArticleTableViewCell
-            if checkedArticleByDateArray[indexPath.section][indexPath.row] {
-                cell.isCheckd = true
-            } else {
-                cell.isCheckd = false
-            }
-            cell.setCheck(isSetCheck: cell.isCheckd)
+            cell.setCheck(isSetCheck: checkedArticleByDateArray[indexPath.section][indexPath.row])
 
         } else {
+            // 通常時
             selectedUrl = articleByDateArray[indexPath.section][indexPath.row].url as URL
             performSegue(withIdentifier: "toReadWebVC", sender: nil)
         }

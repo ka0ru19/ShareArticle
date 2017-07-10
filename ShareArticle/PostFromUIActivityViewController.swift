@@ -67,17 +67,26 @@ class PostFromUIActivityViewController: UIViewController {
         finishButton.setTitle("Done", for: .normal)
         finishButton.setTitleColor(UIColor.blue, for: .normal)
         
-        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: headerView.frame.width - 90 - 90 , height: headerViewsHeight))
-        titleLabel.frame.origin = CGPoint(x: cancelButton.bottomX, y: headerViewsOriginY)
-        titleLabel.textAlignment = .center
-        titleLabel.text = "title"
+        let headerLabel = UILabel(frame: CGRect(x: 0, y: 0, width: headerView.frame.width - 90 - 90 , height: headerViewsHeight))
+        headerLabel.frame.origin = CGPoint(x: cancelButton.bottomX, y: headerViewsOriginY)
+        headerLabel.textAlignment = .center
+        headerLabel.text = "title"
         
         
         /****** mainInput view ******/
-        textView.frame = CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: 180 - 4 * 2)
+        textView.frame = CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: 100 - 4 * 2)
         textView.frame.origin = CGPoint(x: 4, y: 4)
         textView.text = ""
         textView.becomeFirstResponder()
+        
+        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: 60))
+        titleLabel.frame.origin = CGPoint(x: 4, y: textView.bottomY)
+        titleLabel.numberOfLines = 2
+//        titleLabel.text = postItem[0] as? String ?? "no-text"
+
+        let urlLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: 16))
+        urlLabel.frame.origin = CGPoint(x: 4, y: titleLabel.bottomY)
+//        urlLabel.text = String(describing: postItem[1] as? URL ?? URL(string: "https://www.apple.com/")!)
         
         /****** option view ******/
         
@@ -85,7 +94,7 @@ class PostFromUIActivityViewController: UIViewController {
         /****** view の統合 ******/
         headerView.addSubview(cancelButton)
         headerView.addSubview(finishButton)
-        headerView.addSubview(titleLabel)
+        headerView.addSubview(headerLabel)
         mainInputView.addSubview(textView)
         
         inputView.addSubview(headerView)

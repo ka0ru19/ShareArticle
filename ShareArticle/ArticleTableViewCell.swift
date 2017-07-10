@@ -19,8 +19,6 @@ class ArticleTableViewCell: UITableViewCell {
     
     @IBOutlet weak var articleStackViewBaseView: UIView!
     
-    var isCheckd: Bool = false
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -40,16 +38,16 @@ class ArticleTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func switchCheck() {
-        self.isCheckd = !self.isCheckd
-        setCheck(isSetCheck: self.isCheckd)
-    }
     
     func setCheck(isSetCheck: Bool) {
         if isSetCheck {
             checkMarkImageView.backgroundColor = UIColor.blue
         } else {
-            checkMarkImageView.backgroundColor = UIColor.white
+            checkMarkImageView.backgroundColor = UIColor.lightGray
         }
+    }
+    
+    func setNoCheck() {
+        checkMarkImageView.backgroundColor = UIColor.white
     }
 }
