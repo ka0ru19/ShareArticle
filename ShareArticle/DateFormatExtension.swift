@@ -43,6 +43,13 @@ public extension Date {
         self = date
     }
     
+    //String("yyyy/MM/dd") -> Date
+    init?(onlyDateString: String, dateFormat: String = "yyyy/MM/dd") {
+        formatter.dateFormat = dateFormat
+        guard let date = formatter.date(from: onlyDateString) else { return nil }
+        self = date
+    }
+    
 }
 
 /* 使用例

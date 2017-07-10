@@ -8,6 +8,13 @@
 
 import UIKit
 
+enum SelectArticleType {
+    case all
+    case notAll
+    case today
+    case yesterday
+}
+
 class ArticleListViewController: UIViewController {
     
     @IBOutlet weak var articleTableView: UITableView!
@@ -67,6 +74,11 @@ class ArticleListViewController: UIViewController {
         articleTableView.reloadData()
     }
     
+    // MARK: 「条件選択」ボタン
+    func onTappedKindSelectButton(_ sender: UIBarButtonItem) {
+        showKindSelectAlert()
+    }
+    
     // MARK: 「記事をマークダウンに変換」ボタン
     @IBAction func onTappedChangeToMarkDownButton(_ sender: UIBarButtonItem) {
         changeArticlesToMarkDown()
@@ -117,6 +129,11 @@ extension ArticleListViewController {
             (action: UIAlertAction!) in
             let board = UIPasteboard.general // クリップボード呼び出し
             board.setValue(markdownText, forPasteboardType: "public.text") // クリップボードに貼り付け
+            
+            let alert = UIAlertController(title: "マークダウンに変換完了", message: "クリップボードにコピーしました", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil)) // 「OK」ボタンの設定
+            self.present(alert, animated: true, completion: nil) // アラートを画面に表示
+            
         })
         
         let action2 = UIAlertAction(title: "他のアプリに出力する", style: UIAlertActionStyle.default, handler: {
@@ -136,7 +153,7 @@ extension ArticleListViewController {
         self.present(actionSheet, animated: true, completion: nil)
     }
     
-    // MARK: 選択された記事を管理する
+    // MARK: 選択された記事を管理する配列の初期化
     func controlCheckedArticleArray(isCheckAll: Bool) {
         if !isEditingTableView { return }
         
@@ -155,6 +172,71 @@ extension ArticleListViewController {
             }
         }
         print(checkedArticleByDateArray)
+    }
+    
+    // MARK: 記事を条件で一括選択
+    func selectArticle(type: SelectArticleType) {
+        switch type {
+        case .today:
+            do {
+                guard let headDateString: String = articleDateStringArray.first else { return }
+                guard let headDate: Date = Date(dateString: headDateString, dateFormat: "yyyy/MM/dd") else { return }
+                if Calendar(identifier: .gregorian).isDateInToday(headDate) {
+                    print("先頭のarrayが今日の記事だった場合")
+                    for i in 0 ..< checkedArticleByDateArray[0].count {
+                        self.checkedArticleByDateArray[0][i] = true
+                    }
+                } else {
+                    print("先頭のarrayは今日の記事ではなかったので何も選択しない。さよなら。")
+                }
+                
+            }
+            break
+        case .yesterday:
+            do {
+                guard let headDateString: String = articleDateStringArray.first else { return }
+                guard let headDate: Date = Date(dateString: headDateString, dateFormat: "yyyy/MM/dd") else { return }
+                if Calendar(identifier: .gregorian).isDateInYesterday(headDate) {
+                    print("先頭のarrayが昨日の記事だった場合")
+                    for i in 0 ..< checkedArticleByDateArray[0].count {
+                        self.checkedArticleByDateArray[0][i] = true
+                    }
+                    break
+                }
+                
+                if articleDateStringArray.count < 1 { break }
+                guard let headNextDate: Date = Date(dateString: articleDateStringArray[1], dateFormat: "yyyy/MM/dd") else { return }
+                if Calendar(identifier: .gregorian).isDateInYesterday(headNextDate) {
+                    print("先頭の次ののarrayが昨日の記事だった場合")
+                    for i in 0 ..< checkedArticleByDateArray[1].count {
+                        self.checkedArticleByDateArray[1][i] = true
+                    }
+                    break
+                }
+                print("先頭と2番めのarrayは昨日の記事ではなかったので何も選択しない。さよなら。")
+            }
+            break
+        case .all:
+            do {
+                for d in 0 ..< checkedArticleByDateArray.count {
+                    for a in 0 ..< checkedArticleByDateArray[d].count {
+                        self.checkedArticleByDateArray[d][a] = true
+                    }
+                }
+            }
+            break
+        case .notAll:
+            do {
+                for d in 0 ..< checkedArticleByDateArray.count {
+                    for a in 0 ..< checkedArticleByDateArray[d].count {
+                        self.checkedArticleByDateArray[d][a] = false
+                    }
+                }
+            }
+            break
+        }
+        articleTableView.reloadData()
+        
     }
 }
 
@@ -182,7 +264,7 @@ extension ArticleListViewController {
             articleUdArray.append(atc.change2UdDict())
         }
         
-//        print(articleUdArray)
+        //        print(articleUdArray)
         ud.set(articleUdArray, forKey: "articleUdArray")
     }
     
@@ -191,7 +273,7 @@ extension ArticleListViewController {
         
         if let obj = ud.array(forKey: "articleUdArray") {
             articleUdArray = obj as? [Dictionary<String, Any>] ?? []
-//            print(articleUdArray)
+            //            print(articleUdArray)
         } else {
             print("articleUdArray keyでヒットするobjがない")
         }
@@ -235,8 +317,8 @@ extension ArticleListViewController {
         newArticleByDateArray.removeAll(keepingCapacity: true)
         articleArray.removeAll(keepingCapacity: true)
         
-//        print(articleDateStringArray)
-//        print(articleByDateArray)
+        //        print(articleDateStringArray)
+        //        print(articleByDateArray)
     }
     
     // [[Article]]からudに保存する
@@ -279,6 +361,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         cell.timeLabel.text = article.date.timeString()
         if let comment = article.comment {
             if comment != "" {
+                cell.commentLabel.isHidden = false
                 cell.commentLabel.text = comment
             } else {
                 cell.commentLabel.isHidden = true
@@ -313,7 +396,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
             
             let cell = tableView.cellForRow(at: indexPath) as! ArticleTableViewCell
             cell.setCheck(isSetCheck: checkedArticleByDateArray[indexPath.section][indexPath.row])
-
+            
         } else {
             // 通常時
             selectedUrl = articleByDateArray[indexPath.section][indexPath.row].url as URL
@@ -392,7 +475,8 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         }
         
         if isEditingTableView {
-            self.navigationItem.leftBarButtonItem = nil
+            let leftBarButtonItem = UIBarButtonItem(title: "条件選択", style: .plain, target: self, action: #selector(onTappedKindSelectButton(_:)))
+            self.navigationItem.leftBarButtonItem = leftBarButtonItem
             let rightBarButtonItem = UIBarButtonItem(title: "完了", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
             navigationBarTopItem.title = "記事を選択"
@@ -454,6 +538,31 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         // アラートを画面に表示
         self.present(alert, animated: true, completion: nil)
     }
+    func showKindSelectAlert() {
+        let actionSheet = UIAlertController(title: "一括で記事を選択します", message: "条件を選択してください", preferredStyle: .alert)
+        
+        let action1 = UIAlertAction(title: "今日保存した記事", style: UIAlertActionStyle.default, handler: {
+            (action: UIAlertAction!) in
+            self.selectArticle(type: .today)
+        })
+        let action2 = UIAlertAction(title: "昨日保存した記事", style: UIAlertActionStyle.default, handler: {
+            (action: UIAlertAction!) in
+            self.selectArticle(type: .yesterday)
+        })
+        let action3 = UIAlertAction(title: "保存した全ての記事", style: UIAlertActionStyle.default, handler: {
+            (action: UIAlertAction!) in
+            self.selectArticle(type: .all)
+        })
+        
+        let cancel = UIAlertAction(title: "キャンセル", style: UIAlertActionStyle.cancel, handler: nil)
+        
+        actionSheet.addAction(action1)
+        actionSheet.addAction(action2)
+        actionSheet.addAction(action3)
+        actionSheet.addAction(cancel)
+        
+        self.present(actionSheet, animated: true, completion: nil)
+    }
     
     func showCannotOpenUrlAlert() {
         // MARK: 任意のurlを開けなかったときのalert
@@ -475,7 +584,7 @@ extension ArticleListViewController {
             print("urlが正しくありませんでした")
         }
     }
-  
+    
     func verifyUrl (urlString: String?) -> Bool {
         if let urlString = urlString {
             if let url  = URL(string: urlString) {
