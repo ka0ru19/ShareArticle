@@ -66,6 +66,7 @@
 		632910B51EED10C40071F2E1 /* ArticleClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910B41EED10C40071F2E1 /* ArticleClass.swift */; };
 		632910B71EED16590071F2E1 /* DateFormatExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910B61EED16590071F2E1 /* DateFormatExtension.swift */; };
 		632910B91EED18E60071F2E1 /* ImageConvertExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910B81EED18E60071F2E1 /* ImageConvertExtension.swift */; };
+		63381F191F15AE47006C5604 /* ConstDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63381F181F15AE47006C5604 /* ConstDefine.swift */; };
 		638201EC1EF7A9B900ACE0FA /* PostFromUIActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */; };
 /* End PBXBuildFile section */
 
@@ -131,6 +132,7 @@
 		632910B41EED10C40071F2E1 /* ArticleClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleClass.swift; sourceTree = "<group>"; };
 		632910B61EED16590071F2E1 /* DateFormatExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatExtension.swift; sourceTree = "<group>"; };
 		632910B81EED18E60071F2E1 /* ImageConvertExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageConvertExtension.swift; sourceTree = "<group>"; };
+		63381F181F15AE47006C5604 /* ConstDefine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstDefine.swift; sourceTree = "<group>"; };
 		638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostFromUIActivity.swift; sourceTree = "<group>"; };
 		DF51C2DC13D959FB782D2E85 /* Pods_ShareArticle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareArticle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC4FFD9067F8A16AA1B0C613 /* Pods-ShareArticle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareArticle.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShareArticle/Pods-ShareArticle.release.xcconfig"; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 				638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */,
 				6326D7B61F073B2700448E52 /* PostFromUIActivityViewController.swift */,
 				632910AE1EECF29F0071F2E1 /* ArticleTableViewCell.swift */,
+				63381F181F15AE47006C5604 /* ConstDefine.swift */,
 				632910AF1EECF29F0071F2E1 /* ArticleTableViewCell.xib */,
 				6329109C1EECEC880071F2E1 /* Main.storyboard */,
 				6329109F1EECEC880071F2E1 /* Assets.xcassets */,
@@ -469,6 +472,7 @@
 				632910B51EED10C40071F2E1 /* ArticleClass.swift in Sources */,
 				632910AB1EECF20B0071F2E1 /* ArticleListViewController.swift in Sources */,
 				632910991EECEC880071F2E1 /* AppDelegate.swift in Sources */,
+				63381F191F15AE47006C5604 /* ConstDefine.swift in Sources */,
 				632910B91EED18E60071F2E1 /* ImageConvertExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

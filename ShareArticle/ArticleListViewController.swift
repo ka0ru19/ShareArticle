@@ -17,10 +17,8 @@ enum SelectArticleType {
 
 class ArticleListViewController: UIViewController {
     
-    @IBOutlet weak var articleTableView: UITableView!
-    @IBOutlet weak var toolbar: UIToolbar!
-    @IBOutlet weak var outputSelectedItemsButton: UIBarButtonItem!
-    
+    let articleTableView = UITableView()
+    let toolbar = UIToolbar()
     let ud = UserDefaults.standard
     
     var articleDictionary: Dictionary<String, [Article]> = [:]
@@ -80,12 +78,12 @@ class ArticleListViewController: UIViewController {
     }
     
     // MARK: 「記事をマークダウンに変換」ボタン
-    @IBAction func onTappedChangeToMarkDownButton(_ sender: UIBarButtonItem) {
+    func onTappedChangeToMarkDownButton(_ sender: UIBarButtonItem) {
         changeArticlesToMarkDown()
     }
     
     // MARK: Actionボタン
-    @IBAction func onTappedActionButton(_ sender: UIBarButtonItem) {
+    func onTappedActionButton(_ sender: UIBarButtonItem) {
     }
     
 }
@@ -430,6 +428,8 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
 extension ArticleListViewController: UINavigationControllerDelegate {
     
     func initView() {
+        let originY: CGFloat = 64.0 // statusBarとnavigationBarの高さ // あとでViewSizeにぶち込む
+        articleTableView.frame = CGRect(x: 0, y: originY, width: self.view.frame.width, height: self.view.frame.height - originY - ViewSize.toolbarHeight)
         articleTableView.delegate = self
         articleTableView.dataSource = self
         articleTableView.register(UINib(nibName: "ArticleTableViewCell", bundle: nil),
@@ -441,15 +441,24 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         articleTableView.tableFooterView = UIView(frame: .zero)
         articleTableView.separatorInset = UIEdgeInsetsMake(0, 8, 0, 0) // 文字の頭に合わせている
         
+        self.view.addSubview(articleTableView)
+        
         setNavigationBarContents()
         
+        toolbar.frame = CGRect(x: 0, y: self.view.bottomY, width: self.view.frame.width, height: ViewSize.toolbarHeight)
+        let leftItem = UIBarButtonItem(title: "記事をマークダウンに変換", style: .plain, target: nil, action: #selector(ArticleListViewController.onTappedChangeToMarkDownButton(_:)))
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let rightItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(ArticleListViewController.onTappedActionButton(_:)))
+        toolbar.items = [leftItem, flexibleItem, rightItem]
         // 最初はtoolbarを下に隠しておく
         toolbar.frame.origin.y = self.view.bottomY
+        
+        self.view.addSubview(toolbar)
     }
     
     func animateToolBar() {
         if isEditingTableView {
-            // 編集モード
+            // 出力モード
             UIView.animate(withDuration: 0.2, animations: {
                 self.articleTableView.frame.size.height -= self.toolbar.frame.size.height
                 self.toolbar.frame.origin.y = self.view.bottomY - self.toolbar.frame.size.height
@@ -477,7 +486,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         if isEditingTableView {
             let leftBarButtonItem = UIBarButtonItem(title: "条件選択", style: .plain, target: self, action: #selector(onTappedKindSelectButton(_:)))
             self.navigationItem.leftBarButtonItem = leftBarButtonItem
-            let rightBarButtonItem = UIBarButtonItem(title: "完了", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
+            let rightBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
             navigationBarTopItem.title = "記事を選択"
         } else {
