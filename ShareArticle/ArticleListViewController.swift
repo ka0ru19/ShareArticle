@@ -353,7 +353,6 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         let article = articleByDateArray[indexPath.section][indexPath.row]
         
         cell.titleLabel.text = article.title
-        cell.titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
         let url = article.url as URL
         cell.urlLabel.text = String(describing: url)
         cell.timeLabel.text = article.date.timeString()
