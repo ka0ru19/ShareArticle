@@ -46,12 +46,12 @@ class ReadWebViewController: UIViewController {
     }
     
     @IBAction func onTappedBackButton(_ sender: UIBarButtonItem) {
-        if !webView.canGoBack { return }
+        guard webView.canGoBack else { return }
         webView.goBack() // 戻る
     }
     
     @IBAction func onTappedNextButton(_ sender: UIBarButtonItem) {
-        if !webView.canGoForward { return }
+        guard webView.canGoForward else { return }
         webView.goForward() // 進む
     }
     @IBAction func onTappedStopButton(_ sender: UIBarButtonItem) {
@@ -67,7 +67,9 @@ class ReadWebViewController: UIViewController {
     }
     
     private func showUiActivity() {
-        guard let postUrl = self.webView.request?.url else {
+        guard
+            let postUrl: URL = self.webView.request?.url,
+            postUrl.absoluteString.characters.count != 0 else {
             print("self.webView.request?.urlがない: 読み込みが終わるまで待って。")
             return
         }
