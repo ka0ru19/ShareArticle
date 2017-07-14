@@ -108,7 +108,7 @@ extension ArticleListViewController {
         var markdownSentence: String!
         for article in targetArray {
             let textStr = article.title ?? "no-title"
-            let urlStr = String(describing: article.url as URL) // asがないとoptinalになる
+            let urlStr = article.url.absoluteString
             let commentStr = article.comment ?? ""
             var commentStrBlock = ""
             if commentStr != "" {
@@ -126,7 +126,7 @@ extension ArticleListViewController {
         let actionSheet = UIAlertController(title: "マークダウン形式で保存します", message: "出力先を選択してください", preferredStyle: .actionSheet)
         
         let action1 = UIAlertAction(title: "クリップボードにコピーする", style: UIAlertActionStyle.default, handler: {
-            (action: UIAlertAction!) in
+            _ in
             let board = UIPasteboard.general // クリップボード呼び出し
             board.setValue(markdownText, forPasteboardType: "public.text") // クリップボードに貼り付け
             
@@ -137,12 +137,12 @@ extension ArticleListViewController {
         })
         
         let action2 = UIAlertAction(title: "他のアプリに出力する", style: UIAlertActionStyle.default, handler: {
-            (action: UIAlertAction!) in
+            _ in
             self.showUiActivity(text: markdownText)
         })
         
         let cancel = UIAlertAction(title: "キャンセル", style: UIAlertActionStyle.cancel, handler: {
-            (action: UIAlertAction!) in
+            _ in
             print("キャンセルをタップした時の処理")
         })
         
@@ -257,7 +257,7 @@ extension ArticleListViewController {
         var atc:Article!
         for i in 0 ..< titleArray.count {
             atc = Article(title: titleArray[i],
-                          urlString: String(describing: urlArray[i] as URL),
+                          urlString: urlArray[i].absoluteString,
                           dateString: dateArray[i],
                           comment: commentArray[i])
             
@@ -542,15 +542,15 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         let actionSheet = UIAlertController(title: "一括で記事を選択します", message: "条件を選択してください", preferredStyle: .alert)
         
         let action1 = UIAlertAction(title: "今日保存した記事", style: UIAlertActionStyle.default, handler: {
-            (action: UIAlertAction!) in
+            _ in
             self.selectArticle(type: .today)
         })
         let action2 = UIAlertAction(title: "昨日保存した記事", style: UIAlertActionStyle.default, handler: {
-            (action: UIAlertAction!) in
+            _ in
             self.selectArticle(type: .yesterday)
         })
         let action3 = UIAlertAction(title: "保存した全ての記事", style: UIAlertActionStyle.default, handler: {
-            (action: UIAlertAction!) in
+            _ in
             self.selectArticle(type: .all)
         })
         
