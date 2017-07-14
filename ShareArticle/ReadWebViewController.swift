@@ -73,10 +73,6 @@ class ReadWebViewController: UIViewController {
             print("self.webView.request?.urlがない: 読み込みが終わるまで待って。")
             return
         }
-        if String(describing: postUrl) == "" {
-            print("urlが\"\"") // urlが""
-            return
-        }
         
         let title = self.webView.stringByEvaluatingJavaScript(from: "document.title") ?? "no-title: cannot get title"
         
