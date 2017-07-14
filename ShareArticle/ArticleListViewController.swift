@@ -175,8 +175,10 @@ extension ArticleListViewController {
         switch type {
         case .today:
             do {
-                guard let headDateString: String = articleDateStringArray.first else { return }
-                guard let headDate: Date = Date(dateString: headDateString, dateFormat: "yyyy/MM/dd") else { return }
+                guard
+                    let headDateString: String = articleDateStringArray.first,
+                    let headDate: Date = Date(dateString: headDateString, dateFormat: "yyyy/MM/dd") else { return }
+
                 if Calendar(identifier: .gregorian).isDateInToday(headDate) {
                     print("先頭のarrayが今日の記事だった場合")
                     for i in 0 ..< checkedArticleByDateArray[0].count {
@@ -190,8 +192,9 @@ extension ArticleListViewController {
             break
         case .yesterday:
             do {
-                guard let headDateString: String = articleDateStringArray.first else { return }
-                guard let headDate: Date = Date(dateString: headDateString, dateFormat: "yyyy/MM/dd") else { return }
+                guard
+                    let headDateString: String = articleDateStringArray.first,
+                    let headDate: Date = Date(dateString: headDateString, dateFormat: "yyyy/MM/dd") else { return }
                 if Calendar(identifier: .gregorian).isDateInYesterday(headDate) {
                     print("先頭のarrayが昨日の記事だった場合")
                     for i in 0 ..< checkedArticleByDateArray[0].count {
@@ -471,13 +474,11 @@ extension ArticleListViewController: UINavigationControllerDelegate {
 
     // MARK: isEditingTableViewに応じてnavigationControllerの要素を変更
     func setNavigationBarContents() {
-        guard let navigationController = self.navigationController else {
-            print("self.navigationController?がない")
-            return
-        }
-        guard let navigationBarTopItem = navigationController.navigationBar.topItem else {
-            print("navigationController.navigationBar.topItem?がない")
-            return
+        guard
+            let navigationController = self.navigationController,
+            let navigationBarTopItem = navigationController.navigationBar.topItem else {
+
+                return
         }
 
         if isEditingTableView {
