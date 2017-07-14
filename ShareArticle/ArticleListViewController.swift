@@ -125,8 +125,7 @@ extension ArticleListViewController {
         
         let actionSheet = UIAlertController(title: "マークダウン形式で保存します", message: "出力先を選択してください", preferredStyle: .actionSheet)
         
-        let action1 = UIAlertAction(title: "クリップボードにコピーする", style: UIAlertActionStyle.default, handler: {
-            _ in
+        let action1 = UIAlertAction(title: "クリップボードにコピーする", style: .default, handler: { _ in
             let board = UIPasteboard.general // クリップボード呼び出し
             board.setValue(markdownText, forPasteboardType: "public.text") // クリップボードに貼り付け
             
@@ -136,13 +135,11 @@ extension ArticleListViewController {
             
         })
         
-        let action2 = UIAlertAction(title: "他のアプリに出力する", style: UIAlertActionStyle.default, handler: {
-            _ in
+        let action2 = UIAlertAction(title: "他のアプリに出力する", style: .default, handler: { _ in
             self.showUiActivity(text: markdownText)
         })
         
-        let cancel = UIAlertAction(title: "キャンセル", style: UIAlertActionStyle.cancel, handler: {
-            _ in
+        let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { _ in
             print("キャンセルをタップした時の処理")
         })
         
@@ -500,8 +497,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             UIActivityType.postToTencentWeibo
         ]
         activitySheet.excludedActivityTypes = excludeActivity
-        present(activitySheet, animated: true, completion: {() -> Void in
-        })
+        present(activitySheet, animated: true, completion: nil)
     }
     
     func showUrlTextInputAlert() {
@@ -510,8 +506,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         let placeholderText = "https://www.google.com/"
         
         // 「開く」ボタンの設定
-        let openAction = UIAlertAction(title: "開く", style: .default, handler: {
-            (action:UIAlertAction!) -> Void in
+        let openAction = UIAlertAction(title: "開く", style: .default, handler: { _ in
             if let textFields = alert.textFields {
                 for textField in textFields {
                     let textFieldText = textField.text ?? ""
@@ -528,7 +523,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         alert.addAction(cancelAction)
         
         // テキストフィールドを追加
-        alert.addTextField(configurationHandler: {(textField: UITextField!) -> Void in
+        alert.addTextField(configurationHandler: { textField in
             textField.attributedPlaceholder = NSAttributedString(string: placeholderText,
                                                                  attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         })
@@ -541,20 +536,17 @@ extension ArticleListViewController: UINavigationControllerDelegate {
     func showKindSelectAlert() {
         let actionSheet = UIAlertController(title: "一括で記事を選択します", message: "条件を選択してください", preferredStyle: .alert)
         
-        let action1 = UIAlertAction(title: "今日保存した記事", style: UIAlertActionStyle.default, handler: {
-            _ in
+        let action1 = UIAlertAction(title: "今日保存した記事", style: .default, handler: { _ in
             self.selectArticle(type: .today)
         })
-        let action2 = UIAlertAction(title: "昨日保存した記事", style: UIAlertActionStyle.default, handler: {
-            _ in
+        let action2 = UIAlertAction(title: "昨日保存した記事", style: .default, handler: { _ in
             self.selectArticle(type: .yesterday)
         })
-        let action3 = UIAlertAction(title: "保存した全ての記事", style: UIAlertActionStyle.default, handler: {
-            _ in
+        let action3 = UIAlertAction(title: "保存した全ての記事", style: .default, handler: { _ in
             self.selectArticle(type: .all)
         })
         
-        let cancel = UIAlertAction(title: "キャンセル", style: UIAlertActionStyle.cancel, handler: nil)
+        let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: nil)
         
         actionSheet.addAction(action1)
         actionSheet.addAction(action2)
