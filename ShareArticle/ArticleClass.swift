@@ -129,7 +129,7 @@ extension Article {
                         rttv?.reloadData()
                     }
                     if let error = error {
-                        print("【警告】サムネイルの取得に失敗: \(self.title as String)")
+                        print("【警告】サムネイルの取得に失敗: \(self.title ?? "no-title")")
                         print("AsyncImageView:Error \(error.localizedDescription))")
                     }
             }).resume()

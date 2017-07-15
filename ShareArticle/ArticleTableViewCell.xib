@@ -38,11 +38,11 @@
                                                             <constraint firstAttribute="height" constant="60" id="zR7-jh-C5R"/>
                                                         </constraints>
                                                     </imageView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="9U9-yl-n7p">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="9U9-yl-n7p">
                                                         <rect key="frame" x="88" y="4" width="231" height="52"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="urlLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zrZ-fW-STG">
-                                                                <rect key="frame" x="0.0" y="0.0" width="231" height="12"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="223" height="12"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="12" id="65w-Zv-hxP"/>
                                                                 </constraints>
@@ -51,7 +51,7 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xeD-RS-FuU">
-                                                                <rect key="frame" x="0.0" y="16" width="231" height="36"/>
+                                                                <rect key="frame" x="0.0" y="16" width="223" height="36"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="36" id="HuN-Es-fpt"/>
                                                                 </constraints>
@@ -62,12 +62,17 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                         </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="trailing" secondItem="xeD-RS-FuU" secondAttribute="trailing" constant="8" id="1u2-A5-iII"/>
+                                                            <constraint firstAttribute="trailing" secondItem="zrZ-fW-STG" secondAttribute="trailing" constant="8" id="lzq-dj-ac4"/>
+                                                        </constraints>
                                                     </stackView>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="Z3a-zP-BIn" firstAttribute="top" secondItem="wrL-js-BJ8" secondAttribute="top" id="10t-MS-EfF"/>
                                                     <constraint firstItem="Z3a-zP-BIn" firstAttribute="leading" secondItem="wrL-js-BJ8" secondAttribute="leading" id="5Ny-9S-1wd"/>
                                                     <constraint firstItem="9U9-yl-n7p" firstAttribute="centerY" secondItem="Z3a-zP-BIn" secondAttribute="centerY" id="C2s-59-7Rm"/>
+                                                    <constraint firstItem="9U9-yl-n7p" firstAttribute="leading" secondItem="Z3a-zP-BIn" secondAttribute="trailing" constant="8" id="eGD-s8-Zvv"/>
                                                 </constraints>
                                             </stackView>
                                         </subviews>
