@@ -12,7 +12,7 @@ import OpenGraph
 
 class Article {
     // title, url, date は必須。
-    var title: String! // 記事タイトル
+    var title: String? // 記事タイトル
     var url: URL! // 記事リンク
     var date: Date! // 記事の保存日時
     var image: UIImage? // サムネイル
@@ -32,7 +32,7 @@ class Article {
         self.url = URL(string: urlString)
         self.date = Date(dateString: dateString)
         self.comment = comment
-        print("init Article done. title: \(self.title as String)") // "as 型名"がないとOptionalになる
+        print("init Article done. title: \(title as String)") // "as 型名"がないとOptionalになる
     }
     
     // udのdictionaryから端末で扱うためのデータ型に変換するメソッド
@@ -43,7 +43,7 @@ class Article {
         if let comment = udDict["comment"] as? String {
             self.comment = comment
         }
-        print("init Article done. title: \(self.title as String)")
+        print("init Article done. title: \(self.title as? String)")
     }
     
     func setImage(image: UIImage?) {
@@ -92,10 +92,10 @@ extension Article {
                                 
                                 tv.reloadData() // tableViewをreloadする
                                 guard let image = response.result.value else {
-                                    print("サムネイルの取得に失敗: \(self.title as String)")
+                                    print("サムネイルの取得に失敗: \(self.title ?? "no-title")")
                                     return
                                 }
-                                print("サムネイルの取得完了: \(self.title as String)")
+                                print("サムネイルの取得完了: \(self.title ?? "no-title")")
                                 self.image = image
             })
         }
@@ -126,11 +126,11 @@ extension Article {
                 { (data, resp, err) in
                     if let imageData = data {
                         self.image = UIImage(data: imageData)
-                        print("サムネイルの取得完了: \(self.title as String)")
+                        print("サムネイルの取得完了: \(self.title ?? "no-title")")
                         rttv?.reloadData()
                     }
                     if (error != nil) {
-                        print("【警告】サムネイルの取得に失敗: \(self.title as String)")
+                        print("【警告】サムネイルの取得に失敗: \(self.title ?? "no-title")")
                         print("AsyncImageView:Error \(String(describing: err?.localizedDescription))");
                     }
             }).resume();
