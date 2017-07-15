@@ -123,8 +123,7 @@ extension ArticleListViewController {
 
         let actionSheet = UIAlertController(title: "マークダウン形式で保存します", message: "出力先を選択してください", preferredStyle: .actionSheet)
 
-        let action1 = UIAlertAction(title: "クリップボードにコピーする", style: UIAlertActionStyle.default, handler: {
-            (action: UIAlertAction!) in
+        let action1 = UIAlertAction(title: "クリップボードにコピーする", style: .default, handler: { _ in
             let board = UIPasteboard.general // クリップボード呼び出し
             board.setValue(markdownText, forPasteboardType: "public.text") // クリップボードに貼り付け
 

@@ -43,7 +43,7 @@ class Article {
         if let comment = udDict["comment"] as? String {
             self.comment = comment
         }
-        print("init Article done. title: \(self.title as? String)")
+        print("init Article done. title: \(self.title ?? "no-title" )")
     }
 
     func setImage(image: UIImage?) {
@@ -114,9 +114,9 @@ extension Article {
             let CACHE_SEC : TimeInterval = 2 * 60 //2分キャッシュ
             let req = URLRequest(url: imageUrl,
                                  cachePolicy: .returnCacheDataElseLoad,
-                                 timeoutInterval: CACHE_SEC);
-            let conf =  URLSessionConfiguration.default;
-            let session = URLSession(configuration: conf, delegate: nil, delegateQueue: OperationQueue.main);
+                                 timeoutInterval: CACHE_SEC)
+            let conf =  URLSessionConfiguration.default
+            let session = URLSession(configuration: conf, delegate: nil, delegateQueue: OperationQueue.main)
 
             session.dataTask(with: req, completionHandler:
                 { (data, resp, err) in
@@ -125,11 +125,11 @@ extension Article {
                         print("サムネイルの取得完了: \(self.title ?? "no-title")")
                         rttv?.reloadData()
                     }
-                    if (error != nil) {
-                        print("【警告】サムネイルの取得に失敗: \(self.title as String)")
-                        print("AsyncImageView:Error \(String(describing: err?.localizedDescription))");
+                    if let error = err {
+                        print("【警告】サムネイルの取得に失敗: \(self.title ?? "no-title" )")
+                        print("AsyncImageView:Error \(error.localizedDescription)")
                     }
-            }).resume();
+            }).resume()
         }
     }
 }
