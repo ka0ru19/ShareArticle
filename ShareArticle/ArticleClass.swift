@@ -38,7 +38,7 @@ class Article {
     // udのdictionaryから端末で扱うためのデータ型に変換するメソッド
     init?(from udDict: Dictionary<String, Any>){
         self.title = udDict["title"] as? String ?? "no-title"
-        self.url = URL(string: udDict["urlString"] as? String ?? String("https://www.apple.com/"))
+        self.url = URL(string: udDict["urlString"] as? String ?? "https://www.apple.com/")
         self.date = udDict["date"] as! Date
         if let comment = udDict["comment"] as? String {
             self.comment = comment
@@ -58,7 +58,7 @@ class Article {
     func change2UdDict() -> Dictionary<String, Any> {
         var dict: Dictionary<String, Any> = [:]
         dict["title"] = self.title
-        dict["urlString"] = String(describing: self.url as URL) // "as URL"がないとOptional
+        dict["urlString"] = self.url.absoluteString
         dict["date"] = self.date
         dict["comment"] = self.comment
         print("changed to ud Dict: \(dict)")
@@ -115,25 +115,24 @@ extension Article {
                 return
             }
             
-            let CACHE_SEC : TimeInterval = 2 * 60; //2分キャッシュ
+            let CACHE_SEC : TimeInterval = 2 * 60 //2分キャッシュ
             let req = URLRequest(url: imageUrl,
                                  cachePolicy: .returnCacheDataElseLoad,
-                                 timeoutInterval: CACHE_SEC);
-            let conf =  URLSessionConfiguration.default;
-            let session = URLSession(configuration: conf, delegate: nil, delegateQueue: OperationQueue.main);
-            
-            session.dataTask(with: req, completionHandler:
-                { (data, resp, err) in
+                                 timeoutInterval: CACHE_SEC)
+            let conf =  URLSessionConfiguration.default
+            let session = URLSession(configuration: conf, delegate: nil, delegateQueue: OperationQueue.main)
+
+            session.dataTask(with: req, completionHandler: { (data, resp, err) in
                     if let imageData = data {
                         self.image = UIImage(data: imageData)
                         print("サムネイルの取得完了: \(self.title ?? "no-title")")
                         rttv?.reloadData()
                     }
-                    if (error != nil) {
-                        print("【警告】サムネイルの取得に失敗: \(self.title ?? "no-title")")
-                        print("AsyncImageView:Error \(String(describing: err?.localizedDescription))");
+                    if let error = error {
+                        print("【警告】サムネイルの取得に失敗: \(self.title as String)")
+                        print("AsyncImageView:Error \(error.localizedDescription))")
                     }
-            }).resume();
+            }).resume()
         }
     }
 }
