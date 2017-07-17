@@ -18,7 +18,7 @@ class PostFromUIActivity: UIActivity {
     }
     
     override var activityType: UIActivityType? {
-        guard let bundleId = Bundle.main.bundleIdentifier else {return nil}
+        guard let bundleId = Bundle.main.bundleIdentifier else { return nil }
         return UIActivityType(rawValue: bundleId + "\(self.classForCoder)")
     }
     
