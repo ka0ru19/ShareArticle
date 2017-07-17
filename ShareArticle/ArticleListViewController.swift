@@ -81,11 +81,6 @@ class ArticleListViewController: UIViewController {
     func onTappedChangeToMarkDownButton(_ sender: UIBarButtonItem) {
         changeArticlesToMarkDown()
     }
-
-    // MARK: Actionボタン
-    func onTappedActionButton(_ sender: UIBarButtonItem) {
-    }
-
 }
 
 // MARK: - データ操作
@@ -444,10 +439,9 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         setNavigationBarContents()
         
         toolbar.frame = CGRect(x: 0, y: self.view.bottomY, width: self.view.frame.width, height: ViewSize.toolbarHeight)
-        let leftItem = UIBarButtonItem(title: "記事をマークダウンに変換", style: .plain, target: nil, action: #selector(ArticleListViewController.onTappedChangeToMarkDownButton(_:)))
+        let markDownItem = UIBarButtonItem(title: "記事をマークダウンに変換", style: .plain, target: nil, action: #selector(ArticleListViewController.onTappedChangeToMarkDownButton(_:)))
         let flexibleItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let rightItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(ArticleListViewController.onTappedActionButton(_:)))
-        toolbar.items = [leftItem, flexibleItem, rightItem]
+        toolbar.items = [flexibleItem, markDownItem, flexibleItem ]
         // 最初はtoolbarを下に隠しておく
         toolbar.frame.origin.y = self.view.bottomY
         
@@ -475,7 +469,6 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         guard
             let navigationController = self.navigationController,
             let navigationBarTopItem = navigationController.navigationBar.topItem else {
-
                 return
         }
 
@@ -490,7 +483,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             self.navigationItem.leftBarButtonItem = leftBarButtonItem
             let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
-            navigationBarTopItem.title = ""
+            navigationBarTopItem.title = "(アイコン)"
         }
     }
 

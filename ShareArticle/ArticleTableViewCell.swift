@@ -42,13 +42,16 @@ class ArticleTableViewCell: UITableViewCell {
     
     func setCheck(isSetCheck: Bool) {
         if isSetCheck {
-            checkMarkImageView.backgroundColor = UIColor.blue
+//            checkMarkImageView.backgroundColor = UIColor.blue
+            checkMarkImageView.image = UIImage(named: "check_on.png")
         } else {
-            checkMarkImageView.backgroundColor = UIColor.lightGray
+//            checkMarkImageView.backgroundColor = UIColor.lightGray
+            checkMarkImageView.image = UIImage(named: "check_off.png")
         }
     }
     
     func setNoCheck() {
-        checkMarkImageView.backgroundColor = UIColor.white
+//        checkMarkImageView.backgroundColor = UIColor.white
+        checkMarkImageView.image = nil
     }
 }
