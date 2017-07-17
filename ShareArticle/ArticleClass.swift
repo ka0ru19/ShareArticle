@@ -135,11 +135,28 @@ extension Article {
             }).resume()
         }
     }
+  
+  func requestSetTitle(reloadTargetTableView rttv: UITableView?) {
+    // MARK: urlからタイトルを取得してself.titleにセット
+    OpenGraph.fetch(url: self.url) { og, error in
+      // 非同期で返ってくる
+      
+      guard let title = og?[.title] else {
+        print("no-imageUrlString")
+        return
+      }
+      
+      print("サムネイルの取得完了: \(title)")
+      self.title = title
+      rttv?.reloadData()
+    }
+  }
+  
 }
 
 extension Array where Element: Article {
     // [Article]同士を比較して差分だけ追加、削除するメソッドを作る
     func replace(newArray nArray: [Article]) {
-        
+      
     }
 }
