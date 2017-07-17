@@ -80,7 +80,7 @@ extension Article {
             }
 
             iv?.af_setImage(withURL: imageUrl,
-                            placeholderImage: nil,
+                            placeholderImage: UIImage(named: "thumbnail_nowLoading.png"),
                             filter: nil,
                             progress: nil,
                             progressQueue: DispatchQueue.main,
@@ -101,6 +101,7 @@ extension Article {
 
     func requestSetImage(reloadTargetTableView rttv: UITableView?) {
         // MARK: urlからサムネイル画像のurlを非同期で取得してself.imageにセット
+        self.image = UIImage(named: "thumbnail_nowLoading.png")
         OpenGraph.fetch(url: self.url) { og, error in
             // 非同期で返ってくる
 
@@ -108,6 +109,7 @@ extension Article {
                 let imageUrlString = og?[.image],
                 let imageUrl = URL(string: imageUrlString)  else {
                     print("no-imageUrlString")
+                    self.image = nil
                     return
             }
 
@@ -123,12 +125,14 @@ extension Article {
                     if let imageData = data {
                         self.image = UIImage(data: imageData)
                         print("サムネイルの取得完了: \(self.title ?? "no-title")")
-                        rttv?.reloadData()
+                    } else {
+                        print("【警告】サムネイルの取得に失敗: \(self.title ?? "no-title")")
+                        self.image = nil
+                        if let error = err {
+                            print("AsyncImageView:Error \(error.localizedDescription)")
+                        }
                     }
-                    if let error = err {
-                        print("【警告】サムネイルの取得に失敗: \(self.title ?? "no-title" )")
-                        print("AsyncImageView:Error \(error.localizedDescription)")
-                    }
+                    rttv?.reloadData()
             }).resume()
         }
     }

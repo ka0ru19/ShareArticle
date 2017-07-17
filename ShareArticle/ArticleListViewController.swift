@@ -365,7 +365,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         if let image = article.image {
             cell.thumbnailImageView.image = image
         } else {
-            cell.thumbnailImageView.image = nil
+            cell.thumbnailImageView.image = UIImage(named: "thumbnail_noImage.png")
             print("サムネイルなし: \(indexPath.row): \(article.title ?? "no-title")")
         }
 
