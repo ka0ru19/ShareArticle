@@ -27,7 +27,9 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        webView.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height - ViewSize.navigationbarHeight - ViewSize.toolbarHeight)
+        webView.frame = CGRect(x: 0, y: 0,
+                               width: self.view.frame.size.width,
+                               height: self.view.frame.size.height - ViewSize.navigationbarHeight - ViewSize.toolbarHeight)
         webView.frame.origin = CGPoint(x: 0, y: ViewSize.navigationbarHeight)
         webView.allowsBackForwardNavigationGestures = false // スワイプで戻るを禁止(tableViewの戻りとかぶるため)
         webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
@@ -35,7 +37,8 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate{
         self.view.addSubview(webView)
         
         //プログレスバーを生成(NavigationBar下)
-        progressView.frame = CGRect(x: 0, y: self.navigationController!.navigationBar.frame.size.height  - 2, width: self.view.frame.size.width, height: 2)
+        progressView.frame = CGRect(x: 0, y: self.navigationController!.navigationBar.frame.size.height  - 2,
+                                    width: self.view.frame.size.width, height: 2)
         progressView.progressViewStyle = .bar
         self.navigationController?.navigationBar.addSubview(progressView)
         
@@ -55,6 +58,7 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate{
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        setNavigatinbarTitle(url: webView.url)
         if keyPath == "estimatedProgress"{
             //estimatedProgressが変更されたときに、setProgressを使ってプログレスバーの値を変更する。
             self.progressView.setProgress(Float(webView.estimatedProgress), animated: true)
@@ -104,7 +108,7 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate{
                 return
         }
         
-        let title = webView.title ?? "no-title: cannot get title" //webView.stringByEvaluatingJavaScript(from: "document.title") ?? "no-title: cannot get title"
+        let title = webView.title ?? "no-title: cannot get title"
         
         print("postUrl: \(postUrl)")
         
@@ -121,6 +125,14 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate{
         })
     }
     
+    private func setNavigatinbarTitle(url: URL?) {
+        // vcのタイトルにホスト名を表示する
+        guard let url = url else { return }
+        if let component = URLComponents(string: url.absoluteString) {
+//            self.navigationController?.navigationBar.topItem!.title = component.host
+            self.title = component.host //
+        }
+    }
 }
 
 private extension ReadWebViewController {
