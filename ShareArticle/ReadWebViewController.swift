@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import WebKit
 
-class ReadWebViewController: UIViewController {
+class ReadWebViewController: UIViewController, WKNavigationDelegate{
     
-    @IBOutlet weak var webView: UIWebView!
+//    @IBOutlet weak var webView: UIWebView!
+    let webView = WKWebView()
+    let progressView = UIProgressView()
     
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var nextButton: UIBarButtonItem!
@@ -24,19 +27,47 @@ class ReadWebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        webView.delegate = self
+        webView.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height - ViewSize.navigationbarHeight - ViewSize.toolbarHeight)
+        webView.frame.origin = CGPoint(x: 0, y: ViewSize.navigationbarHeight)
+        webView.allowsBackForwardNavigationGestures = false // スワイプで戻るを禁止(tableViewの戻りとかぶるため)
+        webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
+        webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
+        self.view.addSubview(webView)
         
-        webView.loadRequest(URLRequest(url: originUrl))
+        //プログレスバーを生成(NavigationBar下)
+        progressView.frame = CGRect(x: 0, y: self.navigationController!.navigationBar.frame.size.height  - 2, width: self.view.frame.size.width, height: 2)
+        progressView.progressViewStyle = .bar
+        self.navigationController?.navigationBar.addSubview(progressView)
+        
+        webView.load(URLRequest(url: originUrl))
         
         setAllControlButtonsStatus()
     }
     
     deinit {
-        self.webView.delegate = nil
+        self.webView.removeObserver(self, forKeyPath: "estimatedProgress")
+        self.webView.removeObserver(self, forKeyPath: "loading")
         self.webView.stopLoading()
         self.webView.loadHTMLString("", baseURL: nil)
+        self.progressView.setProgress(0.0, animated: true) // プログレスバーを消す
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
         print("deinit ReadWebViewController")
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "estimatedProgress"{
+            //estimatedProgressが変更されたときに、setProgressを使ってプログレスバーの値を変更する。
+            self.progressView.setProgress(Float(webView.estimatedProgress), animated: true)
+        }else if keyPath == "loading"{
+            UIApplication.shared.isNetworkActivityIndicatorVisible = webView.isLoading
+            setAllControlButtonsStatus()
+            if webView.isLoading {
+                self.progressView.setProgress(0.1, animated: true)
+            }else{
+                //読み込みが終わったら0に
+                self.progressView.setProgress(0.0, animated: false)
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -67,13 +98,13 @@ class ReadWebViewController: UIViewController {
     
     private func showUiActivity() {
         guard
-            let postUrl: URL = self.webView.request?.url,
+            let postUrl: URL = webView.url, // self.webView.request?.url,
             postUrl.absoluteString.characters.count != 0 else {
-            print("self.webView.request?.urlがない: 読み込みが終わるまで待って。")
-            return
+                print("self.webView.request?.urlがない: 読み込みが終わるまで待って。")
+                return
         }
         
-        let title = self.webView.stringByEvaluatingJavaScript(from: "document.title") ?? "no-title: cannot get title"
+        let title = webView.title ?? "no-title: cannot get title" //webView.stringByEvaluatingJavaScript(from: "document.title") ?? "no-title: cannot get title"
         
         print("postUrl: \(postUrl)")
         
@@ -90,7 +121,7 @@ class ReadWebViewController: UIViewController {
         })
     }
     
-    }
+}
 
 private extension ReadWebViewController {
     func setAllControlButtonsStatus() {
@@ -98,19 +129,6 @@ private extension ReadWebViewController {
         backButton.setState(isAvailable: webView.canGoBack)
         nextButton.setState(isAvailable: webView.canGoForward)
         stopButton.setState(isAvailable: webView.isLoading)
-        
-    }
-}
-extension ReadWebViewController: UIWebViewDelegate {
-    func webViewDidStartLoad(_ webView: UIWebView) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        setAllControlButtonsStatus()
-        currentURL = self.webView.request?.url ?? URL(string: "https://www.google.com/")!
-    }
-    
-    func webViewDidFinishLoad(_ webView: UIWebView) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-        setAllControlButtonsStatus()
     }
 }
 
