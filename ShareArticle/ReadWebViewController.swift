@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class ReadWebViewController: UIViewController {
     
     @IBOutlet weak var webView: UIWebView!

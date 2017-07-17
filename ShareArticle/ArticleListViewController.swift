@@ -427,8 +427,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
 extension ArticleListViewController: UINavigationControllerDelegate {
 
     func initView() {
-        let originY: CGFloat = 64.0 // statusBarとnavigationBarの高さ // あとでViewSizeにぶち込む
-        articleTableView.frame = CGRect(x: 0, y: originY, width: self.view.frame.width, height: self.view.frame.height - originY - ViewSize.toolbarHeight)
+        articleTableView.frame = CGRect(x: 0, y: ViewSize.navigationbarHeight, width: self.view.frame.width, height: self.view.frame.height - ViewSize.navigationbarHeight)
         articleTableView.delegate = self
         articleTableView.dataSource = self
         articleTableView.register(UINib(nibName: "ArticleTableViewCell", bundle: nil),
@@ -459,13 +458,13 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         if isEditingTableView {
             // 出力モード
             UIView.animate(withDuration: 0.2, animations: {
-                self.articleTableView.frame.size.height -= self.toolbar.frame.size.height
+                self.articleTableView.frame.size.height -= ViewSize.toolbarHeight
                 self.toolbar.frame.origin.y = self.view.bottomY - self.toolbar.frame.size.height
             })
         } else {
             //通常モード
             UIView.animate(withDuration: 0.2, animations: {
-                self.articleTableView.frame.size.height += self.toolbar.frame.size.height
+                self.articleTableView.frame.size.height += ViewSize.toolbarHeight
                 self.toolbar.frame.origin.y = self.view.bottomY
             })
         }
