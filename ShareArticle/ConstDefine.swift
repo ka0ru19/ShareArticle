@@ -10,5 +10,6 @@
 import UIKit
 
 struct ViewSize {
+    static let navigationbarHeight: CGFloat = 64.0
     static let toolbarHeight: CGFloat = 44.0
 }

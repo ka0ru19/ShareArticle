@@ -81,11 +81,6 @@ class ArticleListViewController: UIViewController {
     func onTappedChangeToMarkDownButton(_ sender: UIBarButtonItem) {
         changeArticlesToMarkDown()
     }
-
-    // MARK: Actionボタン
-    func onTappedActionButton(_ sender: UIBarButtonItem) {
-    }
-
 }
 
 // MARK: - データ操作
@@ -370,8 +365,8 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         if let image = article.image {
             cell.thumbnailImageView.image = image
         } else {
-            cell.thumbnailImageView.image = nil
-            print("サムネイルなし: \(indexPath.row): \(article.title)")
+            cell.thumbnailImageView.image = UIImage(named: "thumbnail_noImage.png")
+            print("サムネイルなし: \(indexPath.row): \(article.title ?? "no-title")")
         }
 
         if isEditingTableView {
@@ -427,8 +422,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
 extension ArticleListViewController: UINavigationControllerDelegate {
 
     func initView() {
-        let originY: CGFloat = 64.0 // statusBarとnavigationBarの高さ // あとでViewSizeにぶち込む
-        articleTableView.frame = CGRect(x: 0, y: originY, width: self.view.frame.width, height: self.view.frame.height - originY - ViewSize.toolbarHeight)
+        articleTableView.frame = CGRect(x: 0, y: ViewSize.navigationbarHeight, width: self.view.frame.width, height: self.view.frame.height - ViewSize.navigationbarHeight)
         articleTableView.delegate = self
         articleTableView.dataSource = self
         articleTableView.register(UINib(nibName: "ArticleTableViewCell", bundle: nil),
@@ -445,10 +439,9 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         setNavigationBarContents()
         
         toolbar.frame = CGRect(x: 0, y: self.view.bottomY, width: self.view.frame.width, height: ViewSize.toolbarHeight)
-        let leftItem = UIBarButtonItem(title: "記事をマークダウンに変換", style: .plain, target: nil, action: #selector(ArticleListViewController.onTappedChangeToMarkDownButton(_:)))
+        let markDownItem = UIBarButtonItem(title: "記事をマークダウンに変換", style: .plain, target: nil, action: #selector(ArticleListViewController.onTappedChangeToMarkDownButton(_:)))
         let flexibleItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let rightItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(ArticleListViewController.onTappedActionButton(_:)))
-        toolbar.items = [leftItem, flexibleItem, rightItem]
+        toolbar.items = [flexibleItem, markDownItem, flexibleItem ]
         // 最初はtoolbarを下に隠しておく
         toolbar.frame.origin.y = self.view.bottomY
         
@@ -459,13 +452,13 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         if isEditingTableView {
             // 出力モード
             UIView.animate(withDuration: 0.2, animations: {
-                self.articleTableView.frame.size.height -= self.toolbar.frame.size.height
+                self.articleTableView.frame.size.height -= ViewSize.toolbarHeight
                 self.toolbar.frame.origin.y = self.view.bottomY - self.toolbar.frame.size.height
             })
         } else {
             //通常モード
             UIView.animate(withDuration: 0.2, animations: {
-                self.articleTableView.frame.size.height += self.toolbar.frame.size.height
+                self.articleTableView.frame.size.height += ViewSize.toolbarHeight
                 self.toolbar.frame.origin.y = self.view.bottomY
             })
         }
@@ -476,7 +469,6 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         guard
             let navigationController = self.navigationController,
             let navigationBarTopItem = navigationController.navigationBar.topItem else {
-
                 return
         }
 
@@ -491,7 +483,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             self.navigationItem.leftBarButtonItem = leftBarButtonItem
             let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
-            navigationBarTopItem.title = ""
+            navigationBarTopItem.title = "(アイコン)"
         }
     }
 
