@@ -40,7 +40,7 @@ class PostFromUIActivityViewController: UIViewController {
         
         let mainHeadSeparateView = UIView(frame: CGRect(x: 0, y: 0, width: inputView.bounds.width, height: 1))
         mainHeadSeparateView.frame.origin = CGPoint(x: inputView.frame.origin.x, y: headerView.bottomY)
-        mainHeadSeparateView.backgroundColor = UIColor.gray
+        mainHeadSeparateView.backgroundColor = UIColor.lightGray
         
         let guideTextLabel = UILabel(frame: CGRect(x: 0, y: 0, width: inputView.bounds.width - 4 * 2, height: 20))
         guideTextLabel.frame.origin = CGPoint(x: inputView.frame.origin.x + 4, y: mainHeadSeparateView.bottomY)
@@ -74,8 +74,10 @@ class PostFromUIActivityViewController: UIViewController {
         
         
         /****** mainInput view ******/
-        textView.frame = CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: 100 - 4 * 2)
-        textView.frame.origin = CGPoint(x: 4, y: 4)
+        textView.frame = CGRect(x: 0, y: 0, width: 300 - 10 * 2, height: 190 - 10 * 2)
+        textView.frame.origin = CGPoint(x: 10, y: 10)
+        textView.layer.masksToBounds = true
+        textView.layer.cornerRadius = 3.0
         textView.text = ""
         textView.becomeFirstResponder()
         
