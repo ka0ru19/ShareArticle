@@ -8,12 +8,6 @@
 
 import UIKit
 
-enum SelectArticleType {
-    case all
-    case notAll
-    case today
-    case yesterday
-}
 
 class ArticleListViewController: UIViewController {
     
@@ -33,6 +27,13 @@ class ArticleListViewController: UIViewController {
     var selectedUrl: URL!
 
     var articleUdArray: [Dictionary<String, Any>] = [] // udで保存するために型変換した記事配列
+
+    enum SelectArticleType {
+        case all
+        case notAll
+        case today
+        case yesterday
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
