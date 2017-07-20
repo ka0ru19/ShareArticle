@@ -253,7 +253,7 @@ extension ArticleListViewController {
                           dateString: dateArray[i],
                           comment: commentArray[i])
 
-            articleUdArray.append(atc.change2UdDict())
+            articleUdArray.append(atc!.change2UdDict())
         }
 
         //        print(articleUdArray)
