@@ -1,0 +1,4 @@
+github "Alamofire/Alamofire" "4.5.0"
+github "Alamofire/AlamofireImage" "3.2.0"
+github "realm/realm-cocoa" "v2.8.3"
+github "satoshi-takano/OpenGraph" "1.0.1"
