@@ -46,10 +46,6 @@ class ArticleListViewController: UIViewController {
         articleTableView.reloadData() // 毎回reloadする必要はないよね
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toReadWebVC" {
             let nextVC = segue.destination as! ReadWebViewController
@@ -166,6 +162,8 @@ extension ArticleListViewController {
 
     // MARK: 記事を条件で一括選択
     func selectArticle(type: SelectArticleType) {
+
+        let calendar = Calendar(identifier: .gregorian)
         switch type {
         case .today:
             do {
@@ -173,7 +171,7 @@ extension ArticleListViewController {
                     let headDateString: String = articleDateStringArray.first,
                     let headDate: Date = Date(dateString: headDateString, dateFormat: "yyyy/MM/dd") else { return }
 
-                if Calendar(identifier: .gregorian).isDateInToday(headDate) {
+                if calendar.isDateInToday(headDate) {
                     print("先頭のarrayが今日の記事だった場合")
                     for i in 0 ..< checkedArticleByDateArray[0].count {
                         self.checkedArticleByDateArray[0][i] = true
@@ -189,7 +187,7 @@ extension ArticleListViewController {
                 guard
                     let headDateString: String = articleDateStringArray.first,
                     let headDate: Date = Date(dateString: headDateString, dateFormat: "yyyy/MM/dd") else { return }
-                if Calendar(identifier: .gregorian).isDateInYesterday(headDate) {
+                if calendar.isDateInYesterday(headDate) {
                     print("先頭のarrayが昨日の記事だった場合")
                     for i in 0 ..< checkedArticleByDateArray[0].count {
                         self.checkedArticleByDateArray[0][i] = true
@@ -199,7 +197,7 @@ extension ArticleListViewController {
 
                 if articleDateStringArray.count < 1 { break }
                 guard let headNextDate: Date = Date(dateString: articleDateStringArray[1], dateFormat: "yyyy/MM/dd") else { return }
-                if Calendar(identifier: .gregorian).isDateInYesterday(headNextDate) {
+                if calendar.isDateInYesterday(headNextDate) {
                     print("先頭の次ののarrayが昨日の記事だった場合")
                     for i in 0 ..< checkedArticleByDateArray[1].count {
                         self.checkedArticleByDateArray[1][i] = true
@@ -247,9 +245,9 @@ extension ArticleListViewController {
         var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
         var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
 
-        var atc:Article!
+
         for i in 0 ..< titleArray.count {
-            atc = Article(title: titleArray[i],
+            let atc = Article(title: titleArray[i],
                           urlString: urlArray[i].absoluteString,
                           dateString: dateArray[i],
                           comment: commentArray[i])
@@ -348,8 +346,8 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         let article = articleByDateArray[indexPath.section][indexPath.row]
 
         cell.titleLabel.text = article.title
-        let url = article.url as URL
-        cell.urlLabel.text = String(describing: url)
+
+        cell.urlLabel.text = article.url.absoluteString
         cell.timeLabel.text = article.date.timeString()
         if let comment = article.comment {
             if comment != "" {
@@ -579,10 +577,9 @@ extension ArticleListViewController {
     }
     
     func verifyUrl (urlString: String?) -> Bool {
-        if let urlString = urlString {
-            if let url  = URL(string: urlString) {
-                return UIApplication.shared.canOpenURL(url)
-            }
+        if let urlString = urlString, let url = URL(string: urlString) {
+
+            return UIApplication.shared.canOpenURL(url)
         }
         return false
     }
