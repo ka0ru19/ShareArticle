@@ -422,7 +422,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
 extension ArticleListViewController: UINavigationControllerDelegate {
 
     func initView() {
-        articleTableView.frame = CGRect(x: 0, y: ViewSize.navigationbarHeight, width: self.view.frame.width, height: self.view.frame.height - ViewSize.navigationbarHeight)
+        articleTableView.frame = CGRect(x: 0, y: ViewSize.navigationbarBottomY, width: self.view.frame.width, height: self.view.frame.height - ViewSize.navigationbarBottomY)
         articleTableView.delegate = self
         articleTableView.dataSource = self
         articleTableView.register(UINib(nibName: "ArticleTableViewCell", bundle: nil),
@@ -477,13 +477,19 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             self.navigationItem.leftBarButtonItem = leftBarButtonItem
             let rightBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
+            self.navigationItem.titleView = nil
             navigationBarTopItem.title = "記事を選択"
         } else {
             let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(onTappedAddButton(_:)))
             self.navigationItem.leftBarButtonItem = leftBarButtonItem
             let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
-            navigationBarTopItem.title = "(アイコン)"
+            navigationBarTopItem.title = ""
+            let uiImageView = UIImageView(image: UIImage(named: "nippoly_logo.png"))
+            uiImageView.frame.size.height = ViewSize.navigationbarHeight * 0.75
+            uiImageView.frame.size.width = ViewSize.navigationbarHeight * 0.75 * 4
+            uiImageView.contentMode = .scaleAspectFit
+            self.navigationItem.titleView = uiImageView
         }
     }
 

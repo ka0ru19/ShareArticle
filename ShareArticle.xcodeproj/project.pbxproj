@@ -88,6 +88,7 @@
 		63E4104D1F1D0EAB004B71A6 /* check_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E4104B1F1D0EAB004B71A6 /* check_on.png */; };
 		63E410501F1D1607004B71A6 /* thumbnail_noImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E4104E1F1D1607004B71A6 /* thumbnail_noImage.png */; };
 		63E410511F1D1607004B71A6 /* thumbnail_nowLoading.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E4104F1F1D1607004B71A6 /* thumbnail_nowLoading.png */; };
+		63E410531F1F4395004B71A6 /* nippoly_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E410521F1F4395004B71A6 /* nippoly_logo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -174,6 +175,7 @@
 		63E4104B1F1D0EAB004B71A6 /* check_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_on.png; sourceTree = "<group>"; };
 		63E4104E1F1D1607004B71A6 /* thumbnail_noImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail_noImage.png; sourceTree = "<group>"; };
 		63E4104F1F1D1607004B71A6 /* thumbnail_nowLoading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail_nowLoading.png; sourceTree = "<group>"; };
+		63E410521F1F4395004B71A6 /* nippoly_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nippoly_logo.png; sourceTree = "<group>"; };
 		DF51C2DC13D959FB782D2E85 /* Pods_ShareArticle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareArticle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC4FFD9067F8A16AA1B0C613 /* Pods-ShareArticle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareArticle.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShareArticle/Pods-ShareArticle.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -353,6 +355,7 @@
 		63E410491F1D0EAB004B71A6 /* systemImage */ = {
 			isa = PBXGroup;
 			children = (
+				63E410521F1F4395004B71A6 /* nippoly_logo.png */,
 				63E4104A1F1D0EAB004B71A6 /* check_off.png */,
 				63E4104B1F1D0EAB004B71A6 /* check_on.png */,
 				63E4104E1F1D1607004B71A6 /* thumbnail_noImage.png */,
@@ -486,6 +489,7 @@
 				6326D79C1F073A1D00448E52 /* Icon-App-29x29@3x.png in Resources */,
 				6326D78D1F073A1D00448E52 /* icon-messages-app-iPadAir-67x50@2x.png in Resources */,
 				6326D79B1F073A1D00448E52 /* Icon-App-29x29@2x.png in Resources */,
+				63E410531F1F4395004B71A6 /* nippoly_logo.png in Resources */,
 				6326D7B21F073A1D00448E52 /* inocci-icon-uiac@2x.png in Resources */,
 				6326D7921F073A1D00448E52 /* icon-messages-app-store-1024x768.png in Resources */,
 				6326D7A91F073A1D00448E52 /* Icon-App-76x76@3x.png in Resources */,

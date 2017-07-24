@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-class ReadWebViewController: UIViewController, WKNavigationDelegate{
+class ReadWebViewController: UIViewController, WKNavigationDelegate {
     
     //    @IBOutlet weak var webView: UIWebView!
     let webView = WKWebView()
@@ -30,9 +30,11 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate{
         
         webView.frame = CGRect(x: 0, y: 0,
                                width: self.view.frame.size.width,
-                               height: self.view.frame.size.height - ViewSize.navigationbarHeight - ViewSize.toolbarHeight)
-        webView.frame.origin = CGPoint(x: 0, y: ViewSize.navigationbarHeight)
+                               height: self.view.frame.size.height - ViewSize.navigationbarBottomY - ViewSize.toolbarHeight)
+        webView.frame.origin = CGPoint(x: 0, y: ViewSize.navigationbarBottomY)
         webView.allowsBackForwardNavigationGestures = false // スワイプで戻るを禁止(tableViewの戻りとかぶるため)
+        webView.uiDelegate = self
+        webView.navigationDelegate = self
         webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
         webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
         self.view.addSubview(webView)
@@ -52,7 +54,7 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate{
         loadButtonItem = UIBarButtonItem(image: IconImage.loadImage(isOn: true), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedLoadButton(_:)))
         let flexibleItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let spaceItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        spaceItem.width = 20
+        spaceItem.width = 10
         actionButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(ReadWebViewController.onTappedActionButton(_:)))
         toolbar.items = [backButtonItem, spaceItem, nextButtonItem, spaceItem, stopButtonItem, spaceItem, loadButtonItem, flexibleItem, actionButtonItem]
         self.view.addSubview(toolbar)
@@ -169,6 +171,13 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate{
     }
 }
 
+extension ReadWebViewController: WKUIDelegate {
+    @available(iOS 10.0, *)
+    func webView(_ webView: WKWebView, shouldPreviewElement elementInfo: WKPreviewElementInfo) -> Bool {
+        return false
+    }
+    
+}
 extension ReadWebViewController {
     func setAllControlButtonsStatus() {
         // webviewの状態に応じて、3つ全てのボタンの色と操作許可を変更
