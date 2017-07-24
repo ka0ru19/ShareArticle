@@ -61,7 +61,7 @@ class PostFromUIActivityViewController: UIViewController {
         
         let inputView = UIView(frame: CGRect(x: 0, y: 0, width: baseView.frame.width , height: baseView.frame.height))
         inputView.frame.origin = baseView.bounds.origin // ここだけはboundsを引いてくる
-        inputView.backgroundColor = UIColor(red: 255/255, green: 208/255, blue: 176/255, alpha: 1.0) // #ffd0b0: 薄い肌色
+        inputView.backgroundColor = UIColor(red: 225/255, green: 226/255, blue: 225/255, alpha: 1.0) // rgb(225,226,225)
         
         /****** header、mainInput、optionの base view & separateBar view ******/
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: inputView.bounds.width , height: 36))
@@ -105,9 +105,14 @@ class PostFromUIActivityViewController: UIViewController {
         
         
         /****** mainInput view ******/
-        let textViewHeight = baseView.bottomY - headerView.bottomY - 4 * 2
-        textView.frame = CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: textViewHeight)
-        textView.frame.origin = CGPoint(x: 4, y: 4)
+        print(inputView.bottomY)
+        print(guideTextLabel.bottomY)
+        let textViewHeight = inputView.bottomY - guideTextLabel.bottomY - 8 * 2
+        textView.frame = CGRect(x: 0, y: 0, width: 300 - 8 * 2, height: textViewHeight)
+        textView.frame.origin = CGPoint(x: 8, y: 8)
+        textView.layer.cornerRadius = 8.0
+        textView.layer.borderWidth = 1.0
+        textView.layer.borderColor = UIColor.darkGray.cgColor
         textView.text = ""
         textView.becomeFirstResponder()
         
@@ -151,11 +156,6 @@ class PostFromUIActivityViewController: UIViewController {
         
         var postUdDic: [String:Any] = [:]
         
-//        guard let postItem = self.activityItems else {
-//            print("保存失敗")
-//            closeView()
-//            return
-//        }
         
         postUdDic["title"] = articleTitle
         postUdDic["urlString"] = articleUrl.absoluteString
