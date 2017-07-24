@@ -17,6 +17,7 @@ class ArticleListViewController: UIViewController {
 
     var articleDictionary: Dictionary<String, [Article]> = [:]
 
+    var articleArray: [Article] = []
     var articleDateStringArray: [String] = [] // 記事の日付を管理する配列: セクションのタイトルで使う
     var articleByDateArray: [[Article]]  = [] // セクション分けして記事を表示するのに使う
 
@@ -271,13 +272,16 @@ extension ArticleListViewController {
         }
 
         // articleArrayに代入
-        var articleArray: [Article] = [] // udから全ての記事を持ってくる
+        var newArticleArray: [Article] = [] // udから全ての記事を持ってくる
         for articleUd in articleUdArray {
             if let article = Article(from: articleUd) {
-                article.requestSetImage(reloadTargetTableView: self.articleTableView)
-                articleArray.append(article)
+//                article.requestSetImage(reloadTargetTableView: self.articleTableView)
+                newArticleArray.append(article)
             }
         }
+        
+        print("articleArray \(articleArray)")
+        articleArray = articleArray.replace(newArray: newArticleArray) // キャッシュを引き継ぎ
 
         if articleArray.count == 0 { return }
 
@@ -292,6 +296,7 @@ extension ArticleListViewController {
         var newArticleByDateArray:[[Article]] = [] // [[Article]]
         for article in articleArray {
             let thisDateString = article.date.dateString()
+            article.requestSetImage(reloadTargetTableView: self.articleTableView)
             if currentDateString != thisDateString {
                 newArticleByDateArray.append(currentArticleArray)
                 currentArticleArray = []
@@ -307,7 +312,7 @@ extension ArticleListViewController {
         articleByDateArray = newArticleByDateArray
 
         newArticleByDateArray.removeAll(keepingCapacity: true)
-        articleArray.removeAll(keepingCapacity: true)
+//        articleArray.removeAll(keepingCapacity: true)
 
         //        print(articleDateStringArray)
         //        print(articleByDateArray)

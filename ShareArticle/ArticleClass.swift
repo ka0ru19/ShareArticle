@@ -101,6 +101,7 @@ extension Article {
 
     func requestSetImage(reloadTargetTableView rttv: UITableView?) {
         // MARK: urlからサムネイル画像のurlを非同期で取得してself.imageにセット
+        if self.image != nil { return }
         self.image = UIImage(named: "thumbnail_nowLoading.png")
         OpenGraph.fetch(url: self.url) { og, error in
             // 非同期で返ってくる
@@ -140,7 +141,28 @@ extension Article {
 
 extension Array where Element: Article {
     // [Article]同士を比較して差分だけ追加、削除するメソッドを作る
-    func replace(newArray nArray: [Article]) {
+    func replace(newArray nArray: [Article]) -> [Article] {
+        var oldTempArray = self
+        var resultArray: [Article] = []
+        
+        for (nIndex, n) in nArray.enumerated() {
+            if oldTempArray.count == 0 {
+                resultArray.append(nArray[nIndex])
+                continue
+            }
+            for (oIndex, o) in oldTempArray.enumerated() {
+                if n.url == o.url {
+                    resultArray.append(o)
+                    oldTempArray.remove(at: oIndex)
+                    break
+                }
+                if oIndex == oldTempArray.count - 1 {
+                    resultArray.append(n)
+                }
+            }
+        }
+        
+        return resultArray
 
     }
 }
