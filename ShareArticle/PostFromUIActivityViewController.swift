@@ -9,21 +9,51 @@
 import UIKit
 
 class PostFromUIActivityViewController: UIViewController {
-
+    
     var postFromUiAc: PostFromUIActivity?
     var activityItems: [Any]?
     
     let textView = UITextView()
     
+    var articleTitle: String?
+    var articleUrl: URL!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        var tempTitle: String?
+        var tempUrl: URL?
+        guard let aItems = activityItems else {
+            closeView()
+            return
+        }
+        for item in aItems {
+            print(String(describing: type(of: item)))
+            if String(describing: type(of: item)) == "__NSCFString" {
+                tempTitle = item as? String
+                continue
+            }
+            if String(describing: type(of: item)) == "NSURL" {
+                tempUrl = item as? URL
+                continue
+            }
+        }
+        guard let url = tempUrl else {
+            closeView()
+            return
+        }
+        
+        articleTitle = tempTitle
+        articleUrl = url.absoluteURL
+        print("articleTitle: \(articleTitle ?? "no-Title")")
+        print("articleUrl: \(articleUrl)")
+        
         
         self.modalPresentationStyle = .overCurrentContext // 背景の透過を許可
         self.view.backgroundColor = UIColor(colorLiteralRed: 0/255, green: 0/255, blue: 0/255, alpha: 0.6)
         
         /****** baseのview ******/
-        let baseView = UIView(frame: CGRect(x: 0, y: 0, width: 300 , height: 250))
+        let baseView = UIView(frame: CGRect(x: 0, y: 0, width: 300 , height: 200))
         baseView.center = CGPoint(x: self.view.center.x, y: self.view.center.y - 100) // ここで親viewのpositonを変更できる
         baseView.layer.masksToBounds = true
         baseView.layer.cornerRadius = 10.0
@@ -36,7 +66,7 @@ class PostFromUIActivityViewController: UIViewController {
         /****** header、mainInput、optionの base view & separateBar view ******/
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: inputView.bounds.width , height: 36))
         headerView.frame.origin = inputView.frame.origin
-        headerView.backgroundColor = UIColor(red: 255/255, green: 159/255, blue: 128/255, alpha: 1.0) // #ff9e80: 肌色
+        headerView.backgroundColor = UIColor.saRed
         
         let mainHeadSeparateView = UIView(frame: CGRect(x: 0, y: 0, width: inputView.bounds.width, height: 1))
         mainHeadSeparateView.frame.origin = CGPoint(x: inputView.frame.origin.x, y: headerView.bottomY)
@@ -46,6 +76,7 @@ class PostFromUIActivityViewController: UIViewController {
         guideTextLabel.frame.origin = CGPoint(x: inputView.frame.origin.x + 4, y: mainHeadSeparateView.bottomY)
         guideTextLabel.backgroundColor = UIColor.clear
         guideTextLabel.text = "記事へのコメントも一緒に保存できるよ:D"
+        guideTextLabel.textAlignment = .center
         guideTextLabel.font = UIFont.systemFont(ofSize: CGFloat(12))
         
         let mainInputView = UIView(frame: CGRect(x: 0, y: 0, width: inputView.bounds.width, height: 200))
@@ -59,34 +90,35 @@ class PostFromUIActivityViewController: UIViewController {
         cancelButton.frame.origin = CGPoint(x: 0, y: headerViewsOriginY)
         cancelButton.addTarget(self, action: #selector(self.closeView), for: .touchUpInside)
         cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.setTitleColor(UIColor.red, for: .normal)
+        cancelButton.setTitleColor(UIColor.white, for: .normal)
         
         let finishButton = UIButton(frame: CGRect(x: 0, y: 0, width: 90 , height: headerViewsHeight))
         finishButton.frame.origin = CGPoint(x: inputView.frame.width -  finishButton.frame.width, y: headerViewsOriginY)
         finishButton.addTarget(self, action: #selector(self.post), for: .touchUpInside)
         finishButton.setTitle("Done", for: .normal)
-        finishButton.setTitleColor(UIColor.blue, for: .normal)
+        finishButton.setTitleColor(UIColor.white, for: .normal)
         
-        let headerLabel = UILabel(frame: CGRect(x: 0, y: 0, width: headerView.frame.width - 90 - 90 , height: headerViewsHeight))
-        headerLabel.frame.origin = CGPoint(x: cancelButton.bottomX, y: headerViewsOriginY)
-        headerLabel.textAlignment = .center
-        headerLabel.text = "title"
+        let headerImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: headerView.frame.width - 90 - 90 , height: headerViewsHeight))
+        headerImageView.frame.origin = CGPoint(x: cancelButton.bottomX, y: headerViewsOriginY)
+        headerImageView.contentMode = .scaleAspectFit
+        headerImageView.image = UIImage(named: "nippoly_white.png")
         
         
         /****** mainInput view ******/
-        textView.frame = CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: 100 - 4 * 2)
+        let textViewHeight = baseView.bottomY - headerView.bottomY - 4 * 2
+        textView.frame = CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: textViewHeight)
         textView.frame.origin = CGPoint(x: 4, y: 4)
         textView.text = ""
         textView.becomeFirstResponder()
         
-        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: 60))
-        titleLabel.frame.origin = CGPoint(x: 4, y: textView.bottomY)
-        titleLabel.numberOfLines = 2
-//        titleLabel.text = postItem[0] as? String ?? "no-text"
-
-        let urlLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: 16))
-        urlLabel.frame.origin = CGPoint(x: 4, y: titleLabel.bottomY)
-//        urlLabel.text = String(describing: postItem[1] as? URL ?? URL(string: "https://www.apple.com/")!)
+        //        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: 60))
+        //        titleLabel.frame.origin = CGPoint(x: 4, y: textView.bottomY)
+        //        titleLabel.numberOfLines = 2
+        //        titleLabel.text = articleTitle
+        //
+        //        let urlLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 300 - 4 * 2, height: 16))
+        //        urlLabel.frame.origin = CGPoint(x: 4, y: titleLabel.bottomY)
+        //        urlLabel.text = String(describing: articleUrl)
         
         /****** option view ******/
         
@@ -94,7 +126,7 @@ class PostFromUIActivityViewController: UIViewController {
         /****** view の統合 ******/
         headerView.addSubview(cancelButton)
         headerView.addSubview(finishButton)
-        headerView.addSubview(headerLabel)
+        headerView.addSubview(headerImageView)
         mainInputView.addSubview(textView)
         
         inputView.addSubview(headerView)
@@ -119,14 +151,14 @@ class PostFromUIActivityViewController: UIViewController {
         
         var postUdDic: [String:Any] = [:]
         
-        guard let postItem = self.activityItems else {
-            print("保存失敗")
-            closeView()
-            return
-        }
+//        guard let postItem = self.activityItems else {
+//            print("保存失敗")
+//            closeView()
+//            return
+//        }
         
-        postUdDic["title"] = postItem[0] as? String ?? "no-text"
-        postUdDic["urlString"] = String(describing: postItem[1] as? URL ?? URL(string: "https://www.apple.com/")!)
+        postUdDic["title"] = articleTitle
+        postUdDic["urlString"] = articleUrl.absoluteString
         postUdDic["date"] = Date()
         postUdDic["comment"] = self.textView.text
         articleUdArray.append(postUdDic)

@@ -297,6 +297,7 @@ extension ArticleListViewController {
         for article in articleArray {
             let thisDateString = article.date.dateString()
             article.requestSetImage(reloadTargetTableView: self.articleTableView)
+            article.requestSetTitle(reloadTargetTableView: self.articleTableView)
             if currentDateString != thisDateString {
                 newArticleByDateArray.append(currentArticleArray)
                 currentArticleArray = []
