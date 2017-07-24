@@ -67,6 +67,8 @@
 		632910B71EED16590071F2E1 /* DateFormatExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910B61EED16590071F2E1 /* DateFormatExtension.swift */; };
 		632910B91EED18E60071F2E1 /* ImageConvertExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910B81EED18E60071F2E1 /* ImageConvertExtension.swift */; };
 		63381F191F15AE47006C5604 /* ConstDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63381F181F15AE47006C5604 /* ConstDefine.swift */; };
+		634CB66E1F263E0B00F2E7F5 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634CB66D1F263E0B00F2E7F5 /* UIColorExtension.swift */; };
+		634CB6701F2640AE00F2E7F5 /* nippoly_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 634CB66F1F2640AE00F2E7F5 /* nippoly_white.png */; };
 		638201EC1EF7A9B900ACE0FA /* PostFromUIActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */; };
 		63E410311F1CFA4D004B71A6 /* back_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E410291F1CFA4D004B71A6 /* back_on.png */; };
 		63E410321F1CFA4D004B71A6 /* back_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E4102A1F1CFA4D004B71A6 /* back_on@2x.png */; };
@@ -154,6 +156,8 @@
 		632910B61EED16590071F2E1 /* DateFormatExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatExtension.swift; sourceTree = "<group>"; };
 		632910B81EED18E60071F2E1 /* ImageConvertExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageConvertExtension.swift; sourceTree = "<group>"; };
 		63381F181F15AE47006C5604 /* ConstDefine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstDefine.swift; sourceTree = "<group>"; };
+		634CB66D1F263E0B00F2E7F5 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		634CB66F1F2640AE00F2E7F5 /* nippoly_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nippoly_white.png; sourceTree = "<group>"; };
 		638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostFromUIActivity.swift; sourceTree = "<group>"; };
 		63E410291F1CFA4D004B71A6 /* back_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_on.png; sourceTree = "<group>"; };
 		63E4102A1F1CFA4D004B71A6 /* back_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_on@2x.png"; sourceTree = "<group>"; };
@@ -317,6 +321,7 @@
 				6326D7B61F073B2700448E52 /* PostFromUIActivityViewController.swift */,
 				632910AE1EECF29F0071F2E1 /* ArticleTableViewCell.swift */,
 				63381F181F15AE47006C5604 /* ConstDefine.swift */,
+				634CB66D1F263E0B00F2E7F5 /* UIColorExtension.swift */,
 				632910AF1EECF29F0071F2E1 /* ArticleTableViewCell.xib */,
 				6329109C1EECEC880071F2E1 /* Main.storyboard */,
 				6329109F1EECEC880071F2E1 /* Assets.xcassets */,
@@ -355,6 +360,7 @@
 		63E410491F1D0EAB004B71A6 /* systemImage */ = {
 			isa = PBXGroup;
 			children = (
+				634CB66F1F2640AE00F2E7F5 /* nippoly_white.png */,
 				63E410521F1F4395004B71A6 /* nippoly_logo.png */,
 				63E4104A1F1D0EAB004B71A6 /* check_off.png */,
 				63E4104B1F1D0EAB004B71A6 /* check_on.png */,
@@ -481,6 +487,7 @@
 				63E410331F1CFA4D004B71A6 /* next_on.png in Resources */,
 				6326D7AD1F073A1D00448E52 /* iTunesArtwork@1x.png in Resources */,
 				63E410341F1CFA4D004B71A6 /* next_on@2x.png in Resources */,
+				634CB6701F2640AE00F2E7F5 /* nippoly_white.png in Resources */,
 				6326D79A1F073A1D00448E52 /* Icon-App-29x29@1x.png in Resources */,
 				6326D7A21F073A1D00448E52 /* Icon-App-60x60@1x.png in Resources */,
 				6326D7B31F073A1D00448E52 /* inocci-icon-uiac@2x~ipad.png in Resources */,
@@ -570,6 +577,7 @@
 				6326D7B71F073B2700448E52 /* PostFromUIActivityViewController.swift in Sources */,
 				632910AD1EECF2760071F2E1 /* ReadWebViewController.swift in Sources */,
 				632910B51EED10C40071F2E1 /* ArticleClass.swift in Sources */,
+				634CB66E1F263E0B00F2E7F5 /* UIColorExtension.swift in Sources */,
 				632910AB1EECF20B0071F2E1 /* ArticleListViewController.swift in Sources */,
 				632910991EECEC880071F2E1 /* AppDelegate.swift in Sources */,
 				63381F191F15AE47006C5604 /* ConstDefine.swift in Sources */,
