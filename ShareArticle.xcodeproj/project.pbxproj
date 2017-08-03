@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0EABB536CCF85B382ED7E600 /* Pods_ShareArticle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF51C2DC13D959FB782D2E85 /* Pods_ShareArticle.framework */; };
+		631139E41F27361000813080 /* ArticleObjectClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631139E31F27361000813080 /* ArticleObjectClass.swift */; };
 		632536E01F0F423E00D43C08 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632536DF1F0F423E00D43C08 /* ArrayExtension.swift */; };
 		6326D78A1F073A1D00448E52 /* icon-messages-app-27x20@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6326D75B1F073A1D00448E52 /* icon-messages-app-27x20@1x.png */; };
 		6326D78B1F073A1D00448E52 /* icon-messages-app-27x20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6326D75C1F073A1D00448E52 /* icon-messages-app-27x20@2x.png */; };
@@ -70,6 +71,7 @@
 		634CB66E1F263E0B00F2E7F5 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634CB66D1F263E0B00F2E7F5 /* UIColorExtension.swift */; };
 		634CB6701F2640AE00F2E7F5 /* nippoly_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 634CB66F1F2640AE00F2E7F5 /* nippoly_white.png */; };
 		638201EC1EF7A9B900ACE0FA /* PostFromUIActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */; };
+		63A78AD01F332A210081349B /* PublicFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A78ACF1F332A210081349B /* PublicFunction.swift */; };
 		63E410311F1CFA4D004B71A6 /* back_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E410291F1CFA4D004B71A6 /* back_on.png */; };
 		63E410321F1CFA4D004B71A6 /* back_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E4102A1F1CFA4D004B71A6 /* back_on@2x.png */; };
 		63E410331F1CFA4D004B71A6 /* next_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E4102B1F1CFA4D004B71A6 /* next_on.png */; };
@@ -95,6 +97,7 @@
 
 /* Begin PBXFileReference section */
 		629B2BA04CA8E52A59169EDA /* Pods-ShareArticle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareArticle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShareArticle/Pods-ShareArticle.debug.xcconfig"; sourceTree = "<group>"; };
+		631139E31F27361000813080 /* ArticleObjectClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleObjectClass.swift; sourceTree = "<group>"; };
 		632536DF1F0F423E00D43C08 /* ArrayExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		6326D75B1F073A1D00448E52 /* icon-messages-app-27x20@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-messages-app-27x20@1x.png"; sourceTree = "<group>"; };
 		6326D75C1F073A1D00448E52 /* icon-messages-app-27x20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-messages-app-27x20@2x.png"; sourceTree = "<group>"; };
@@ -159,6 +162,7 @@
 		634CB66D1F263E0B00F2E7F5 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		634CB66F1F2640AE00F2E7F5 /* nippoly_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nippoly_white.png; sourceTree = "<group>"; };
 		638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostFromUIActivity.swift; sourceTree = "<group>"; };
+		63A78ACF1F332A210081349B /* PublicFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicFunction.swift; sourceTree = "<group>"; };
 		63E410291F1CFA4D004B71A6 /* back_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_on.png; sourceTree = "<group>"; };
 		63E4102A1F1CFA4D004B71A6 /* back_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_on@2x.png"; sourceTree = "<group>"; };
 		63E4102B1F1CFA4D004B71A6 /* next_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = next_on.png; sourceTree = "<group>"; };
@@ -314,6 +318,7 @@
 				632910AC1EECF2760071F2E1 /* ReadWebViewController.swift */,
 				632910B21EED0F0B0071F2E1 /* UIViewExtension.swift */,
 				632910B41EED10C40071F2E1 /* ArticleClass.swift */,
+				631139E31F27361000813080 /* ArticleObjectClass.swift */,
 				632910B61EED16590071F2E1 /* DateFormatExtension.swift */,
 				632536DF1F0F423E00D43C08 /* ArrayExtension.swift */,
 				632910B81EED18E60071F2E1 /* ImageConvertExtension.swift */,
@@ -322,6 +327,7 @@
 				632910AE1EECF29F0071F2E1 /* ArticleTableViewCell.swift */,
 				63381F181F15AE47006C5604 /* ConstDefine.swift */,
 				634CB66D1F263E0B00F2E7F5 /* UIColorExtension.swift */,
+				63A78ACF1F332A210081349B /* PublicFunction.swift */,
 				632910AF1EECF29F0071F2E1 /* ArticleTableViewCell.xib */,
 				6329109C1EECEC880071F2E1 /* Main.storyboard */,
 				6329109F1EECEC880071F2E1 /* Assets.xcassets */,
@@ -572,6 +578,7 @@
 				632910B71EED16590071F2E1 /* DateFormatExtension.swift in Sources */,
 				6326D7B01F073A1D00448E52 /* README.md in Sources */,
 				632536E01F0F423E00D43C08 /* ArrayExtension.swift in Sources */,
+				63A78AD01F332A210081349B /* PublicFunction.swift in Sources */,
 				632910B31EED0F0B0071F2E1 /* UIViewExtension.swift in Sources */,
 				632910B01EECF29F0071F2E1 /* ArticleTableViewCell.swift in Sources */,
 				6326D7B71F073B2700448E52 /* PostFromUIActivityViewController.swift in Sources */,
@@ -582,6 +589,7 @@
 				632910991EECEC880071F2E1 /* AppDelegate.swift in Sources */,
 				63381F191F15AE47006C5604 /* ConstDefine.swift in Sources */,
 				632910B91EED18E60071F2E1 /* ImageConvertExtension.swift in Sources */,
+				631139E41F27361000813080 /* ArticleObjectClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -629,9 +637,11 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wataru Inoue (44KX7M22LP)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 44KX7M22LP;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -679,9 +689,11 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wataru Inoue (44KX7M22LP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wataru Inoue (44KX7M22LP)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 44KX7M22LP;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -705,6 +717,7 @@
 			baseConfigurationReference = 629B2BA04CA8E52A59169EDA /* Pods-ShareArticle.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = 44KX7M22LP;
 				INFOPLIST_FILE = ShareArticle/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -720,6 +733,7 @@
 			baseConfigurationReference = FC4FFD9067F8A16AA1B0C613 /* Pods-ShareArticle.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = 44KX7M22LP;
 				INFOPLIST_FILE = ShareArticle/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
