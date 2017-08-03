@@ -139,14 +139,14 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate {
     private func showUiActivity() {
         guard
             let postUrl: URL = webView.url, // self.webView.request?.url,
-            postUrl.absoluteString.characters.count != 0 else {
-                print("self.webView.request?.urlがない: 読み込みが終わるまで待って。")
+            postUrl.absoluteString.characters.count != 0,
+            let title = webView.title,
+            title.characters.count != 0 else {
+                print("self.webView.request?.url || webView.titleがない")
                 return
         }
         
-        let title = webView.title ?? "no-title: cannot get title"
-        
-        print("postUrl: \(postUrl)")
+        print("postUrl: \(postUrl), title: \(title)")
         
         let activityItems: [Any] = [title, postUrl]
         let appActivity = [PostFromUIActivity()]
