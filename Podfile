@@ -6,8 +6,5 @@ target 'ShareArticle' do
   use_frameworks!
 
   # Pods for ShareArticle
-  pod 'OpenGraph'
-  pod 'AlamofireImage', '~> 3.1'
-  pod 'RealmSwift'
 
 end

@@ -1,18 +1,3 @@
-PODS:
-  - Alamofire (4.5.0)
-  - AlamofireImage (3.2.0):
-    - Alamofire (~> 4.1)
-  - OpenGraph (1.0.1)
-
-DEPENDENCIES:
-  - AlamofireImage (~> 3.1)
-  - OpenGraph
-
-SPEC CHECKSUMS:
-  Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
-  AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
-  OpenGraph: ab741a1468a28a3cca10a03602034ed1c74b84d3
-
-PODFILE CHECKSUM: f5b588f37133f4bf161df702b86e0f03fd08cd4f
+PODFILE CHECKSUM: 724f2d5ac9695205f1e810be3ea8183f2f8e7f7e
 
 COCOAPODS: 1.2.1
