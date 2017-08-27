@@ -99,7 +99,7 @@ extension Article {
         }
     }
     
-    func requestSetImage(reloadTargetTableView rttv: UITableView?) {
+    func requestSetImage(reloadTargetTableView rttv: UITableView?, indexPath ip: IndexPath) {
         // MARK: urlからサムネイル画像のurlを非同期で取得してself.imageにセット
         if self.image != nil { return }
         self.image = UIImage(named: "thumbnail_nowLoading.png")
@@ -133,7 +133,8 @@ extension Article {
                             print("AsyncImageView:Error \(error.localizedDescription)")
                         }
                     }
-                    rttv?.reloadData()
+//                    rttv?.reloadData()
+                    rttv?.reloadRows(at: [ip], with: .fade)
             }).resume()
         }
     }

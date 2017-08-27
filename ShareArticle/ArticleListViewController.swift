@@ -85,6 +85,7 @@ class ArticleListViewController: UIViewController {
 extension ArticleListViewController {
     // MARK: [記事]をマークダウン形式の文字列に変換
     func changeArticlesToMarkDown() {
+        
         // 選択された記事のみを書き出す
         var targetArray: [Article] = []
         for d in 0 ..< articleByDateArray.count {
@@ -93,6 +94,13 @@ extension ArticleListViewController {
                     targetArray.append(articleByDateArray[d][a])
                 }
             }
+        }
+        
+        if targetArray.count == 0 {
+            let alert = UIAlertController(title: "記事がありません", message: "変換したい記事を選択してください", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+            return
         }
 
         var markdownText: String = ""
@@ -296,8 +304,8 @@ extension ArticleListViewController {
         var newArticleByDateArray:[[Article]] = [] // [[Article]]
         for article in articleArray {
             let thisDateString = article.date.dateString()
-            article.requestSetImage(reloadTargetTableView: self.articleTableView)
-            article.requestSetTitle(reloadTargetTableView: self.articleTableView)
+//            article.requestSetImage(reloadTargetTableView: self.articleTableView) // あとでやる
+//            article.requestSetTitle(reloadTargetTableView: self.articleTableView) // 想定しない
             if currentDateString != thisDateString {
                 newArticleByDateArray.append(currentArticleArray)
                 currentArticleArray = []
@@ -313,10 +321,14 @@ extension ArticleListViewController {
         articleByDateArray = newArticleByDateArray
 
         newArticleByDateArray.removeAll(keepingCapacity: true)
-//        articleArray.removeAll(keepingCapacity: true)
-
-        //        print(articleDateStringArray)
-        //        print(articleByDateArray)
+        
+        // サムネイルセットのリクエスト
+        for j in 0 ..< articleByDateArray.count {
+            for i in 0 ..< articleByDateArray[j].count {
+                let ip = IndexPath(row: i, section: j)
+                articleByDateArray[j][i].requestSetImage(reloadTargetTableView: self.articleTableView, indexPath: ip)
+            }
+        }
     }
 
     // [[Article]]からudに保存する
@@ -495,7 +507,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
             navigationBarTopItem.title = ""
-            let uiImageView = UIImageView(image: UIImage(named: "Sheraric_1440-360.png"))
+            let uiImageView = UIImageView(image: UIImage(named: "Posty_logo_1440_360.png"))
             uiImageView.frame.size.height = ViewSize.navigationbarHeight * 0.75
             uiImageView.frame.size.width = ViewSize.navigationbarHeight * 0.75 * 4
             uiImageView.contentMode = .scaleAspectFit

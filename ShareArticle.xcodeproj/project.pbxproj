@@ -23,9 +23,11 @@
 		632910B71EED16590071F2E1 /* DateFormatExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910B61EED16590071F2E1 /* DateFormatExtension.swift */; };
 		632910B91EED18E60071F2E1 /* ImageConvertExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910B81EED18E60071F2E1 /* ImageConvertExtension.swift */; };
 		63381F191F15AE47006C5604 /* ConstDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63381F181F15AE47006C5604 /* ConstDefine.swift */; };
-		633BF84C1F52C34100D99E22 /* Sheraric_1440-360.png in Resources */ = {isa = PBXBuildFile; fileRef = 633BF84B1F52C34100D99E22 /* Sheraric_1440-360.png */; };
 		633BF84E1F52C9EA00D99E22 /* bookmark_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 633BF84D1F52C9EA00D99E22 /* bookmark_icon.png */; };
 		633BF8521F52CA7F00D99E22 /* icon_180.png in Resources */ = {isa = PBXBuildFile; fileRef = 633BF8511F52CA7F00D99E22 /* icon_180.png */; };
+		633BF8541F52F34200D99E22 /* Posty_logo_1440_360.png in Resources */ = {isa = PBXBuildFile; fileRef = 633BF8531F52F34200D99E22 /* Posty_logo_1440_360.png */; };
+		633BF8571F52FD7B00D99E22 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633BF8551F52FD7B00D99E22 /* TutorialViewController.swift */; };
+		633BF85A1F52FDBB00D99E22 /* Tutorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 633BF8591F52FDBB00D99E22 /* Tutorial.storyboard */; };
 		634CB66E1F263E0B00F2E7F5 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634CB66D1F263E0B00F2E7F5 /* UIColorExtension.swift */; };
 		634CB6701F2640AE00F2E7F5 /* nippoly_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 634CB66F1F2640AE00F2E7F5 /* nippoly_white.png */; };
 		638201EC1EF7A9B900ACE0FA /* PostFromUIActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */; };
@@ -111,9 +113,11 @@
 		632910B61EED16590071F2E1 /* DateFormatExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatExtension.swift; sourceTree = "<group>"; };
 		632910B81EED18E60071F2E1 /* ImageConvertExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageConvertExtension.swift; sourceTree = "<group>"; };
 		63381F181F15AE47006C5604 /* ConstDefine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstDefine.swift; sourceTree = "<group>"; };
-		633BF84B1F52C34100D99E22 /* Sheraric_1440-360.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sheraric_1440-360.png"; sourceTree = "<group>"; };
 		633BF84D1F52C9EA00D99E22 /* bookmark_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bookmark_icon.png; sourceTree = "<group>"; };
 		633BF8511F52CA7F00D99E22 /* icon_180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_180.png; sourceTree = "<group>"; };
+		633BF8531F52F34200D99E22 /* Posty_logo_1440_360.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Posty_logo_1440_360.png; sourceTree = "<group>"; };
+		633BF8551F52FD7B00D99E22 /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
+		633BF8591F52FDBB00D99E22 /* Tutorial.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Tutorial.storyboard; sourceTree = "<group>"; };
 		634CB66D1F263E0B00F2E7F5 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		634CB66F1F2640AE00F2E7F5 /* nippoly_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nippoly_white.png; sourceTree = "<group>"; };
 		638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostFromUIActivity.swift; sourceTree = "<group>"; };
@@ -250,6 +254,8 @@
 				632910AA1EECF20B0071F2E1 /* ArticleListViewController.swift */,
 				632910AC1EECF2760071F2E1 /* ReadWebViewController.swift */,
 				6326D7B61F073B2700448E52 /* PostFromUIActivityViewController.swift */,
+				633BF8551F52FD7B00D99E22 /* TutorialViewController.swift */,
+				633BF8591F52FDBB00D99E22 /* Tutorial.storyboard */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -364,7 +370,7 @@
 			children = (
 				634CB66F1F2640AE00F2E7F5 /* nippoly_white.png */,
 				633BF8511F52CA7F00D99E22 /* icon_180.png */,
-				633BF84B1F52C34100D99E22 /* Sheraric_1440-360.png */,
+				633BF8531F52F34200D99E22 /* Posty_logo_1440_360.png */,
 				633BF84D1F52C9EA00D99E22 /* bookmark_icon.png */,
 				63E4104A1F1D0EAB004B71A6 /* check_off.png */,
 				63E4104B1F1D0EAB004B71A6 /* check_on.png */,
@@ -449,7 +455,6 @@
 				63E410431F1CFED7004B71A6 /* stop_off.png in Resources */,
 				63DD884E1F529B4300885385 /* iTunesArtwork@3x.png in Resources */,
 				632910B11EECF29F0071F2E1 /* ArticleTableViewCell.xib in Resources */,
-				633BF84C1F52C34100D99E22 /* Sheraric_1440-360.png in Resources */,
 				63DD88481F529B4300885385 /* Icon-App-76x76@3x.png in Resources */,
 				63DD88461F529B4300885385 /* Icon-App-76x76@1x.png in Resources */,
 				63DD88451F529B4300885385 /* Icon-App-72x72@2x.png in Resources */,
@@ -507,7 +512,9 @@
 				63DD882F1F529B4300885385 /* icon-messages-app-iPhone-60x45@2x.png in Resources */,
 				633BF8521F52CA7F00D99E22 /* icon_180.png in Resources */,
 				63DD883C1F529B4300885385 /* Icon-App-40x40@1x.png in Resources */,
+				633BF8541F52F34200D99E22 /* Posty_logo_1440_360.png in Resources */,
 				63DD884B1F529B4300885385 /* Icon-Small-50x50@2x.png in Resources */,
+				633BF85A1F52FDBB00D99E22 /* Tutorial.storyboard in Resources */,
 				6329109E1EECEC880071F2E1 /* Main.storyboard in Resources */,
 				63E410311F1CFA4D004B71A6 /* back_on.png in Resources */,
 				63E410381F1CFA4D004B71A6 /* stop_on@2x.png in Resources */,
@@ -581,6 +588,7 @@
 				6326D7B71F073B2700448E52 /* PostFromUIActivityViewController.swift in Sources */,
 				632910AD1EECF2760071F2E1 /* ReadWebViewController.swift in Sources */,
 				632910B51EED10C40071F2E1 /* ArticleClass.swift in Sources */,
+				633BF8571F52FD7B00D99E22 /* TutorialViewController.swift in Sources */,
 				634CB66E1F263E0B00F2E7F5 /* UIColorExtension.swift in Sources */,
 				632910AB1EECF20B0071F2E1 /* ArticleListViewController.swift in Sources */,
 				632910991EECEC880071F2E1 /* AppDelegate.swift in Sources */,
