@@ -449,6 +449,8 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         toolbar.items = [flexibleItem, markDownItem, flexibleItem ]
         // 最初はtoolbarを下に隠しておく
         toolbar.frame.origin.y = self.view.bottomY
+        toolbar.tintColor = UIColor.black
+        toolbar.barTintColor = UIColor.lightRed
         
         self.view.addSubview(toolbar)
     }
@@ -476,6 +478,9 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             let navigationBarTopItem = navigationController.navigationBar.topItem else {
                 return
         }
+        
+        navigationController.navigationBar.barTintColor = UIColor.lightRed
+        navigationController.navigationBar.tintColor = UIColor.black
 
         if isEditingTableView {
             let leftBarButtonItem = UIBarButtonItem(title: "条件選択", style: .plain, target: self, action: #selector(onTappedKindSelectButton(_:)))
@@ -490,7 +495,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
             navigationBarTopItem.title = ""
-            let uiImageView = UIImageView(image: UIImage(named: "nippoly_logo.png"))
+            let uiImageView = UIImageView(image: UIImage(named: "Sheraric_1440-360.png"))
             uiImageView.frame.size.height = ViewSize.navigationbarHeight * 0.75
             uiImageView.frame.size.width = ViewSize.navigationbarHeight * 0.75 * 4
             uiImageView.contentMode = .scaleAspectFit

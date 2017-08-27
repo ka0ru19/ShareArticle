@@ -47,7 +47,10 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate {
         
         webView.load(URLRequest(url: originUrl))
         
+        // ツールバーを生成
         toolbar.frame = CGRect(x: 0, y: webView.bottomY, width: self.view.frame.width, height: ViewSize.toolbarHeight)
+        toolbar.barTintColor = UIColor.lightRed
+        toolbar.tintColor = UIColor.black
         backButtonItem = UIBarButtonItem(image: IconImage.backImage(isOn: false), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedBackButton(_:)))
         nextButtonItem = UIBarButtonItem(image: IconImage.nextImage(isOn: false), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedNextButton(_:)))
         stopButtonItem = UIBarButtonItem(image: IconImage.stopImage(isOn: false), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedStopButton(_:)))

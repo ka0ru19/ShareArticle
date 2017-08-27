@@ -98,11 +98,15 @@ class PostFromUIActivityViewController: UIViewController {
         finishButton.setTitle("Done", for: .normal)
         finishButton.setTitleColor(UIColor.white, for: .normal)
         
-        let headerImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: headerView.frame.width - 90 - 90 , height: headerViewsHeight))
-        headerImageView.frame.origin = CGPoint(x: cancelButton.bottomX, y: headerViewsOriginY)
+//        let headerImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: headerView.frame.width - 90 - 90 , height: headerViewsHeight))
+//        headerImageView.frame.origin = CGPoint(x: cancelButton.bottomX, y: headerViewsOriginY)
+        let headerImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: headerViewsHeight , height: headerViewsHeight))
+        headerImageView.center = headerView.center
         headerImageView.contentMode = .scaleAspectFit
-        headerImageView.image = UIImage(named: "nippoly_white.png")
-        
+        headerImageView.image = UIImage(named: "icon_180.png")
+        headerImageView.clipsToBounds = true
+//        headerImageView.layer.masksToBounds = true
+        headerImageView.layer.cornerRadius = 6.0
         
         /****** mainInput view ******/
         print(inputView.bottomY)
