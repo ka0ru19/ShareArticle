@@ -27,7 +27,7 @@ class PostFromUIActivity: UIActivity {
     }
     
     override var activityImage: UIImage? {
-        return UIImage(named: "inocci-icon-uiac")
+        return UIImage(named: "icon-uiac")
     }
     
     
