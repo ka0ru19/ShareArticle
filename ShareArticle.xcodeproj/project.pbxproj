@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0EABB536CCF85B382ED7E600 /* Pods_ShareArticle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF51C2DC13D959FB782D2E85 /* Pods_ShareArticle.framework */; };
-		631139E41F27361000813080 /* ArticleObjectClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631139E31F27361000813080 /* ArticleObjectClass.swift */; };
 		632536E01F0F423E00D43C08 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632536DF1F0F423E00D43C08 /* ArrayExtension.swift */; };
 		6326D7B71F073B2700448E52 /* PostFromUIActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326D7B61F073B2700448E52 /* PostFromUIActivityViewController.swift */; };
 		632910991EECEC880071F2E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910981EECEC880071F2E1 /* AppDelegate.swift */; };
@@ -95,7 +94,6 @@
 
 /* Begin PBXFileReference section */
 		629B2BA04CA8E52A59169EDA /* Pods-ShareArticle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareArticle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShareArticle/Pods-ShareArticle.debug.xcconfig"; sourceTree = "<group>"; };
-		631139E31F27361000813080 /* ArticleObjectClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleObjectClass.swift; sourceTree = "<group>"; };
 		632536DF1F0F423E00D43C08 /* ArrayExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		6326D7B61F073B2700448E52 /* PostFromUIActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostFromUIActivityViewController.swift; sourceTree = "<group>"; };
 		632910951EECEC880071F2E1 /* ShareArticle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareArticle.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -230,7 +228,6 @@
 				633BF8471F52C24A00D99E22 /* View */,
 				633BF8491F52C26D00D99E22 /* Extension */,
 				632910B41EED10C40071F2E1 /* ArticleClass.swift */,
-				631139E31F27361000813080 /* ArticleObjectClass.swift */,
 				638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */,
 				63381F181F15AE47006C5604 /* ConstDefine.swift */,
 				63A78ACF1F332A210081349B /* PublicFunction.swift */,
@@ -589,7 +586,6 @@
 				632910991EECEC880071F2E1 /* AppDelegate.swift in Sources */,
 				63381F191F15AE47006C5604 /* ConstDefine.swift in Sources */,
 				632910B91EED18E60071F2E1 /* ImageConvertExtension.swift in Sources */,
-				631139E41F27361000813080 /* ArticleObjectClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
