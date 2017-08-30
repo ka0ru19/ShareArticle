@@ -30,7 +30,7 @@ class ArticleTableViewCell: UITableViewCell {
         articleStackViewBaseView.clipsToBounds = true
         thumbnailImageView.contentMode = .scaleAspectFill
         thumbnailImageView.clipsToBounds = true
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 13)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

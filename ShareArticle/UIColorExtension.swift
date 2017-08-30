@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIColor {
-    static let saRed = colorWithHexString("FF0033")
+    static let saRed = colorWithHexString("c62828")
     static let lightRed = colorWithHexString("FF8A80")
     
     // カラーコード変換

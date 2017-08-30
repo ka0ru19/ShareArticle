@@ -21,6 +21,12 @@ class WelcomeViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    @IBAction func tutorialButtonTapped(_ sender: UIButton) {
+        // 画面遷移
+        let sb = UIStoryboard(name: "Tutorial", bundle: nil)
+        guard let vc = sb.instantiateInitialViewController() else { return }
+        self.present(vc, animated: true, completion: nil)
+    }
     
     @IBAction func startButtonTapped(_ sender: UIButton) {
 

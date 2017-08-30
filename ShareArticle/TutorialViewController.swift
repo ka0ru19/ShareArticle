@@ -12,7 +12,11 @@ class TutorialViewController: UIViewController , UIScrollViewDelegate {
 
     var pageControl: UIPageControl!
     var scrollView: UIScrollView!
-    var pageImageArray: [UIImage] = [] // ここで宣言する
+    var pageImageArray: [UIImage] = [UIImage(named: "Tutorial01.jpg")!,
+                                     UIImage(named: "Tutorial02.jpg")!,
+                                     UIImage(named: "Tutorial03.jpg")!,
+                                     UIImage(named: "Tutorial04.jpg")!,
+                                     UIImage(named: "Tutorial05.jpg")!] // ここで宣言する
     
     enum udKey: String {
         case isFirstTime = "isFirstTime"
@@ -41,6 +45,7 @@ class TutorialViewController: UIViewController , UIScrollViewDelegate {
         for i in 0 ..< pageImageArray.count {
             let img = pageImageArray[i]
             let iv = UIImageView(image: img)
+            iv.contentMode = .scaleAspectFill
             iv.frame = CGRect(x: CGFloat(i) * width, y: 0, width: width, height: height - 50)
             scrollView.addSubview(iv)
         }
@@ -54,7 +59,7 @@ class TutorialViewController: UIViewController , UIScrollViewDelegate {
         self.view.addSubview(pageControl)
         
         // 閉じるボタンの追加
-        let button = UIButton(frame: CGRect(x: width - 60, y: 40, width: 40, height: 40))
+        let button = UIButton(frame: CGRect(x: width - 50, y: 90, width: 40, height: 40))
         button.backgroundColor = UIColor.gray
         button.addTarget(self, action: #selector(TutorialViewController.closeButtonTapped), for: .touchUpInside)
         button.setTitle("X", for: .normal)
