@@ -82,4 +82,9 @@ class TutorialViewController: UIViewController , UIScrollViewDelegate {
             pageControl.currentPage = Int(scrollView.contentOffset.x/scrollView.frame.maxX)
         }
     }
+    
+    // 初回起動時かどうかの確認
+    public func isFirstTime() -> Bool{
+        return UserDefaults.standard.bool(forKey: udKey.isFirstTime.rawValue)
+    }
 }
