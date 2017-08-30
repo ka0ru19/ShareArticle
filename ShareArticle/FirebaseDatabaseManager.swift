@@ -12,15 +12,12 @@ import Firebase
 class FirebaseDatabaseManager {
     
     let rootRef = Database.database().reference()
+    let fireUser: User? = Auth.auth().currentUser
     
+    // MARK: - 取得
     func getArcitleArray(vc: ArticleListViewController) {
-        
         // Firebaseのデータベースにアクセスする下準備
-        guard let uid = Auth.auth().currentUser?.uid else {
-            print("no currentUser?.uid")
-            return
-        }
-        
+        guard let uid = fireUser?.uid else { return }
         let articleIdListRef = rootRef.child("user-list").child(uid).child("article-list")
         
         // リクエストを送信
@@ -33,27 +30,42 @@ class FirebaseDatabaseManager {
             
             var tempDictArray: [Dictionary<String, String>] = []
             for v in valueArray {
+//                guard let dict = v.value as? Dictionary<String, String> else { continue }
+//                tempDictArray.append(dict)
                 guard let dict = v.value as? Dictionary<String, String> else { continue }
-                tempDictArray.append(dict)
+                tempDictArray.append(dict.union(other: ["selfArticleID": v.key]))
             }
             vc.successLoadDictArray(dictArray: tempDictArray)
             tempDictArray.removeAll(keepingCapacity: true)
         })
     }
     
+    // MARK: - 削除
+    func removeArcitle(articleID: String, vc: ArticleListViewController) {
+        guard let uid = fireUser?.uid else { return }
+        let articleIdListRef = rootRef.child("user-list").child(uid).child("article-list")
+        
+        // 工事中
+        articleIdListRef.child(articleID).removeValue(completionBlock: { (error, ref) in
+            if let err = error {
+                print(err.localizedDescription)
+            } else {
+                print("正常にdatabaseからremoveされました. id: \(articleID)")
+            }
+        })
+    }
+    
+    // MARK: - 投稿
     func postNewArcitle(newValue: [String:String], vc: PostFromUIActivityViewController){
-        
-        guard let uid = Auth.auth().currentUser?.uid else {
-            print("uidの取得に失敗")
-            return
-        }
-        
+        guard let uid = fireUser?.uid else { return }
         let articleIdListRef = rootRef.child("user-list").child(uid).child("article-list")
         
         let newRef = articleIdListRef.childByAutoId()
         let newKey = newRef.key
         
-        articleIdListRef.child(newKey).setValue(newValue, withCompletionBlock: {(error: Error?, ref) in
+        let newValueWithKey = newValue.union(other: ["selfArticleID": newKey])
+        
+        articleIdListRef.child(newKey).setValue(newValueWithKey, withCompletionBlock: {(error: Error?, ref) in
             if let err = error {
                 // 失敗
                 vc.failedGetArcitleArray(message: err.localizedDescription)

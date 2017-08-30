@@ -17,6 +17,7 @@ class Article {
     var date: Date! // 記事の保存日時
     var image: UIImage? // サムネイル
     var comment: String? // ユーザが入力する記事に対するコメント
+    var selfArticleID: String? // Firebaseで管理するユニーク記事ID
     
     // 初めて記事を保存するとき
     init?(title: String, url: URL) {
@@ -52,6 +53,7 @@ class Article {
         self.url = URL(string: fbDict["url"] ?? "")
         self.date = Date(dateString: fbDict["date"] ?? Date().string())
         self.comment = fbDict["comment"]
+        self.selfArticleID = fbDict["selfArticleID"]
         print("Article init done. title: \(self.title ?? "no-title")")
     }
     

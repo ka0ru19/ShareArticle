@@ -164,25 +164,6 @@ class PostFromUIActivityViewController: UIViewController {
         
         FirebaseDatabaseManager().postNewArcitle(newValue: newArticleDict, vc: self)
         
-        // TODO: ここでデータベースに保存
-        //        let ud = UserDefaults.standard
-        //        var articleUdArray = ud.array(forKey: "articleUdArray") as? [[String: Any]] ?? []
-        //
-        //        var postUdDic: [String:Any] = [:]
-        //
-        //
-        //        postUdDic["title"] = articleTitle
-        //        postUdDic["urlString"] = articleUrl.absoluteString
-        //        postUdDic["date"] = Date()
-        //        postUdDic["comment"] = self.textView.text
-        //        articleUdArray.append(postUdDic)
-        //        print(postUdDic)
-        //
-        //        print("ほぞんするよ")
-        //        print(articleUdArray)
-        //        ud.set(articleUdArray, forKey: "articleUdArray")
-        //
-        //        closeView()
     }
     
     func closeView() {
