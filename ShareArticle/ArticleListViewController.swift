@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class ArticleListViewController: UIViewController {
     
     let articleTableView = UITableView()
@@ -44,8 +43,9 @@ class ArticleListViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        loadArticleArrayFromUd()
-        articleTableView.reloadData() // 毎回reloadする必要はないよね
+        FirebaseDatabaseManager().getArcitleArray(vc: self)
+//        loadArticleArrayFromUd()
+//        articleTableView.reloadData() // 毎回reloadする必要はないよね
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -241,6 +241,66 @@ extension ArticleListViewController {
     }
 }
 
+// MARK: - Firebaseのcomplition
+extension ArticleListViewController {
+    public func successLoadDictArray(dictArray: [Dictionary<String, String>]) {
+        var newArticleArray: [Article] = [] // = array // udから全ての記事を持ってくる
+        
+        for d in dictArray {
+            guard let newArticle = Article(from: d) else { continue }
+            newArticleArray.append(newArticle)
+        }
+        
+        print("articleArray \(articleArray)")
+        articleArray = articleArray.replace(newArray: newArticleArray) // キャッシュを引き継ぎ
+        if articleArray.count == 0 { return }
+        
+        // 日付でソート(新しい順)
+        articleArray.sort { $1.date < $0.date }
+        
+        // セクションわけのために日付ごとに記事を分ける
+        var currentDateString: String = articleArray[0].date.dateString() // "yyyy/MM/dd"
+        var currentArticleArray: [Article] = []
+        articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
+        
+        var newArticleByDateArray:[[Article]] = [] // [[Article]]
+        for article in articleArray {
+            let thisDateString = article.date.dateString()
+            if currentDateString != thisDateString {
+                newArticleByDateArray.append(currentArticleArray)
+                currentArticleArray = []
+                currentDateString = thisDateString
+                articleDateStringArray.append(currentDateString)
+            }
+            currentArticleArray.append(article)
+        }
+        if currentArticleArray.count > 0 {
+            newArticleByDateArray.append(currentArticleArray)
+        }
+        
+        articleByDateArray = newArticleByDateArray
+        
+        articleTableView.reloadData()
+        
+        newArticleByDateArray.removeAll(keepingCapacity: true)
+        
+        // サムネイルセットのリクエスト
+        for j in 0 ..< articleByDateArray.count {
+            for i in 0 ..< articleByDateArray[j].count {
+                let ip = IndexPath(row: i, section: j)
+                articleByDateArray[j][i].requestSetImage(reloadTargetTableView: self.articleTableView, indexPath: ip)
+            }
+        }
+        
+    }
+    
+    public func failedGetArcitleArray(message: String) {
+        print(message)
+    }
+}
+
+
+
 // MARK: - データベース連携操作
 extension ArticleListViewController {
     func initDict() { // デバック用にダミーデータを入れる
@@ -270,67 +330,66 @@ extension ArticleListViewController {
     }
 
     // MARK: udから読み込む
-    func loadArticleArrayFromUd() {
-
-        if let obj = ud.array(forKey: "articleUdArray") {
-            articleUdArray = obj as? [Dictionary<String, Any>] ?? []
-            //            print(articleUdArray)
-        } else {
-            print("articleUdArray keyでヒットするobjがない")
-        }
-
-        // articleArrayに代入
-        var newArticleArray: [Article] = [] // udから全ての記事を持ってくる
-        for articleUd in articleUdArray {
-            if let article = Article(from: articleUd) {
-//                article.requestSetImage(reloadTargetTableView: self.articleTableView)
-                newArticleArray.append(article)
-            }
-        }
-        
-        print("articleArray \(articleArray)")
-        articleArray = articleArray.replace(newArray: newArticleArray) // キャッシュを引き継ぎ
-
-        if articleArray.count == 0 { return }
-
-        // 日付でソート(新しい順)
-        articleArray.sort { $1.date < $0.date }
-
-        // セクションわけのために日付ごとに記事を分ける
-        var currentDateString: String = articleArray[0].date.dateString() // "yyyy/MM/dd"
-        var currentArticleArray: [Article] = []
-        articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
-
-        var newArticleByDateArray:[[Article]] = [] // [[Article]]
-        for article in articleArray {
-            let thisDateString = article.date.dateString()
-//            article.requestSetImage(reloadTargetTableView: self.articleTableView) // あとでやる
-//            article.requestSetTitle(reloadTargetTableView: self.articleTableView) // 想定しない
-            if currentDateString != thisDateString {
-                newArticleByDateArray.append(currentArticleArray)
-                currentArticleArray = []
-                currentDateString = thisDateString
-                articleDateStringArray.append(currentDateString)
-            }
-            currentArticleArray.append(article)
-        }
-        if currentArticleArray.count > 0 {
-            newArticleByDateArray.append(currentArticleArray)
-        }
-
-        articleByDateArray = newArticleByDateArray
-
-        newArticleByDateArray.removeAll(keepingCapacity: true)
-        
-        // サムネイルセットのリクエスト
-        for j in 0 ..< articleByDateArray.count {
-            for i in 0 ..< articleByDateArray[j].count {
-                let ip = IndexPath(row: i, section: j)
-                articleByDateArray[j][i].requestSetImage(reloadTargetTableView: self.articleTableView, indexPath: ip)
-            }
-        }
-    }
-
+//    func loadArticleArrayFromUd() {
+//
+//        if let obj = ud.array(forKey: "articleUdArray") {
+//            articleUdArray = obj as? [Dictionary<String, Any>] ?? []
+//            //            print(articleUdArray)
+//        } else {
+//            print("articleUdArray keyでヒットするobjがない")
+//        }
+//
+//        // articleArrayに代入
+//        var newArticleArray: [Article] = [] // udから全ての記事を持ってくる
+//        for articleUd in articleUdArray {
+//            if let article = Article(from: articleUd) {
+//                newArticleArray.append(article)
+//            }
+//        }
+//        
+//        print("articleArray \(articleArray)")
+//        articleArray = articleArray.replace(newArray: newArticleArray) // キャッシュを引き継ぎ
+//
+//        if articleArray.count == 0 { return }
+//
+//        // 日付でソート(新しい順)
+//        articleArray.sort { $1.date < $0.date }
+//
+//        // セクションわけのために日付ごとに記事を分ける
+//        var currentDateString: String = articleArray[0].date.dateString() // "yyyy/MM/dd"
+//        var currentArticleArray: [Article] = []
+//        articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
+//
+//        var newArticleByDateArray:[[Article]] = [] // [[Article]]
+//        for article in articleArray {
+//            let thisDateString = article.date.dateString()
+////            article.requestSetImage(reloadTargetTableView: self.articleTableView) // あとでやる
+////            article.requestSetTitle(reloadTargetTableView: self.articleTableView) // 想定しない
+//            if currentDateString != thisDateString {
+//                newArticleByDateArray.append(currentArticleArray)
+//                currentArticleArray = []
+//                currentDateString = thisDateString
+//                articleDateStringArray.append(currentDateString)
+//            }
+//            currentArticleArray.append(article)
+//        }
+//        if currentArticleArray.count > 0 {
+//            newArticleByDateArray.append(currentArticleArray)
+//        }
+//
+//        articleByDateArray = newArticleByDateArray
+//
+//        newArticleByDateArray.removeAll(keepingCapacity: true)
+//        
+//        // サムネイルセットのリクエスト
+//        for j in 0 ..< articleByDateArray.count {
+//            for i in 0 ..< articleByDateArray[j].count {
+//                let ip = IndexPath(row: i, section: j)
+//                articleByDateArray[j][i].requestSetImage(reloadTargetTableView: self.articleTableView, indexPath: ip)
+//            }
+//        }
+////    }
+//
     // [[Article]]からudに保存する
     func setArticlesUdFromArray(from targetArrayOfArray: [[Article]]) {
         let articleArray = targetArrayOfArray.joined().map {$0} // 結合: [[Article]] -> [Article]

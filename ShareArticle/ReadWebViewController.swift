@@ -96,28 +96,6 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    //    @IBAction func onTappedBackButton(_ sender: UIBarButtonItem) {
-    //        guard webView.canGoBack else { return }
-    //        webView.goBack() // 戻る
-    //    }
-    //
-    //    @IBAction func onTappedNextButton(_ sender: UIBarButtonItem) {
-    //        guard webView.canGoForward else { return }
-    //        webView.goForward() // 進む
-    //    }
-    //    @IBAction func onTappedStopButton(_ sender: UIBarButtonItem) {
-    //        webView.stopLoading() // 読み込み停止
-    //    }
-    //
-    //    @IBAction func onTappedLoadButton(_ sender: UIBarButtonItem) {
-    //        webView.reload() // 再度読み込み
-    //    }
-    //
-    //    @IBAction func onTappedActionButton(_ sender: UIBarButtonItem) {
-    //        showUiActivity()
-    //    }
-    //
     func onTappedBackButton(_ sender: UIBarButtonItem) {
         guard webView.canGoBack else { return }
         webView.goBack() // 戻る

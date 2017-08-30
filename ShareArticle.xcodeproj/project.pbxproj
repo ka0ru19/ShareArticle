@@ -32,6 +32,10 @@
 		634CB6701F2640AE00F2E7F5 /* nippoly_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 634CB66F1F2640AE00F2E7F5 /* nippoly_white.png */; };
 		638201EC1EF7A9B900ACE0FA /* PostFromUIActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */; };
 		63A78AD01F332A210081349B /* PublicFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A78ACF1F332A210081349B /* PublicFunction.swift */; };
+		63BC8E231F56C97800E9F55E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E221F56C97800E9F55E /* GoogleService-Info.plist */; };
+		63BC8E251F56CC8E00E9F55E /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC8E241F56CC8E00E9F55E /* WelcomeViewController.swift */; };
+		63BC8E271F56CC9E00E9F55E /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E261F56CC9E00E9F55E /* Welcome.storyboard */; };
+		63BC8E291F56CFC900E9F55E /* FirebaseDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC8E281F56CFC900E9F55E /* FirebaseDatabaseManager.swift */; };
 		63DD88291F529B4300885385 /* icon-messages-app-27x20@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DD87F91F529B4300885385 /* icon-messages-app-27x20@1x.png */; };
 		63DD882A1F529B4300885385 /* icon-messages-app-27x20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DD87FA1F529B4300885385 /* icon-messages-app-27x20@2x.png */; };
 		63DD882B1F529B4300885385 /* icon-messages-app-27x20@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DD87FB1F529B4300885385 /* icon-messages-app-27x20@3x.png */; };
@@ -122,6 +126,10 @@
 		634CB66F1F2640AE00F2E7F5 /* nippoly_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nippoly_white.png; sourceTree = "<group>"; };
 		638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostFromUIActivity.swift; sourceTree = "<group>"; };
 		63A78ACF1F332A210081349B /* PublicFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicFunction.swift; sourceTree = "<group>"; };
+		63BC8E221F56C97800E9F55E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		63BC8E241F56CC8E00E9F55E /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		63BC8E261F56CC9E00E9F55E /* Welcome.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Welcome.storyboard; sourceTree = "<group>"; };
+		63BC8E281F56CFC900E9F55E /* FirebaseDatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseDatabaseManager.swift; sourceTree = "<group>"; };
 		63DD87F91F529B4300885385 /* icon-messages-app-27x20@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-messages-app-27x20@1x.png"; sourceTree = "<group>"; };
 		63DD87FA1F529B4300885385 /* icon-messages-app-27x20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-messages-app-27x20@2x.png"; sourceTree = "<group>"; };
 		63DD87FB1F529B4300885385 /* icon-messages-app-27x20@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-messages-app-27x20@3x.png"; sourceTree = "<group>"; };
@@ -229,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				632910981EECEC880071F2E1 /* AppDelegate.swift */,
+				63BC8E281F56CFC900E9F55E /* FirebaseDatabaseManager.swift */,
 				633BF8471F52C24A00D99E22 /* View */,
 				633BF8491F52C26D00D99E22 /* Extension */,
 				632910B41EED10C40071F2E1 /* ArticleClass.swift */,
@@ -244,6 +253,7 @@
 				63E410491F1D0EAB004B71A6 /* systemImage */,
 				632910A11EECEC880071F2E1 /* LaunchScreen.storyboard */,
 				632910A41EECEC880071F2E1 /* Info.plist */,
+				63BC8E221F56C97800E9F55E /* GoogleService-Info.plist */,
 			);
 			path = ShareArticle;
 			sourceTree = "<group>";
@@ -254,6 +264,8 @@
 				632910AA1EECF20B0071F2E1 /* ArticleListViewController.swift */,
 				632910AC1EECF2760071F2E1 /* ReadWebViewController.swift */,
 				6326D7B61F073B2700448E52 /* PostFromUIActivityViewController.swift */,
+				63BC8E241F56CC8E00E9F55E /* WelcomeViewController.swift */,
+				63BC8E261F56CC9E00E9F55E /* Welcome.storyboard */,
 				633BF8551F52FD7B00D99E22 /* TutorialViewController.swift */,
 				633BF8591F52FDBB00D99E22 /* Tutorial.storyboard */,
 			);
@@ -507,6 +519,7 @@
 				63E410361F1CFA4D004B71A6 /* reload_on@2x.png in Resources */,
 				63DD883A1F529B4300885385 /* Icon-App-29x29@2x.png in Resources */,
 				63DD882E1F529B4300885385 /* icon-messages-app-iPhone-60x45@1x.png in Resources */,
+				63BC8E271F56CC9E00E9F55E /* Welcome.storyboard in Resources */,
 				63DD88431F529B4300885385 /* Icon-App-60x60@3x.png in Resources */,
 				63DD882A1F529B4300885385 /* icon-messages-app-27x20@2x.png in Resources */,
 				63DD882F1F529B4300885385 /* icon-messages-app-iPhone-60x45@2x.png in Resources */,
@@ -517,6 +530,7 @@
 				633BF85A1F52FDBB00D99E22 /* Tutorial.storyboard in Resources */,
 				6329109E1EECEC880071F2E1 /* Main.storyboard in Resources */,
 				63E410311F1CFA4D004B71A6 /* back_on.png in Resources */,
+				63BC8E231F56C97800E9F55E /* GoogleService-Info.plist in Resources */,
 				63E410381F1CFA4D004B71A6 /* stop_on@2x.png in Resources */,
 				63E410421F1CFED7004B71A6 /* next_off.png in Resources */,
 				63DD884C1F529B4300885385 /* iTunesArtwork@1x.png in Resources */,
@@ -581,8 +595,10 @@
 				638201EC1EF7A9B900ACE0FA /* PostFromUIActivity.swift in Sources */,
 				632910B71EED16590071F2E1 /* DateFormatExtension.swift in Sources */,
 				632536E01F0F423E00D43C08 /* ArrayExtension.swift in Sources */,
+				63BC8E291F56CFC900E9F55E /* FirebaseDatabaseManager.swift in Sources */,
 				63A78AD01F332A210081349B /* PublicFunction.swift in Sources */,
 				632910B31EED0F0B0071F2E1 /* UIViewExtension.swift in Sources */,
+				63BC8E251F56CC8E00E9F55E /* WelcomeViewController.swift in Sources */,
 				632910B01EECF29F0071F2E1 /* ArticleTableViewCell.swift in Sources */,
 				63DD884F1F529B4300885385 /* README.md in Sources */,
 				6326D7B71F073B2700448E52 /* PostFromUIActivityViewController.swift in Sources */,
