@@ -58,6 +58,11 @@ class ArticleListViewController: UIViewController {
         showUrlTextInputAlert()
     }
     
+    // MARK: ブックマークボタン
+    func openBookmarkButton(_ sender: UIBarButtonItem) {
+        openBookmarkVC()
+    }
+
     // MARK: 「出力」ボタン
     func onTappedOutputButton(_ sender: UIBarButtonItem) {
         isEditingTableView = !isEditingTableView // スイッチ
@@ -491,7 +496,9 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             navigationBarTopItem.title = "記事を選択"
         } else {
             let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(onTappedAddButton(_:)))
-            self.navigationItem.leftBarButtonItem = leftBarButtonItem
+            let bookmarkBarButtonItem = UIBarButtonItem(title: "BM", style: .plain, target: self, action: #selector(openBookmarkButton(_:)))
+            
+            self.navigationItem.leftBarButtonItems = [leftBarButtonItem,bookmarkBarButtonItem]
             let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
             navigationBarTopItem.title = ""
@@ -549,6 +556,14 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         
         // アラートを画面に表示
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func openBookmarkVC() {
+        // 画面遷移
+        let sb = UIStoryboard(name: "Bookmark", bundle: nil)
+        guard let vc = sb.instantiateInitialViewController() else { return }
+        self.present(vc, animated: true, completion: nil)
+
     }
     func showKindSelectAlert() {
         let actionSheet = UIAlertController(title: "一括で記事を選択します", message: "条件を選択してください", preferredStyle: .alert)

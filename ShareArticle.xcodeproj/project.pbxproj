@@ -42,6 +42,8 @@
 		63BC8E3D1F57CD4400E9F55E /* Tutorial03.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E381F57CD4400E9F55E /* Tutorial03.jpg */; };
 		63BC8E3E1F57CD4400E9F55E /* Tutorial04.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E391F57CD4400E9F55E /* Tutorial04.jpg */; };
 		63BC8E3F1F57CD4400E9F55E /* Tutorial05.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E3A1F57CD4400E9F55E /* Tutorial05.jpg */; };
+		63BC8E411F57CFAE00E9F55E /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC8E401F57CFAE00E9F55E /* BookmarkViewController.swift */; };
+		63BC8E431F57CFB900E9F55E /* Bookmark.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E421F57CFB900E9F55E /* Bookmark.storyboard */; };
 		63DD88291F529B4300885385 /* icon-messages-app-27x20@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DD87F91F529B4300885385 /* icon-messages-app-27x20@1x.png */; };
 		63DD882A1F529B4300885385 /* icon-messages-app-27x20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DD87FA1F529B4300885385 /* icon-messages-app-27x20@2x.png */; };
 		63DD882B1F529B4300885385 /* icon-messages-app-27x20@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DD87FB1F529B4300885385 /* icon-messages-app-27x20@3x.png */; };
@@ -142,6 +144,8 @@
 		63BC8E381F57CD4400E9F55E /* Tutorial03.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial03.jpg; sourceTree = "<group>"; };
 		63BC8E391F57CD4400E9F55E /* Tutorial04.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial04.jpg; sourceTree = "<group>"; };
 		63BC8E3A1F57CD4400E9F55E /* Tutorial05.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial05.jpg; sourceTree = "<group>"; };
+		63BC8E401F57CFAE00E9F55E /* BookmarkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkViewController.swift; sourceTree = "<group>"; };
+		63BC8E421F57CFB900E9F55E /* Bookmark.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Bookmark.storyboard; sourceTree = "<group>"; };
 		63DD87F91F529B4300885385 /* icon-messages-app-27x20@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-messages-app-27x20@1x.png"; sourceTree = "<group>"; };
 		63DD87FA1F529B4300885385 /* icon-messages-app-27x20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-messages-app-27x20@2x.png"; sourceTree = "<group>"; };
 		63DD87FB1F529B4300885385 /* icon-messages-app-27x20@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-messages-app-27x20@3x.png"; sourceTree = "<group>"; };
@@ -256,9 +260,6 @@
 				638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */,
 				63381F181F15AE47006C5604 /* ConstDefine.swift */,
 				63A78ACF1F332A210081349B /* PublicFunction.swift */,
-				632910AE1EECF29F0071F2E1 /* ArticleTableViewCell.swift */,
-				632910AF1EECF29F0071F2E1 /* ArticleTableViewCell.xib */,
-				6329109C1EECEC880071F2E1 /* Main.storyboard */,
 				6329109F1EECEC880071F2E1 /* Assets.xcassets */,
 				63DD87E91F529B4300885385 /* icon */,
 				63E410281F1CFA4D004B71A6 /* barItemIcon */,
@@ -275,11 +276,16 @@
 			children = (
 				632910AA1EECF20B0071F2E1 /* ArticleListViewController.swift */,
 				632910AC1EECF2760071F2E1 /* ReadWebViewController.swift */,
-				6326D7B61F073B2700448E52 /* PostFromUIActivityViewController.swift */,
+				6329109C1EECEC880071F2E1 /* Main.storyboard */,
 				63BC8E241F56CC8E00E9F55E /* WelcomeViewController.swift */,
 				63BC8E261F56CC9E00E9F55E /* Welcome.storyboard */,
 				633BF8551F52FD7B00D99E22 /* TutorialViewController.swift */,
 				633BF8591F52FDBB00D99E22 /* Tutorial.storyboard */,
+				63BC8E401F57CFAE00E9F55E /* BookmarkViewController.swift */,
+				63BC8E421F57CFB900E9F55E /* Bookmark.storyboard */,
+				632910AE1EECF29F0071F2E1 /* ArticleTableViewCell.swift */,
+				632910AF1EECF29F0071F2E1 /* ArticleTableViewCell.xib */,
+				6326D7B61F073B2700448E52 /* PostFromUIActivityViewController.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -538,6 +544,7 @@
 				63DD882C1F529B4300885385 /* icon-messages-app-iPadAir-67x50@2x.png in Resources */,
 				63DD884D1F529B4300885385 /* iTunesArtwork@2x.png in Resources */,
 				63DD88381F529B4300885385 /* Icon-App-20x20@3x.png in Resources */,
+				63BC8E431F57CFB900E9F55E /* Bookmark.storyboard in Resources */,
 				63E410471F1CFED7004B71A6 /* stop_off@2x.png in Resources */,
 				63E410361F1CFA4D004B71A6 /* reload_on@2x.png in Resources */,
 				63DD883A1F529B4300885385 /* Icon-App-29x29@2x.png in Resources */,
@@ -619,6 +626,7 @@
 				632910B71EED16590071F2E1 /* DateFormatExtension.swift in Sources */,
 				632536E01F0F423E00D43C08 /* ArrayExtension.swift in Sources */,
 				63BC8E291F56CFC900E9F55E /* FirebaseDatabaseManager.swift in Sources */,
+				63BC8E411F57CFAE00E9F55E /* BookmarkViewController.swift in Sources */,
 				63A78AD01F332A210081349B /* PublicFunction.swift in Sources */,
 				632910B31EED0F0B0071F2E1 /* UIViewExtension.swift in Sources */,
 				63BC8E251F56CC8E00E9F55E /* WelcomeViewController.swift in Sources */,
