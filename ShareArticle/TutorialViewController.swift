@@ -59,7 +59,7 @@ class TutorialViewController: UIViewController , UIScrollViewDelegate {
         self.view.addSubview(pageControl)
         
         // 閉じるボタンの追加
-        let button = UIButton(frame: CGRect(x: width - 50, y: 90, width: 40, height: 40))
+        let button = UIButton(frame: CGRect(x: width - 50, y: 100, width: 40, height: 40))
         button.backgroundColor = UIColor.gray
         button.addTarget(self, action: #selector(TutorialViewController.closeButtonTapped), for: .touchUpInside)
         button.setTitle("X", for: .normal)
