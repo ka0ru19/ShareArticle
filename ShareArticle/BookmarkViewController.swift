@@ -12,8 +12,16 @@ class BookmarkViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
+    let ud = UserDefaults.standard
+    
+    var bookmarkDictArray: [Dictionary<String, String>] = []
+    
+    var prevVC: ArticleListViewController? // 前の画面でvalueをもらってくる想定
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        bookmarkDictArray = ud.array(forKey: "bookmarkDictArray") as? [Dictionary<String, String>] ?? []
 
         tableView.dataSource = self
         tableView.delegate = self
@@ -37,20 +45,33 @@ extension BookmarkViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return bookmarkDictArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
         
-        cell.textLabel?.text = "\(indexPath.row)"
-        cell.detailTextLabel?.text = "detail: \(indexPath.row)"
+        let bookmarkDict = bookmarkDictArray[indexPath.row]
+        
+        cell.textLabel?.text = bookmarkDict["title"]
+        cell.detailTextLabel?.text = bookmarkDict["urlText"]
+        cell.detailTextLabel?.textColor = UIColor.gray
         
         return cell
     }
 }
 extension BookmarkViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
+        guard let prevVC = prevVC else {
+            self.dismiss(animated: true, completion: nil)
+            return 
+        }
+        
+        self.dismiss(animated: true, completion: {
+            if let urlText = self.bookmarkDictArray[indexPath.row]["urlText"] {
+            prevVC.selectedUrl = URL(string: urlText)
+            prevVC.performSegue(withIdentifier: "toReadWebVC", sender: nil)
+            }
+        })
     }
 }

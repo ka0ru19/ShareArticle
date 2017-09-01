@@ -31,7 +31,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="ブックマーク" id="yIr-xD-IXV">
-                                        <barButtonItem key="rightBarButtonItem" title="閉じる" id="3Bg-jl-WKi">
+                                        <barButtonItem key="leftBarButtonItem" title="閉じる" id="3Bg-jl-WKi">
                                             <connections>
                                                 <action selector="closeButtonTapped:" destination="NXT-pu-Fzj" id="GMG-MQ-TUw"/>
                                             </connections>

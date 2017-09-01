@@ -496,7 +496,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             navigationBarTopItem.title = "記事を選択"
         } else {
             let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(onTappedAddButton(_:)))
-            let bookmarkBarButtonItem = UIBarButtonItem(title: "BM", style: .plain, target: self, action: #selector(openBookmarkButton(_:)))
+            let bookmarkBarButtonItem = UIBarButtonItem(image: UIImage(named: "bookmark_normal.png"), style: .plain, target: self, action: #selector(openBookmarkButton(_:)))
             
             self.navigationItem.leftBarButtonItems = [leftBarButtonItem,bookmarkBarButtonItem]
             let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
@@ -561,7 +561,8 @@ extension ArticleListViewController: UINavigationControllerDelegate {
     func openBookmarkVC() {
         // 画面遷移
         let sb = UIStoryboard(name: "Bookmark", bundle: nil)
-        guard let vc = sb.instantiateInitialViewController() else { return }
+        guard let vc = sb.instantiateInitialViewController() as? BookmarkViewController else { return }
+        vc.prevVC = self
         self.present(vc, animated: true, completion: nil)
 
     }
