@@ -38,7 +38,6 @@ class ArticleListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //        initDict() // データベースの初期化、ダミーデータの挿入
         initView()
     }
     
@@ -247,7 +246,7 @@ extension ArticleListViewController {
 // MARK: - Firebaseのcomplition
 extension ArticleListViewController {
     public func successLoadDictArray(dictArray: [Dictionary<String, String>]) {
-        var newArticleArray: [Article] = [] // = array // udから全ての記事を持ってくる
+        var newArticleArray: [Article] = []
         
         for d in dictArray {
             guard let newArticle = Article(from: d) else { continue }
@@ -304,39 +303,39 @@ extension ArticleListViewController {
 
 
 
-// MARK: - データベース連携操作
-extension ArticleListViewController {
-    func initDict() { // デバック用にダミーデータを入れる
-        ud.removeSuite(named: "articleUdArray")
-        articleUdArray = []
-        
-        // デバック用のダミーデータ
-        var titleArray: [String] = ["mac","ipad","iphone"]
-        var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
-                               URL(string: "https://www.apple.com/jp/ipad/")!,
-                               URL(string: "https://www.apple.com/jp/iphone/")!]
-        var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
-        var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
-        
-        
-        for i in 0 ..< titleArray.count {
-            let atc = Article(title: titleArray[i],
-                              urlString: urlArray[i].absoluteString,
-                              dateString: dateArray[i],
-                              comment: commentArray[i])
-            
-            articleUdArray.append(atc!.change2UdDict())
-        }
-        
-        ud.set(articleUdArray, forKey: "articleUdArray")
-    }
-    
-}
+// MARK: - データベース連携操作(デバック用)
+//extension ArticleListViewController {
+//    func initDict() { // デバック用にダミーデータを入れる
+//        ud.removeSuite(named: "articleUdArray")
+//        articleUdArray = []
+//        
+//        // デバック用のダミーデータ
+//        var titleArray: [String] = ["mac","ipad","iphone"]
+//        var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
+//                               URL(string: "https://www.apple.com/jp/ipad/")!,
+//                               URL(string: "https://www.apple.com/jp/iphone/")!]
+//        var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
+//        var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
+//        
+//        
+//        for i in 0 ..< titleArray.count {
+//            let atc = Article(title: titleArray[i],
+//                              urlString: urlArray[i].absoluteString,
+//                              dateString: dateArray[i],
+//                              comment: commentArray[i])
+//            
+//            articleUdArray.append(atc!.change2UdDict())
+//        }
+//        
+//        ud.set(articleUdArray, forKey: "articleUdArray")
+//    }
+//    
+//}
 
 // MARK: - tableView操作
 extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return articleDateStringArray.count // セクションの数
+        return articleDateStringArray.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -417,8 +416,6 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
                 articleByDateArray.remove(at: indexPath.section)
                 tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
             }
-            
-//            setArticlesUdFromArray(from: articleByDateArray)
             
         }
     }
