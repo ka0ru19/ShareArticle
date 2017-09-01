@@ -23,11 +23,11 @@ class PostFromUIActivity: UIActivity {
     }
     
     override var activityTitle: String? {
-        return "ShareArticle"
+        return "Shareric"
     }
     
     override var activityImage: UIImage? {
-        return UIImage(named: "inocci-icon-uiac")
+        return UIImage(named: "icon-uiac")
     }
     
     

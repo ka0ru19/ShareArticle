@@ -17,6 +17,7 @@ class Article {
     var date: Date! // 記事の保存日時
     var image: UIImage? // サムネイル
     var comment: String? // ユーザが入力する記事に対するコメント
+    var selfArticleID: String? // Firebaseで管理するユニーク記事ID
     
     // 初めて記事を保存するとき
     init?(title: String, url: URL) {
@@ -36,14 +37,24 @@ class Article {
     }
     
     // udのdictionaryから端末で扱うためのデータ型に変換するメソッド
-    init?(from udDict: Dictionary<String, Any>){
-        self.title = udDict["title"] as? String
-        self.url = URL(string: udDict["urlString"] as! String)
-        self.date = udDict["date"] as! Date
-        if let comment = udDict["comment"] as? String {
-            self.comment = comment
-        }
-        print("init Article done. title: \(self.title ?? "no-title")")
+//    init?(from udDict: Dictionary<String, Any>){
+//        self.title = udDict["title"] as? String
+//        self.url = URL(string: udDict["urlString"] as! String)
+//        self.date = udDict["date"] as! Date
+//        if let comment = udDict["comment"] as? String {
+//            self.comment = comment
+//        }
+//        print("init Article done. title: \(self.title ?? "no-title")")
+//    }
+    
+    // firebaseのdatabaseからクラスオブジェクトに変換する
+    init?(from fbDict: Dictionary<String, String>) {
+        self.title = fbDict["title"]
+        self.url = URL(string: fbDict["url"] ?? "")
+        self.date = Date(dateString: fbDict["date"] ?? Date().string())
+        self.comment = fbDict["comment"]
+        self.selfArticleID = fbDict["selfArticleID"]
+        print("Article init done. title: \(self.title ?? "no-title")")
     }
     
     func setImage(image: UIImage?) {
@@ -64,6 +75,19 @@ class Article {
         print("changed to ud Dict: \(dict)")
         return dict
     }
+    
+    // firebaseのdatabaseで管理できる型にキャストする
+    func change2FbDict() -> Dictionary<String, String> {
+        var dict: Dictionary<String, String> = [:]
+        dict["title"] = self.title
+        dict["url"] = self.url.absoluteString
+        dict["date"] = self.date.string()
+        dict["comment"] = self.comment
+        print("changed to ud Dict: \(dict)")
+        return dict
+    }
+    
+    
 }
 
 extension Article {
@@ -99,7 +123,7 @@ extension Article {
         }
     }
     
-    func requestSetImage(reloadTargetTableView rttv: UITableView?) {
+    func requestSetImage(reloadTargetTableView rttv: UITableView?, indexPath ip: IndexPath) {
         // MARK: urlからサムネイル画像のurlを非同期で取得してself.imageにセット
         if self.image != nil { return }
         self.image = UIImage(named: "thumbnail_nowLoading.png")
@@ -133,7 +157,8 @@ extension Article {
                             print("AsyncImageView:Error \(error.localizedDescription)")
                         }
                     }
-                    rttv?.reloadData()
+                    //                    rttv?.reloadData()
+                    rttv?.reloadRows(at: [ip], with: .fade)
             }).resume()
         }
     }
@@ -153,7 +178,7 @@ extension Article {
 }
 
 extension Array where Element: Article {
-    // [Article]同士を比較して差分だけ追加、削除するメソッドを作る
+    // [Article]同士を比較して差分だけ追加、削除するメソッド
     func replace(newArray nArray: [Article]) -> [Article] {
         var oldTempArray = self
         var resultArray: [Article] = []

@@ -8,73 +8,76 @@
 
 import UIKit
 
-
 class ArticleListViewController: UIViewController {
     
     let articleTableView = UITableView()
     let toolbar = UIToolbar()
     let ud = UserDefaults.standard
-
+    
     var articleDictionary: Dictionary<String, [Article]> = [:]
-
+    
     var articleArray: [Article] = []
     var articleDateStringArray: [String] = [] // 記事の日付を管理する配列: セクションのタイトルで使う
     var articleByDateArray: [[Article]]  = [] // セクション分けして記事を表示するのに使う
-
+    
     var checkedArticleByDateArray: [[Bool]] = []
-
+    
     var isEditingTableView = false
-
+    
     var selectedUrl: URL!
-
+    
     var articleUdArray: [Dictionary<String, Any>] = [] // udで保存するために型変換した記事配列
-
+    
     enum SelectArticleType {
         case all
         case notAll
         case today
         case yesterday
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         //        initDict() // データベースの初期化、ダミーデータの挿入
         initView()
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
-        loadArticleArrayFromUd()
-        articleTableView.reloadData() // 毎回reloadする必要はないよね
+        FirebaseDatabaseManager().getArcitleArray(vc: self)
     }
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toReadWebVC" {
             let nextVC = segue.destination as! ReadWebViewController
             nextVC.originUrl = self.selectedUrl
         }
     }
-
+    
     // MARK: Addボタン
     func onTappedAddButton(_ sender: UIBarButtonItem) {
         showUrlTextInputAlert()
+    }
+    
+    // MARK: ブックマークボタン
+    func openBookmarkButton(_ sender: UIBarButtonItem) {
+        openBookmarkVC()
     }
 
     // MARK: 「出力」ボタン
     func onTappedOutputButton(_ sender: UIBarButtonItem) {
         isEditingTableView = !isEditingTableView // スイッチ
-
+        
         animateToolBar()
         controlCheckedArticleArray(isCheckAll: false)
         setNavigationBarContents()
         articleTableView.reloadData()
     }
-
+    
     // MARK: 「条件選択」ボタン
     func onTappedKindSelectButton(_ sender: UIBarButtonItem) {
         showKindSelectAlert()
     }
-
+    
     // MARK: 「記事をマークダウンに変換」ボタン
     func onTappedChangeToMarkDownButton(_ sender: UIBarButtonItem) {
         changeArticlesToMarkDown()
@@ -85,6 +88,7 @@ class ArticleListViewController: UIViewController {
 extension ArticleListViewController {
     // MARK: [記事]をマークダウン形式の文字列に変換
     func changeArticlesToMarkDown() {
+        
         // 選択された記事のみを書き出す
         var targetArray: [Article] = []
         for d in 0 ..< articleByDateArray.count {
@@ -94,7 +98,14 @@ extension ArticleListViewController {
                 }
             }
         }
-
+        
+        if targetArray.count == 0 {
+            let alert = UIAlertController(title: "記事がありません", message: "変換したい記事を選択してください", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+            return
+        }
+        
         var markdownText: String = ""
         var markdownSentence: String!
         for article in targetArray {
@@ -111,19 +122,19 @@ extension ArticleListViewController {
             markdownSentence = "- [" + textStr + "](" + urlStr + ")\n" + commentStrBlock
             markdownText += markdownSentence
         }
-
+        
         print(markdownText)
-
+        
         let actionSheet = UIAlertController(title: "マークダウン形式で保存します", message: "出力先を選択してください", preferredStyle: .actionSheet)
-
+        
         let action1 = UIAlertAction(title: "クリップボードにコピーする", style: .default, handler: { _ in
             let board = UIPasteboard.general // クリップボード呼び出し
             board.setValue(markdownText, forPasteboardType: "public.text") // クリップボードに貼り付け
-
+            
             let alert = UIAlertController(title: "マークダウンに変換完了", message: "クリップボードにコピーしました", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil)) // 「OK」ボタンの設定
             self.present(alert, animated: true, completion: nil) // アラートを画面に表示
-
+            
         })
         
         let action2 = UIAlertAction(title: "他のアプリに出力する", style: .default, handler: { _ in
@@ -133,21 +144,21 @@ extension ArticleListViewController {
         let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { _ in
             print("キャンセルをタップした時の処理")
         })
-
+        
         actionSheet.addAction(action1)
         actionSheet.addAction(action2)
         actionSheet.addAction(cancel)
-
+        
         self.present(actionSheet, animated: true, completion: nil)
     }
-
+    
     // MARK: 選択された記事を管理する配列の初期化
     func controlCheckedArticleArray(isCheckAll: Bool) {
         if !isEditingTableView { return }
-
+        
         //取得したメモリ空間は残して、配列のすべての要素を削除する。
         checkedArticleByDateArray.removeAll(keepingCapacity: true)
-
+        
         // 全てfalseでarticleByDateArrayと同じ要素構成の[[Bool]]配列を作成
         var tmepBoolArray: [Bool] = []
         for d in 0 ..< articleByDateArray.count {
@@ -161,10 +172,10 @@ extension ArticleListViewController {
         }
         print(checkedArticleByDateArray)
     }
-
+    
     // MARK: 記事を条件で一括選択
     func selectArticle(type: SelectArticleType) {
-
+        
         let calendar = Calendar(identifier: .gregorian)
         switch type {
         case .today:
@@ -172,7 +183,7 @@ extension ArticleListViewController {
                 guard
                     let headDateString: String = articleDateStringArray.first,
                     let headDate: Date = Date(dateString: headDateString, dateFormat: "yyyy/MM/dd") else { return }
-
+                
                 if calendar.isDateInToday(headDate) {
                     print("先頭のarrayが今日の記事だった場合")
                     for i in 0 ..< checkedArticleByDateArray[0].count {
@@ -181,7 +192,7 @@ extension ArticleListViewController {
                 } else {
                     print("先頭のarrayは今日の記事ではなかったので何も選択しない。さよなら。")
                 }
-
+                
             }
             break
         case .yesterday:
@@ -196,7 +207,7 @@ extension ArticleListViewController {
                     }
                     break
                 }
-
+                
                 if articleDateStringArray.count < 1 { break }
                 guard let headNextDate: Date = Date(dateString: articleDateStringArray[1], dateFormat: "yyyy/MM/dd") else { return }
                 if calendar.isDateInYesterday(headNextDate) {
@@ -229,75 +240,35 @@ extension ArticleListViewController {
             break
         }
         articleTableView.reloadData()
-
+        
     }
 }
 
-// MARK: - データベース連携操作
+// MARK: - Firebaseのcomplition
 extension ArticleListViewController {
-    func initDict() { // デバック用にダミーデータを入れる
-        ud.removeSuite(named: "articleUdArray")
-        articleUdArray = []
-
-        // デバック用のダミーデータ
-        var titleArray: [String] = ["mac","ipad","iphone"]
-        var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
-                               URL(string: "https://www.apple.com/jp/ipad/")!,
-                               URL(string: "https://www.apple.com/jp/iphone/")!]
-        var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
-        var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
-
-
-        for i in 0 ..< titleArray.count {
-            let atc = Article(title: titleArray[i],
-                          urlString: urlArray[i].absoluteString,
-                          dateString: dateArray[i],
-                          comment: commentArray[i])
-
-            articleUdArray.append(atc!.change2UdDict())
-        }
-
-        //        print(articleUdArray)
-        ud.set(articleUdArray, forKey: "articleUdArray")
-    }
-
-    // MARK: udから読み込む
-    func loadArticleArrayFromUd() {
-
-        if let obj = ud.array(forKey: "articleUdArray") {
-            articleUdArray = obj as? [Dictionary<String, Any>] ?? []
-            //            print(articleUdArray)
-        } else {
-            print("articleUdArray keyでヒットするobjがない")
-        }
-
-        // articleArrayに代入
-        var newArticleArray: [Article] = [] // udから全ての記事を持ってくる
-        for articleUd in articleUdArray {
-            if let article = Article(from: articleUd) {
-//                article.requestSetImage(reloadTargetTableView: self.articleTableView)
-                newArticleArray.append(article)
-            }
+    public func successLoadDictArray(dictArray: [Dictionary<String, String>]) {
+        var newArticleArray: [Article] = [] // = array // udから全ての記事を持ってくる
+        
+        for d in dictArray {
+            guard let newArticle = Article(from: d) else { continue }
+            newArticleArray.append(newArticle)
         }
         
         print("articleArray \(articleArray)")
         articleArray = articleArray.replace(newArray: newArticleArray) // キャッシュを引き継ぎ
-
         if articleArray.count == 0 { return }
-
+        
         // 日付でソート(新しい順)
         articleArray.sort { $1.date < $0.date }
-
+        
         // セクションわけのために日付ごとに記事を分ける
         var currentDateString: String = articleArray[0].date.dateString() // "yyyy/MM/dd"
         var currentArticleArray: [Article] = []
         articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
-
+        
         var newArticleByDateArray:[[Article]] = [] // [[Article]]
         for article in articleArray {
             let thisDateString = article.date.dateString()
-            article.requestSetImage(reloadTargetTableView: self.articleTableView)
-            article.requestSetTitle(reloadTargetTableView: self.articleTableView)
             if currentDateString != thisDateString {
                 newArticleByDateArray.append(currentArticleArray)
                 currentArticleArray = []
@@ -309,29 +280,57 @@ extension ArticleListViewController {
         if currentArticleArray.count > 0 {
             newArticleByDateArray.append(currentArticleArray)
         }
-
+        
         articleByDateArray = newArticleByDateArray
-
+        
+        articleTableView.reloadData()
+        
         newArticleByDateArray.removeAll(keepingCapacity: true)
-//        articleArray.removeAll(keepingCapacity: true)
-
-        //        print(articleDateStringArray)
-        //        print(articleByDateArray)
+        
+        // サムネイルセットのリクエスト
+        for j in 0 ..< articleByDateArray.count {
+            for i in 0 ..< articleByDateArray[j].count {
+                let ip = IndexPath(row: i, section: j)
+                articleByDateArray[j][i].requestSetImage(reloadTargetTableView: self.articleTableView, indexPath: ip)
+            }
+        }
+        
     }
+    
+    public func failedGetArcitleArray(message: String) {
+        print(message)
+    }
+}
 
-    // [[Article]]からudに保存する
-    func setArticlesUdFromArray(from targetArrayOfArray: [[Article]]) {
-        let articleArray = targetArrayOfArray.joined().map {$0} // 結合: [[Article]] -> [Article]
 
+
+// MARK: - データベース連携操作
+extension ArticleListViewController {
+    func initDict() { // デバック用にダミーデータを入れる
         ud.removeSuite(named: "articleUdArray")
         articleUdArray = []
-
-        for article in articleArray {
-            articleUdArray.append(article.change2UdDict())
+        
+        // デバック用のダミーデータ
+        var titleArray: [String] = ["mac","ipad","iphone"]
+        var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
+                               URL(string: "https://www.apple.com/jp/ipad/")!,
+                               URL(string: "https://www.apple.com/jp/iphone/")!]
+        var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
+        var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
+        
+        
+        for i in 0 ..< titleArray.count {
+            let atc = Article(title: titleArray[i],
+                              urlString: urlArray[i].absoluteString,
+                              dateString: dateArray[i],
+                              comment: commentArray[i])
+            
+            articleUdArray.append(atc!.change2UdDict())
         }
-
+        
         ud.set(articleUdArray, forKey: "articleUdArray")
     }
+    
 }
 
 // MARK: - tableView操作
@@ -339,21 +338,21 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
     func numberOfSections(in tableView: UITableView) -> Int {
         return articleDateStringArray.count // セクションの数
     }
-
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return articleDateStringArray[section]
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return articleByDateArray[section].count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "articleCell", for: indexPath) as! ArticleTableViewCell
         let article = articleByDateArray[indexPath.section][indexPath.row]
-
+        
         cell.titleLabel.text = article.title
-
+        
         cell.urlLabel.text = article.url.absoluteString
         cell.timeLabel.text = article.date.timeString()
         if let comment = article.comment {
@@ -366,58 +365,64 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
         } else {
             print("article.comment自体がnil: やばい")
         }
-
+        
         if let image = article.image {
             cell.thumbnailImageView.image = image
         } else {
             cell.thumbnailImageView.image = UIImage(named: "thumbnail_noImage.png")
             print("サムネイルなし: \(indexPath.row): \(article.title ?? "no-title")")
         }
-
+        
         if isEditingTableView {
             cell.setCheck(isSetCheck: checkedArticleByDateArray[indexPath.section][indexPath.row])
         } else {
             cell.setNoCheck()
         }
-
+        
         // セルが選択された時の背景色を消す
         cell.selectionStyle = .none
-
+        
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditingTableView {
             // 出力中のとき
             checkedArticleByDateArray[indexPath.section][indexPath.row] = !checkedArticleByDateArray[indexPath.section][indexPath.row]
-
+            
             let cell = tableView.cellForRow(at: indexPath) as! ArticleTableViewCell
             cell.setCheck(isSetCheck: checkedArticleByDateArray[indexPath.section][indexPath.row])
-
+            
         } else {
             // 通常時
             selectedUrl = articleByDateArray[indexPath.section][indexPath.row].url as URL
             performSegue(withIdentifier: "toReadWebVC", sender: nil)
         }
-
+        
     }
-
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // スワイプで削除された時
+            
+            if let removeKey = articleByDateArray[indexPath.section][indexPath.row].selfArticleID {
+                FirebaseDatabaseManager().removeArcitle(articleID: removeKey, vc: self)
+            }
+            
             articleByDateArray[indexPath.section].remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-
+            
             if articleByDateArray[indexPath.section].count == 0 {
                 articleDateStringArray.remove(at: indexPath.section)
                 articleByDateArray.remove(at: indexPath.section)
                 tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
             }
-
-            setArticlesUdFromArray(from: articleByDateArray)
+            
+//            setArticlesUdFromArray(from: articleByDateArray)
+            
         }
     }
-
+    
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return !isEditingTableView // 出力記事の選択中はスワイプ削除禁止
     }
@@ -425,14 +430,14 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
 
 // MARK: - view操作
 extension ArticleListViewController: UINavigationControllerDelegate {
-
+    
     func initView() {
         articleTableView.frame = CGRect(x: 0, y: ViewSize.navigationbarBottomY, width: self.view.frame.width, height: self.view.frame.height - ViewSize.navigationbarBottomY)
         articleTableView.delegate = self
         articleTableView.dataSource = self
         articleTableView.register(UINib(nibName: "ArticleTableViewCell", bundle: nil),
                                   forCellReuseIdentifier: "articleCell")
-
+        
         articleTableView.rowHeight = UITableViewAutomaticDimension
         articleTableView.estimatedRowHeight = 600
         articleTableView.sectionHeaderHeight = 20
@@ -449,10 +454,12 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         toolbar.items = [flexibleItem, markDownItem, flexibleItem ]
         // 最初はtoolbarを下に隠しておく
         toolbar.frame.origin.y = self.view.bottomY
+        toolbar.tintColor = UIColor.black
+        toolbar.barTintColor = UIColor.lightRed
         
         self.view.addSubview(toolbar)
     }
-
+    
     func animateToolBar() {
         if isEditingTableView {
             // 出力モード
@@ -468,7 +475,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             })
         }
     }
-
+    
     // MARK: isEditingTableViewに応じてnavigationControllerの要素を変更
     func setNavigationBarContents() {
         guard
@@ -476,7 +483,10 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             let navigationBarTopItem = navigationController.navigationBar.topItem else {
                 return
         }
-
+        
+        navigationController.navigationBar.barTintColor = UIColor.lightRed
+        navigationController.navigationBar.tintColor = UIColor.black
+        
         if isEditingTableView {
             let leftBarButtonItem = UIBarButtonItem(title: "条件選択", style: .plain, target: self, action: #selector(onTappedKindSelectButton(_:)))
             self.navigationItem.leftBarButtonItem = leftBarButtonItem
@@ -486,18 +496,20 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             navigationBarTopItem.title = "記事を選択"
         } else {
             let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(onTappedAddButton(_:)))
-            self.navigationItem.leftBarButtonItem = leftBarButtonItem
+            let bookmarkBarButtonItem = UIBarButtonItem(image: UIImage(named: "bookmark_normal.png"), style: .plain, target: self, action: #selector(openBookmarkButton(_:)))
+            
+            self.navigationItem.leftBarButtonItems = [leftBarButtonItem,bookmarkBarButtonItem]
             let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             self.navigationItem.rightBarButtonItem = rightBarButtonItem
             navigationBarTopItem.title = ""
-            let uiImageView = UIImageView(image: UIImage(named: "nippoly_logo.png"))
+            let uiImageView = UIImageView(image: UIImage(named: "Posty_logo_1440_360.png"))
             uiImageView.frame.size.height = ViewSize.navigationbarHeight * 0.75
             uiImageView.frame.size.width = ViewSize.navigationbarHeight * 0.75 * 4
             uiImageView.contentMode = .scaleAspectFit
             self.navigationItem.titleView = uiImageView
         }
     }
-
+    
     func showUiActivity(text: String) {
         let activityItems: [Any] = [text]
         let appActivity = [PostFromUIActivity()]
@@ -511,12 +523,12 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         activitySheet.excludedActivityTypes = excludeActivity
         present(activitySheet, animated: true, completion: nil)
     }
-
+    
     func showUrlTextInputAlert() {
         // MARK: テキストフィールド付きアラート表示
         let alert = UIAlertController(title: "URLからページを開きます", message: "URLを入力してください", preferredStyle: .alert)
         let placeholderText = "https://www.google.com/"
-
+        
         // 「開く」ボタンの設定
         let openAction = UIAlertAction(title: "開く", style: .default, handler: { _ in
             if let textFields = alert.textFields {
@@ -529,21 +541,30 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             }
         })
         alert.addAction(openAction)
-
+        
         // キャンセルボタンの設定
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
-
+        
         // テキストフィールドを追加
         alert.addTextField(configurationHandler: { textField in
             textField.attributedPlaceholder = NSAttributedString(string: placeholderText,
                                                                  attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         })
-
+        
         alert.view.setNeedsLayout() // シミュレータの種類によっては、これがないと警告が発生
-
+        
         // アラートを画面に表示
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func openBookmarkVC() {
+        // 画面遷移
+        let sb = UIStoryboard(name: "Bookmark", bundle: nil)
+        guard let vc = sb.instantiateInitialViewController() as? BookmarkViewController else { return }
+        vc.prevVC = self
+        self.present(vc, animated: true, completion: nil)
+
     }
     func showKindSelectAlert() {
         let actionSheet = UIAlertController(title: "一括で記事を選択します", message: "条件を選択してください", preferredStyle: .alert)
@@ -564,10 +585,10 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         actionSheet.addAction(action2)
         actionSheet.addAction(action3)
         actionSheet.addAction(cancel)
-
+        
         self.present(actionSheet, animated: true, completion: nil)
     }
-
+    
     func showCannotOpenUrlAlert() {
         // MARK: 任意のurlを開けなかったときのalert
         let alert = UIAlertController(title: "ページを開けませんでした", message: "URLが正しくありませんでした", preferredStyle: .alert)
@@ -591,7 +612,7 @@ extension ArticleListViewController {
     
     func verifyUrl (urlString: String?) -> Bool {
         if let urlString = urlString, let url = URL(string: urlString) {
-
+            
             return UIApplication.shared.canOpenURL(url)
         }
         return false

@@ -20,6 +20,7 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate {
     var nextButtonItem: UIBarButtonItem!
     var stopButtonItem: UIBarButtonItem!
     var loadButtonItem: UIBarButtonItem!
+    var addBookmarkButtonItem: UIBarButtonItem!
     var actionButtonItem: UIBarButtonItem!
     
     var originUrl: URL! // 前のvcから引き継いでくる
@@ -28,38 +29,7 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        webView.frame = CGRect(x: 0, y: 0,
-                               width: self.view.frame.size.width,
-                               height: self.view.frame.size.height - ViewSize.navigationbarBottomY - ViewSize.toolbarHeight)
-        webView.frame.origin = CGPoint(x: 0, y: ViewSize.navigationbarBottomY)
-        webView.allowsBackForwardNavigationGestures = false // スワイプで戻るを禁止(tableViewの戻りとかぶるため)
-        webView.uiDelegate = self
-        webView.navigationDelegate = self
-        webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
-        webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
-        self.view.addSubview(webView)
-        
-        //プログレスバーを生成(NavigationBar下)
-        progressView.frame = CGRect(x: 0, y: self.navigationController!.navigationBar.frame.size.height  - 2,
-                                    width: self.view.frame.size.width, height: 2)
-        progressView.progressViewStyle = .bar
-        self.navigationController?.navigationBar.addSubview(progressView)
-        
-        webView.load(URLRequest(url: originUrl))
-        
-        toolbar.frame = CGRect(x: 0, y: webView.bottomY, width: self.view.frame.width, height: ViewSize.toolbarHeight)
-        backButtonItem = UIBarButtonItem(image: IconImage.backImage(isOn: false), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedBackButton(_:)))
-        nextButtonItem = UIBarButtonItem(image: IconImage.nextImage(isOn: false), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedNextButton(_:)))
-        stopButtonItem = UIBarButtonItem(image: IconImage.stopImage(isOn: false), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedStopButton(_:)))
-        loadButtonItem = UIBarButtonItem(image: IconImage.loadImage(isOn: true), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedLoadButton(_:)))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let spaceItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        spaceItem.width = 10
-        actionButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(ReadWebViewController.onTappedActionButton(_:)))
-        toolbar.items = [backButtonItem, spaceItem, nextButtonItem, spaceItem, stopButtonItem, spaceItem, loadButtonItem, flexibleItem, actionButtonItem]
-        self.view.addSubview(toolbar)
-        
-        setAllControlButtonsStatus()
+        initView()
     }
     
     deinit {
@@ -93,28 +63,6 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    //    @IBAction func onTappedBackButton(_ sender: UIBarButtonItem) {
-    //        guard webView.canGoBack else { return }
-    //        webView.goBack() // 戻る
-    //    }
-    //
-    //    @IBAction func onTappedNextButton(_ sender: UIBarButtonItem) {
-    //        guard webView.canGoForward else { return }
-    //        webView.goForward() // 進む
-    //    }
-    //    @IBAction func onTappedStopButton(_ sender: UIBarButtonItem) {
-    //        webView.stopLoading() // 読み込み停止
-    //    }
-    //
-    //    @IBAction func onTappedLoadButton(_ sender: UIBarButtonItem) {
-    //        webView.reload() // 再度読み込み
-    //    }
-    //
-    //    @IBAction func onTappedActionButton(_ sender: UIBarButtonItem) {
-    //        showUiActivity()
-    //    }
-    //
     func onTappedBackButton(_ sender: UIBarButtonItem) {
         guard webView.canGoBack else { return }
         webView.goBack() // 戻る
@@ -132,23 +80,83 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate {
         webView.reload() // 再度読み込み
     }
     
+    func onTappedAddBookmarkButton(_ sender: UIBarButtonItem) {
+        showAddBookMarkAlert()
+    }
+    
     func onTappedActionButton(_ sender: UIBarButtonItem) {
         showUiActivity()
     }
     
-    private func showUiActivity() {
-        guard
-            let postUrl: URL = webView.url, // self.webView.request?.url,
-            postUrl.absoluteString.characters.count != 0,
-            let title = webView.title,
-            title.characters.count != 0 else {
-                print("self.webView.request?.url || webView.titleがない")
-                return
+    
+    private func setNavigatinbarTitle(url: URL?) {
+        // vcのタイトルにホスト名を表示する
+        guard let url = url else { return }
+        if let component = URLComponents(string: url.absoluteString) {
+            self.title = component.host
+        }
+    }
+}
+
+extension ReadWebViewController {
+    
+    func initView() {
+        webView.frame = CGRect(x: 0, y: 0,
+                               width: self.view.frame.size.width,
+                               height: self.view.frame.size.height - ViewSize.navigationbarBottomY - ViewSize.toolbarHeight)
+        webView.frame.origin = CGPoint(x: 0, y: ViewSize.navigationbarBottomY)
+        webView.allowsBackForwardNavigationGestures = false // スワイプで戻るを禁止(tableViewの戻りとかぶるため)
+        webView.uiDelegate = self
+        webView.navigationDelegate = self
+        webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
+        webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
+        self.view.addSubview(webView)
+        
+        //プログレスバーを生成(NavigationBar下)
+        progressView.frame = CGRect(x: 0, y: self.navigationController!.navigationBar.frame.size.height  - 2,
+                                    width: self.view.frame.size.width, height: 2)
+        progressView.progressViewStyle = .bar
+        self.navigationController?.navigationBar.addSubview(progressView)
+        
+        webView.load(URLRequest(url: originUrl))
+        
+        // ツールバーを生成
+        toolbar.frame = CGRect(x: 0, y: webView.bottomY, width: self.view.frame.width, height: ViewSize.toolbarHeight)
+        toolbar.barTintColor = UIColor.lightRed
+        toolbar.tintColor = UIColor.black
+        backButtonItem = UIBarButtonItem(image: IconImage.backImage(isOn: false), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedBackButton(_:)))
+        nextButtonItem = UIBarButtonItem(image: IconImage.nextImage(isOn: false), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedNextButton(_:)))
+        stopButtonItem = UIBarButtonItem(image: IconImage.stopImage(isOn: false), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedStopButton(_:)))
+        loadButtonItem = UIBarButtonItem(image: IconImage.loadImage(isOn: true), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedLoadButton(_:)))
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let spaceItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        spaceItem.width = 10
+        addBookmarkButtonItem = UIBarButtonItem(image: IconImage.addBookmarkImage(), style: .plain, target: self, action: #selector(ReadWebViewController.onTappedAddBookmarkButton(_:)))
+        actionButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(ReadWebViewController.onTappedActionButton(_:)))
+        toolbar.items = [backButtonItem, spaceItem, nextButtonItem, spaceItem, stopButtonItem, spaceItem, loadButtonItem, flexibleItem, addBookmarkButtonItem, spaceItem, actionButtonItem]
+        self.view.addSubview(toolbar)
+        
+        setAllControlButtonsStatus()
+    }
+    
+    func showAddBookMarkAlert() {
+        guard let pageInfoArray = getPageInfo() else {
+            return
         }
         
-        print("postUrl: \(postUrl), title: \(title)")
-        
-        let activityItems: [Any] = [title, postUrl]
+        let sb = UIStoryboard(name: "AddBookmark", bundle: nil)
+        guard let vc = sb.instantiateInitialViewController() as? AddBookmarkViewController else {
+            return
+        }
+        vc.pageInfo = pageInfoArray
+        present(vc, animated: true, completion: nil)
+        print("ブックマークに追加する処理")
+    }
+    
+    func showUiActivity() {
+        guard let activityItems = getPageInfo() else {
+            return
+        }
         let appActivity = [PostFromUIActivity()]
         let activitySheet = UIActivityViewController(activityItems: activityItems, applicationActivities: appActivity)
         let excludeActivity: [UIActivityType] = [
@@ -160,14 +168,19 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate {
         present(activitySheet, animated: true, completion: {() -> Void in
         })
     }
-    
-    private func setNavigatinbarTitle(url: URL?) {
-        // vcのタイトルにホスト名を表示する
-        guard let url = url else { return }
-        if let component = URLComponents(string: url.absoluteString) {
-            //            self.navigationController?.navigationBar.topItem!.title = component.host
-            self.title = component.host //
+
+    // 閲覧中のページのurlとタイトルを取得するメソッド、できなかったらnilを返す
+    private func getPageInfo() -> [Any]? {
+        guard
+            let postUrl: URL = webView.url, // self.webView.request?.url,
+            postUrl.absoluteString.characters.count != 0,
+            let title = webView.title,
+            title.characters.count != 0 else {
+                print("self.webView.request?.url || webView.titleがない")
+                return nil
         }
+        print("title: \(title), postUrl: \(postUrl).")
+        return [title, postUrl]
     }
 }
 
@@ -212,7 +225,12 @@ struct IconImage {
     static func stopImage(isOn: Bool) -> UIImage {
         return isOn ? UIImage(named: "stop_on.png")! : UIImage(named: "stop_off.png")!
     }
+    
     static func loadImage(isOn: Bool) -> UIImage {
         return isOn ? UIImage(named: "reload_on.png")! : UIImage(named: "reload_off.png")!
+    }
+    
+    static func addBookmarkImage() -> UIImage {
+        return UIImage(named: "bookmark_add.png")!
     }
 }

@@ -8,6 +8,8 @@ target 'ShareArticle' do
   # Pods for ShareArticle
   pod 'OpenGraph'
   pod 'AlamofireImage', '~> 3.1'
-  pod 'RealmSwift'
+  pod 'Firebase/Core'
+  pod 'Firebase/Database'
+  pod 'Firebase/Auth'
 
 end

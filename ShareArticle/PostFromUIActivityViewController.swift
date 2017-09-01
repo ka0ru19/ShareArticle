@@ -98,11 +98,12 @@ class PostFromUIActivityViewController: UIViewController {
         finishButton.setTitle("Done", for: .normal)
         finishButton.setTitleColor(UIColor.white, for: .normal)
         
-        let headerImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: headerView.frame.width - 90 - 90 , height: headerViewsHeight))
-        headerImageView.frame.origin = CGPoint(x: cancelButton.bottomX, y: headerViewsOriginY)
+        let headerImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: headerViewsHeight , height: headerViewsHeight))
+        headerImageView.center = headerView.center
         headerImageView.contentMode = .scaleAspectFit
-        headerImageView.image = UIImage(named: "nippoly_white.png")
-        
+        headerImageView.image = UIImage(named: "icon_180.png")
+        headerImageView.clipsToBounds = true
+        headerImageView.layer.cornerRadius = 6.0
         
         /****** mainInput view ******/
         print(inputView.bottomY)
@@ -150,31 +151,34 @@ class PostFromUIActivityViewController: UIViewController {
     func post() {
         print("これを読了した->\(self.activityItems ?? ["error: no activityItems value"])")
         
-        // TODO: ここでデータベースに保存
-        let ud = UserDefaults.standard
-        var articleUdArray = ud.array(forKey: "articleUdArray") as? [[String: Any]] ?? []
+        let newArticleDict: [String: String] = [
+            "title": articleTitle ?? "",
+            "url": articleUrl.absoluteString,
+            "date": Date().string(),
+            "comment": self.textView.text ?? ""
+            
+        ]
         
-        var postUdDic: [String:Any] = [:]
+        FirebaseDatabaseManager().postNewArcitle(newValue: newArticleDict, vc: self)
         
-        
-        postUdDic["title"] = articleTitle
-        postUdDic["urlString"] = articleUrl.absoluteString
-        postUdDic["date"] = Date()
-        postUdDic["comment"] = self.textView.text
-        articleUdArray.append(postUdDic)
-        print(postUdDic)
-        
-        print("ほぞんするよ")
-        print(articleUdArray)
-        ud.set(articleUdArray, forKey: "articleUdArray")
-        
-        closeView()
     }
     
     func closeView() {
         postFromUiAc?.perform()
     }
     
+}
+
+extension PostFromUIActivityViewController {
+    public func successPostNewArcitle() {
+        closeView()
+        //        textField.placeholder = textField.text
+        //        textField.text = ""
+    }
+    
+    public func failedGetArcitleArray(message: String) {
+        print(message)
+    }
 }
 
 extension PostFromUIActivityViewController: UITextViewDelegate {
