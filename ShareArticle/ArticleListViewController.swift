@@ -37,12 +37,26 @@ class ArticleListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         initView()
+        
+        // 初回起動かチェック
+        if let isFirst = UserDefaults.standard.object(forKey: "isFirst") as? Bool {
+            if !isFirst {
+                // 2回目移行は通常の処理
+                return
+            }
+        }
+        
+        // 初回のみTutorialを表示
+        let sb = UIStoryboard(name: "Tutorial", bundle: nil)
+        guard let naviVc = sb.instantiateInitialViewController() as? TutorialViewController else { return }
+        self.present(naviVc, animated: true, completion: nil)
+        return
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        FirebaseDatabaseManager().getArcitleArray(vc: self)
+        FirebaseAuthManager().signInAnonymously(vc: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -61,7 +75,7 @@ class ArticleListViewController: UIViewController {
     func openBookmarkButton(_ sender: UIBarButtonItem) {
         openBookmarkVC()
     }
-
+    
     // MARK: 「出力」ボタン
     func onTappedOutputButton(_ sender: UIBarButtonItem) {
         isEditingTableView = !isEditingTableView // スイッチ
@@ -299,6 +313,15 @@ extension ArticleListViewController {
     public func failedGetArcitleArray(message: String) {
         print(message)
     }
+    
+    public func successSignInAnonymously() {
+        FirebaseDatabaseManager().getArcitleArray(vc: self)
+    }
+    
+    public func failedSignInAnonymously(message: String) {
+        print(message)
+    }
+    
 }
 
 
@@ -308,7 +331,7 @@ extension ArticleListViewController {
 //    func initDict() { // デバック用にダミーデータを入れる
 //        ud.removeSuite(named: "articleUdArray")
 //        articleUdArray = []
-//        
+//
 //        // デバック用のダミーデータ
 //        var titleArray: [String] = ["mac","ipad","iphone"]
 //        var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
@@ -316,20 +339,20 @@ extension ArticleListViewController {
 //                               URL(string: "https://www.apple.com/jp/iphone/")!]
 //        var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
 //        var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
-//        
-//        
+//
+//
 //        for i in 0 ..< titleArray.count {
 //            let atc = Article(title: titleArray[i],
 //                              urlString: urlArray[i].absoluteString,
 //                              dateString: dateArray[i],
 //                              comment: commentArray[i])
-//            
+//
 //            articleUdArray.append(atc!.change2UdDict())
 //        }
-//        
+//
 //        ud.set(articleUdArray, forKey: "articleUdArray")
 //    }
-//    
+//
 //}
 
 // MARK: - tableView操作
@@ -564,7 +587,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         guard let vc = naviVc.topViewController as? BookmarkViewController else { return }
         vc.prevVC = self
         self.present(naviVc, animated: true, completion: nil)
-
+        
     }
     func showKindSelectAlert() {
         let actionSheet = UIAlertController(title: "一括で記事を選択します", message: "条件を選択してください", preferredStyle: .alert)
