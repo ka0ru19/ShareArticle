@@ -37,11 +37,6 @@
 		63BC8E271F56CC9E00E9F55E /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E261F56CC9E00E9F55E /* Welcome.storyboard */; };
 		63BC8E291F56CFC900E9F55E /* FirebaseDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC8E281F56CFC900E9F55E /* FirebaseDatabaseManager.swift */; };
 		63BC8E2B1F57060400E9F55E /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC8E2A1F57060400E9F55E /* DictionaryExtension.swift */; };
-		63BC8E3B1F57CD4400E9F55E /* Tutorial01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E361F57CD4400E9F55E /* Tutorial01.jpg */; };
-		63BC8E3C1F57CD4400E9F55E /* Tutorial02.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E371F57CD4400E9F55E /* Tutorial02.jpg */; };
-		63BC8E3D1F57CD4400E9F55E /* Tutorial03.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E381F57CD4400E9F55E /* Tutorial03.jpg */; };
-		63BC8E3E1F57CD4400E9F55E /* Tutorial04.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E391F57CD4400E9F55E /* Tutorial04.jpg */; };
-		63BC8E3F1F57CD4400E9F55E /* Tutorial05.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E3A1F57CD4400E9F55E /* Tutorial05.jpg */; };
 		63BC8E411F57CFAE00E9F55E /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC8E401F57CFAE00E9F55E /* BookmarkViewController.swift */; };
 		63BC8E431F57CFB900E9F55E /* Bookmark.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E421F57CFB900E9F55E /* Bookmark.storyboard */; };
 		63BC8E451F57DDE600E9F55E /* AddBookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC8E441F57DDE600E9F55E /* AddBookmarkViewController.swift */; };
@@ -50,6 +45,11 @@
 		63BC8E591F58025200E9F55E /* bookmark_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E551F58025200E9F55E /* bookmark_normal@2x.png */; };
 		63BC8E5A1F58025200E9F55E /* bookmark_add.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E561F58025200E9F55E /* bookmark_add.png */; };
 		63BC8E5B1F58025200E9F55E /* bookmark_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E571F58025200E9F55E /* bookmark_normal.png */; };
+		63BC8E611F5E885D00E9F55E /* Tutorial01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E5C1F5E885D00E9F55E /* Tutorial01.jpg */; };
+		63BC8E621F5E885D00E9F55E /* Tutorial02.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E5D1F5E885D00E9F55E /* Tutorial02.jpg */; };
+		63BC8E631F5E885D00E9F55E /* Tutorial03.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E5E1F5E885D00E9F55E /* Tutorial03.jpg */; };
+		63BC8E641F5E885D00E9F55E /* Tutorial04.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E5F1F5E885D00E9F55E /* Tutorial04.jpg */; };
+		63BC8E651F5E885D00E9F55E /* Tutorial05.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E601F5E885D00E9F55E /* Tutorial05.jpg */; };
 		63DD88291F529B4300885385 /* icon-messages-app-27x20@1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DD87F91F529B4300885385 /* icon-messages-app-27x20@1x.png */; };
 		63DD882A1F529B4300885385 /* icon-messages-app-27x20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DD87FA1F529B4300885385 /* icon-messages-app-27x20@2x.png */; };
 		63DD882B1F529B4300885385 /* icon-messages-app-27x20@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63DD87FB1F529B4300885385 /* icon-messages-app-27x20@3x.png */; };
@@ -145,11 +145,6 @@
 		63BC8E261F56CC9E00E9F55E /* Welcome.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Welcome.storyboard; sourceTree = "<group>"; };
 		63BC8E281F56CFC900E9F55E /* FirebaseDatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseDatabaseManager.swift; sourceTree = "<group>"; };
 		63BC8E2A1F57060400E9F55E /* DictionaryExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryExtension.swift; sourceTree = "<group>"; };
-		63BC8E361F57CD4400E9F55E /* Tutorial01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial01.jpg; sourceTree = "<group>"; };
-		63BC8E371F57CD4400E9F55E /* Tutorial02.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial02.jpg; sourceTree = "<group>"; };
-		63BC8E381F57CD4400E9F55E /* Tutorial03.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial03.jpg; sourceTree = "<group>"; };
-		63BC8E391F57CD4400E9F55E /* Tutorial04.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial04.jpg; sourceTree = "<group>"; };
-		63BC8E3A1F57CD4400E9F55E /* Tutorial05.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial05.jpg; sourceTree = "<group>"; };
 		63BC8E401F57CFAE00E9F55E /* BookmarkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkViewController.swift; sourceTree = "<group>"; };
 		63BC8E421F57CFB900E9F55E /* Bookmark.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Bookmark.storyboard; sourceTree = "<group>"; };
 		63BC8E441F57DDE600E9F55E /* AddBookmarkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddBookmarkViewController.swift; sourceTree = "<group>"; };
@@ -158,6 +153,11 @@
 		63BC8E551F58025200E9F55E /* bookmark_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bookmark_normal@2x.png"; sourceTree = "<group>"; };
 		63BC8E561F58025200E9F55E /* bookmark_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bookmark_add.png; sourceTree = "<group>"; };
 		63BC8E571F58025200E9F55E /* bookmark_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bookmark_normal.png; sourceTree = "<group>"; };
+		63BC8E5C1F5E885D00E9F55E /* Tutorial01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial01.jpg; sourceTree = "<group>"; };
+		63BC8E5D1F5E885D00E9F55E /* Tutorial02.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial02.jpg; sourceTree = "<group>"; };
+		63BC8E5E1F5E885D00E9F55E /* Tutorial03.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial03.jpg; sourceTree = "<group>"; };
+		63BC8E5F1F5E885D00E9F55E /* Tutorial04.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial04.jpg; sourceTree = "<group>"; };
+		63BC8E601F5E885D00E9F55E /* Tutorial05.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tutorial05.jpg; sourceTree = "<group>"; };
 		63DD87F91F529B4300885385 /* icon-messages-app-27x20@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-messages-app-27x20@1x.png"; sourceTree = "<group>"; };
 		63DD87FA1F529B4300885385 /* icon-messages-app-27x20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-messages-app-27x20@2x.png"; sourceTree = "<group>"; };
 		63DD87FB1F529B4300885385 /* icon-messages-app-27x20@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-messages-app-27x20@3x.png"; sourceTree = "<group>"; };
@@ -426,11 +426,11 @@
 				63E4104E1F1D1607004B71A6 /* thumbnail_noImage.png */,
 				63E4104F1F1D1607004B71A6 /* thumbnail_nowLoading.png */,
 				63DD88501F52A1C400885385 /* icon-uiac.png */,
-				63BC8E361F57CD4400E9F55E /* Tutorial01.jpg */,
-				63BC8E371F57CD4400E9F55E /* Tutorial02.jpg */,
-				63BC8E381F57CD4400E9F55E /* Tutorial03.jpg */,
-				63BC8E391F57CD4400E9F55E /* Tutorial04.jpg */,
-				63BC8E3A1F57CD4400E9F55E /* Tutorial05.jpg */,
+				63BC8E5C1F5E885D00E9F55E /* Tutorial01.jpg */,
+				63BC8E5D1F5E885D00E9F55E /* Tutorial02.jpg */,
+				63BC8E5E1F5E885D00E9F55E /* Tutorial03.jpg */,
+				63BC8E5F1F5E885D00E9F55E /* Tutorial04.jpg */,
+				63BC8E601F5E885D00E9F55E /* Tutorial05.jpg */,
 			);
 			path = systemImage;
 			sourceTree = "<group>";
@@ -511,7 +511,6 @@
 				63DD884E1F529B4300885385 /* iTunesArtwork@3x.png in Resources */,
 				632910B11EECF29F0071F2E1 /* ArticleTableViewCell.xib in Resources */,
 				63DD88481F529B4300885385 /* Icon-App-76x76@3x.png in Resources */,
-				63BC8E3D1F57CD4400E9F55E /* Tutorial03.jpg in Resources */,
 				63DD88461F529B4300885385 /* Icon-App-76x76@1x.png in Resources */,
 				63DD88451F529B4300885385 /* Icon-App-72x72@2x.png in Resources */,
 				63DD88371F529B4300885385 /* Icon-App-20x20@2x.png in Resources */,
@@ -521,6 +520,7 @@
 				63DD88471F529B4300885385 /* Icon-App-76x76@2x.png in Resources */,
 				63DD88491F529B4300885385 /* Icon-App-83.5x83.5@2x.png in Resources */,
 				63DD883D1F529B4300885385 /* Icon-App-40x40@2x.png in Resources */,
+				63BC8E651F5E885D00E9F55E /* Tutorial05.jpg in Resources */,
 				63E410511F1D1607004B71A6 /* thumbnail_nowLoading.png in Resources */,
 				63E410351F1CFA4D004B71A6 /* reload_on.png in Resources */,
 				63E410451F1CFED7004B71A6 /* reload_off@2x.png in Resources */,
@@ -530,14 +530,13 @@
 				63E410411F1CFED7004B71A6 /* back_off.png in Resources */,
 				632910A31EECEC880071F2E1 /* LaunchScreen.storyboard in Resources */,
 				63DD883F1F529B4300885385 /* Icon-App-57x57@1x.png in Resources */,
-				63BC8E3E1F57CD4400E9F55E /* Tutorial04.jpg in Resources */,
 				63DD88331F529B4300885385 /* icon-messages-transcript-32x24@2x.png in Resources */,
 				63BC8E591F58025200E9F55E /* bookmark_normal@2x.png in Resources */,
 				63E410461F1CFED7004B71A6 /* next_off@2x.png in Resources */,
 				632910A01EECEC880071F2E1 /* Assets.xcassets in Resources */,
 				63E410371F1CFA4D004B71A6 /* stop_on.png in Resources */,
 				63DD88311F529B4300885385 /* icon-messages-app-store-1024x768.png in Resources */,
-				63BC8E3F1F57CD4400E9F55E /* Tutorial05.jpg in Resources */,
+				63BC8E631F5E885D00E9F55E /* Tutorial03.jpg in Resources */,
 				63DD88411F529B4300885385 /* Icon-App-60x60@1x.png in Resources */,
 				63BC8E5A1F58025200E9F55E /* bookmark_add.png in Resources */,
 				63E4104C1F1D0EAB004B71A6 /* check_off.png in Resources */,
@@ -547,20 +546,19 @@
 				63DD882B1F529B4300885385 /* icon-messages-app-27x20@3x.png in Resources */,
 				63DD88291F529B4300885385 /* icon-messages-app-27x20@1x.png in Resources */,
 				63DD88301F529B4300885385 /* icon-messages-app-iPhone-60x45@3x.png in Resources */,
-				63BC8E3C1F57CD4400E9F55E /* Tutorial02.jpg in Resources */,
 				63DD883E1F529B4300885385 /* Icon-App-40x40@3x.png in Resources */,
 				63DD882D1F529B4300885385 /* icon-messages-app-iPadAir-74x55@2x.png in Resources */,
 				63DD883B1F529B4300885385 /* Icon-App-29x29@3x.png in Resources */,
 				63DD88321F529B4300885385 /* icon-messages-transcript-32x24@1x.png in Resources */,
 				63BC8E471F57DDF500E9F55E /* AddBookmark.storyboard in Resources */,
 				63E410321F1CFA4D004B71A6 /* back_on@2x.png in Resources */,
-				63BC8E3B1F57CD4400E9F55E /* Tutorial01.jpg in Resources */,
 				63E410481F1CFED7004B71A6 /* back_off@2x.png in Resources */,
 				63DD88401F529B4300885385 /* Icon-App-57x57@2x.png in Resources */,
 				63E410331F1CFA4D004B71A6 /* next_on.png in Resources */,
 				63E410341F1CFA4D004B71A6 /* next_on@2x.png in Resources */,
 				634CB6701F2640AE00F2E7F5 /* nippoly_white.png in Resources */,
 				63DD88341F529B4300885385 /* icon-messages-transcript-32x24@3x.png in Resources */,
+				63BC8E611F5E885D00E9F55E /* Tutorial01.jpg in Resources */,
 				63DD88421F529B4300885385 /* Icon-App-60x60@2x.png in Resources */,
 				63DD88391F529B4300885385 /* Icon-App-29x29@1x.png in Resources */,
 				63DD882C1F529B4300885385 /* icon-messages-app-iPadAir-67x50@2x.png in Resources */,
@@ -569,6 +567,7 @@
 				63BC8E431F57CFB900E9F55E /* Bookmark.storyboard in Resources */,
 				63E410471F1CFED7004B71A6 /* stop_off@2x.png in Resources */,
 				63E410361F1CFA4D004B71A6 /* reload_on@2x.png in Resources */,
+				63BC8E621F5E885D00E9F55E /* Tutorial02.jpg in Resources */,
 				63DD883A1F529B4300885385 /* Icon-App-29x29@2x.png in Resources */,
 				63DD882E1F529B4300885385 /* icon-messages-app-iPhone-60x45@1x.png in Resources */,
 				63BC8E271F56CC9E00E9F55E /* Welcome.storyboard in Resources */,
@@ -577,6 +576,7 @@
 				63DD882F1F529B4300885385 /* icon-messages-app-iPhone-60x45@2x.png in Resources */,
 				633BF8521F52CA7F00D99E22 /* icon_180.png in Resources */,
 				63DD883C1F529B4300885385 /* Icon-App-40x40@1x.png in Resources */,
+				63BC8E641F5E885D00E9F55E /* Tutorial04.jpg in Resources */,
 				633BF8541F52F34200D99E22 /* Posty_logo_1440_360.png in Resources */,
 				63DD884B1F529B4300885385 /* Icon-Small-50x50@2x.png in Resources */,
 				633BF85A1F52FDBB00D99E22 /* Tutorial.storyboard in Resources */,
