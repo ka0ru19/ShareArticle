@@ -21,10 +21,23 @@ class BookmarkViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        guard
+            let navigationController = self.navigationController,
+            let navigationBarTopItem = navigationController.navigationBar.topItem else {
+                return
+        }
+        
+        navigationController.navigationBar.barTintColor = UIColor.lightRed
+        navigationController.navigationBar.tintColor = UIColor.black
+        navigationBarTopItem.title = "ブックマーク"
+
+        
         bookmarkDictArray = ud.array(forKey: "bookmarkDictArray") as? [Dictionary<String, String>] ?? []
 
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.tableFooterView = UIView(frame: .zero)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -35,7 +48,6 @@ class BookmarkViewController: UIViewController {
     @IBAction func closeButtonTapped(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
     }
-
 
 }
 

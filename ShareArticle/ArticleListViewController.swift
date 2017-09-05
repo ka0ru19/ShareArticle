@@ -438,7 +438,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         articleTableView.rowHeight = UITableViewAutomaticDimension
         articleTableView.estimatedRowHeight = 600
         articleTableView.sectionHeaderHeight = 20
-        articleTableView.tableFooterView = UIView(frame: .zero)
+        articleTableView.tableFooterView = UIView(frame: .zero) // 空白cellのセパレータを非表示
         articleTableView.separatorInset = UIEdgeInsetsMake(0, 8, 0, 0) // 文字の頭に合わせている
         
         self.view.addSubview(articleTableView)
@@ -486,22 +486,24 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         
         if isEditingTableView {
             let leftBarButtonItem = UIBarButtonItem(title: "条件選択", style: .plain, target: self, action: #selector(onTappedKindSelectButton(_:)))
-            self.navigationItem.leftBarButtonItem = leftBarButtonItem
+            self.navigationItem.leftBarButtonItems = [leftBarButtonItem]
             let rightBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
-            self.navigationItem.rightBarButtonItem = rightBarButtonItem
+            self.navigationItem.rightBarButtonItems = [rightBarButtonItem]
             self.navigationItem.titleView = nil
             navigationBarTopItem.title = "記事を選択"
         } else {
             let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(onTappedAddButton(_:)))
             let bookmarkBarButtonItem = UIBarButtonItem(image: UIImage(named: "bookmark_normal.png"), style: .plain, target: self, action: #selector(openBookmarkButton(_:)))
+            self.navigationItem.leftBarButtonItems = [leftBarButtonItem, bookmarkBarButtonItem]
             
-            self.navigationItem.leftBarButtonItems = [leftBarButtonItem,bookmarkBarButtonItem]
             let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
-            self.navigationItem.rightBarButtonItem = rightBarButtonItem
+            let spaceItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+            spaceItem.width = leftBarButtonItem.width + bookmarkBarButtonItem.width - rightBarButtonItem.width + 45 // 45は調整のため
+            self.navigationItem.rightBarButtonItems = [rightBarButtonItem, spaceItem]
             navigationBarTopItem.title = ""
             let uiImageView = UIImageView(image: UIImage(named: "Posty_logo_1440_360.png"))
             uiImageView.frame.size.height = ViewSize.navigationbarHeight * 0.75
-            uiImageView.frame.size.width = ViewSize.navigationbarHeight * 0.75 * 4
+            uiImageView.frame.size.width = ViewSize.navigationbarHeight * 0.75 * 3
             uiImageView.contentMode = .scaleAspectFit
             self.navigationItem.titleView = uiImageView
         }
@@ -558,9 +560,10 @@ extension ArticleListViewController: UINavigationControllerDelegate {
     func openBookmarkVC() {
         // 画面遷移
         let sb = UIStoryboard(name: "Bookmark", bundle: nil)
-        guard let vc = sb.instantiateInitialViewController() as? BookmarkViewController else { return }
+        guard let naviVc = sb.instantiateInitialViewController() as? UINavigationController else { return }
+        guard let vc = naviVc.topViewController as? BookmarkViewController else { return }
         vc.prevVC = self
-        self.present(vc, animated: true, completion: nil)
+        self.present(naviVc, animated: true, completion: nil)
 
     }
     func showKindSelectAlert() {
