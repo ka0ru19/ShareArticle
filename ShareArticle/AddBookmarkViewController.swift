@@ -18,6 +18,10 @@ class AddBookmarkViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        guard let navigationController = self.navigationController else { return }
+        navigationController.navigationBar.barTintColor = UIColor.lightRed
+        navigationController.navigationBar.tintColor = UIColor.black
+        
         guard
             let title = pageInfo[0] as? String,
             let url = pageInfo[1] as? URL else {
@@ -26,6 +30,7 @@ class AddBookmarkViewController: UIViewController {
         
         titleTextField.borderStyle = .line
         titleTextField.text = title
+        titleTextField.becomeFirstResponder()
         
         urlTextField.borderStyle = .none
         urlTextField.text = url.absoluteString
@@ -73,6 +78,4 @@ class AddBookmarkViewController: UIViewController {
         present(alert, animated: true, completion: nil)
         
     }
-    
-    
 }

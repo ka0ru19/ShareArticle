@@ -143,14 +143,11 @@ extension ReadWebViewController {
         guard let pageInfoArray = getPageInfo() else {
             return
         }
-        
         let sb = UIStoryboard(name: "AddBookmark", bundle: nil)
-        guard let vc = sb.instantiateInitialViewController() as? AddBookmarkViewController else {
-            return
-        }
-        vc.pageInfo = pageInfoArray
-        present(vc, animated: true, completion: nil)
-        print("ブックマークに追加する処理")
+        guard let naviVc = sb.instantiateInitialViewController() as? UINavigationController else { return }
+        guard let addBookmarkVc = naviVc.topViewController as? AddBookmarkViewController else { return }
+        addBookmarkVc.pageInfo = pageInfoArray
+        present(naviVc, animated: true, completion: nil)
     }
     
     func showUiActivity() {
