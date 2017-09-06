@@ -79,6 +79,7 @@ class TutorialViewController: UIViewController , UIScrollViewDelegate {
     }
     
     func closeButtonTapped() {
+        UserDefaults.standard.set(false, forKey: "isFirst")
         dismiss(animated: true, completion: nil)
     }
     

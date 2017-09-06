@@ -23,7 +23,7 @@ class PostFromUIActivity: UIActivity {
     }
     
     override var activityTitle: String? {
-        return "Shareric"
+        return "Posty"
     }
     
     override var activityImage: UIImage? {

@@ -26,6 +26,10 @@ class ReadWebViewController: UIViewController, WKNavigationDelegate {
     var originUrl: URL! // 前のvcから引き継いでくる
     var currentURL: URL!
     
+    var beginingPoint = CGPoint.zero // スクロール開始地点
+    var isViewShowed: Bool = true // スクロールによるViewの表示/非表示を管理
+    var isMovingToolbar: Bool = false // 表示が切り替わっている最中
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -107,6 +111,7 @@ extension ReadWebViewController {
         webView.frame.origin = CGPoint(x: 0, y: ViewSize.navigationbarBottomY)
         webView.allowsBackForwardNavigationGestures = false // スワイプで戻るを禁止(tableViewの戻りとかぶるため)
         webView.uiDelegate = self
+        webView.scrollView.delegate = self
         webView.navigationDelegate = self
         webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
         webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
@@ -124,12 +129,12 @@ extension ReadWebViewController {
         toolbar.frame = CGRect(x: 0, y: webView.bottomY, width: self.view.frame.width, height: ViewSize.toolbarHeight)
         toolbar.barTintColor = UIColor.lightRed
         toolbar.tintColor = UIColor.black
-        backButtonItem = UIBarButtonItem(image: IconImage.backImage(isOn: false), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedBackButton(_:)))
-        nextButtonItem = UIBarButtonItem(image: IconImage.nextImage(isOn: false), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedNextButton(_:)))
-        stopButtonItem = UIBarButtonItem(image: IconImage.stopImage(isOn: false), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedStopButton(_:)))
-        loadButtonItem = UIBarButtonItem(image: IconImage.loadImage(isOn: true), style: .plain, target: nil, action: #selector(ReadWebViewController.onTappedLoadButton(_:)))
-        let flexibleItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let spaceItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        backButtonItem = UIBarButtonItem(image: IconImage.backImage(isOn: false), style: .plain, target: self, action: #selector(ReadWebViewController.onTappedBackButton(_:)))
+        nextButtonItem = UIBarButtonItem(image: IconImage.nextImage(isOn: false), style: .plain, target: self, action: #selector(ReadWebViewController.onTappedNextButton(_:)))
+        stopButtonItem = UIBarButtonItem(image: IconImage.stopImage(isOn: false), style: .plain, target: self, action: #selector(ReadWebViewController.onTappedStopButton(_:)))
+        loadButtonItem = UIBarButtonItem(image: IconImage.loadImage(isOn: true), style: .plain, target: self, action: #selector(ReadWebViewController.onTappedLoadButton(_:)))
+        let flexibleItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let spaceItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: self, action: nil)
         spaceItem.width = 10
         addBookmarkButtonItem = UIBarButtonItem(image: IconImage.addBookmarkImage(), style: .plain, target: self, action: #selector(ReadWebViewController.onTappedAddBookmarkButton(_:)))
         actionButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(ReadWebViewController.onTappedActionButton(_:)))
@@ -143,14 +148,11 @@ extension ReadWebViewController {
         guard let pageInfoArray = getPageInfo() else {
             return
         }
-        
         let sb = UIStoryboard(name: "AddBookmark", bundle: nil)
-        guard let vc = sb.instantiateInitialViewController() as? AddBookmarkViewController else {
-            return
-        }
-        vc.pageInfo = pageInfoArray
-        present(vc, animated: true, completion: nil)
-        print("ブックマークに追加する処理")
+        guard let naviVc = sb.instantiateInitialViewController() as? UINavigationController else { return }
+        guard let addBookmarkVc = naviVc.topViewController as? AddBookmarkViewController else { return }
+        addBookmarkVc.pageInfo = pageInfoArray
+        present(naviVc, animated: true, completion: nil)
     }
     
     func showUiActivity() {
@@ -189,8 +191,70 @@ extension ReadWebViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, shouldPreviewElement elementInfo: WKPreviewElementInfo) -> Bool {
         return false
     }
-    
 }
+
+// MARK: - スクロールの状態を管理
+extension ReadWebViewController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        beginingPoint = scrollView.contentOffset
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentPoint = scrollView.contentOffset
+        let contentSize = scrollView.contentSize
+        let frameSize = scrollView.frame
+        let maxOffSet = contentSize.height - frameSize.height
+        
+        if currentPoint.y >= maxOffSet {
+            showToolbarAnimate()
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+        } else if beginingPoint.y < currentPoint.y {
+            // スクロールダウンした時
+            hideToolbarAnimate()
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+        }else{
+            // スクロールアップした時
+            print("Scrolled up")
+            showToolbarAnimate()
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+        }
+    }
+    
+    // MARK: - webViewを縮小し、naviBarとtoolBarを表示する
+    func showToolbarAnimate() {
+        if isViewShowed || isMovingToolbar{ return }
+        isMovingToolbar = true
+        self.toolbar.frame.origin.y = self.view.frame.size.height
+        self.webView.frame.origin.y = ViewSize.statusBarBottomY
+        self.webView.frame.size.height = self.view.frame.size.height - ViewSize.statusBarBottomY
+        UIView.animate(withDuration: 0.2, animations: {
+            self.toolbar.frame.origin.y -= ViewSize.toolbarHeight
+            self.webView.frame.origin.y += ViewSize.navigationbarHeight
+            self.webView.frame.size.height -= ViewSize.navigationbarHeight + ViewSize.toolbarHeight
+        }, completion: { _ in
+            self.isViewShowed = true
+            self.isMovingToolbar = false
+        })
+    }
+    
+    // MARK: - webViewを画面いっぱいにし、naviBarとtoolBarを非表示にする
+    func hideToolbarAnimate() {
+        if !isViewShowed || isMovingToolbar{ return }
+        isMovingToolbar = true
+        self.toolbar.frame.origin.y = self.view.frame.size.height - ViewSize.toolbarHeight
+        self.webView.frame.origin.y = ViewSize.navigationbarBottomY
+        self.webView.frame.size.height = self.view.frame.size.height - ViewSize.navigationbarBottomY - ViewSize.toolbarHeight
+        UIView.animate(withDuration: 0.2, animations: {
+            self.toolbar.frame.origin.y += ViewSize.toolbarHeight
+            self.webView.frame.origin.y -= ViewSize.navigationbarHeight
+            self.webView.frame.size.height += ViewSize.navigationbarHeight + ViewSize.toolbarHeight
+        }, completion: { _ in
+            self.isViewShowed = false
+            self.isMovingToolbar = false
+        })
+    }
+}
+
 extension ReadWebViewController {
     func setAllControlButtonsStatus() {
         // webviewの状態に応じて、3つ全てのボタンの色と操作許可を変更
@@ -209,7 +273,6 @@ extension ReadWebViewController {
 private extension UIBarButtonItem {
     func setState(isAvailable: Bool) {
         self.isEnabled = isAvailable
-        //        self.tintColor = isAvailable ? UIColor.blue : UIColor.gray
     }
 }
 

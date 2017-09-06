@@ -37,13 +37,26 @@ class ArticleListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //        initDict() // データベースの初期化、ダミーデータの挿入
         initView()
+        
+        // 初回起動かチェック
+        if let isFirst = UserDefaults.standard.object(forKey: "isFirst") as? Bool {
+            if !isFirst {
+                // 2回目移行は通常の処理
+                return
+            }
+        }
+        
+        // 初回のみTutorialを表示
+        let sb = UIStoryboard(name: "Tutorial", bundle: nil)
+        guard let naviVc = sb.instantiateInitialViewController() as? TutorialViewController else { return }
+        self.present(naviVc, animated: true, completion: nil)
+        return
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        FirebaseDatabaseManager().getArcitleArray(vc: self)
+        FirebaseAuthManager().signInAnonymously(vc: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -62,7 +75,7 @@ class ArticleListViewController: UIViewController {
     func openBookmarkButton(_ sender: UIBarButtonItem) {
         openBookmarkVC()
     }
-
+    
     // MARK: 「出力」ボタン
     func onTappedOutputButton(_ sender: UIBarButtonItem) {
         isEditingTableView = !isEditingTableView // スイッチ
@@ -247,7 +260,7 @@ extension ArticleListViewController {
 // MARK: - Firebaseのcomplition
 extension ArticleListViewController {
     public func successLoadDictArray(dictArray: [Dictionary<String, String>]) {
-        var newArticleArray: [Article] = [] // = array // udから全ての記事を持ってくる
+        var newArticleArray: [Article] = []
         
         for d in dictArray {
             guard let newArticle = Article(from: d) else { continue }
@@ -300,43 +313,52 @@ extension ArticleListViewController {
     public func failedGetArcitleArray(message: String) {
         print(message)
     }
-}
-
-
-
-// MARK: - データベース連携操作
-extension ArticleListViewController {
-    func initDict() { // デバック用にダミーデータを入れる
-        ud.removeSuite(named: "articleUdArray")
-        articleUdArray = []
-        
-        // デバック用のダミーデータ
-        var titleArray: [String] = ["mac","ipad","iphone"]
-        var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
-                               URL(string: "https://www.apple.com/jp/ipad/")!,
-                               URL(string: "https://www.apple.com/jp/iphone/")!]
-        var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
-        var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
-        
-        
-        for i in 0 ..< titleArray.count {
-            let atc = Article(title: titleArray[i],
-                              urlString: urlArray[i].absoluteString,
-                              dateString: dateArray[i],
-                              comment: commentArray[i])
-            
-            articleUdArray.append(atc!.change2UdDict())
-        }
-        
-        ud.set(articleUdArray, forKey: "articleUdArray")
+    
+    public func successSignInAnonymously() {
+        FirebaseDatabaseManager().getArcitleArray(vc: self)
+    }
+    
+    public func failedSignInAnonymously(message: String) {
+        print(message)
     }
     
 }
 
+
+
+// MARK: - データベース連携操作(デバック用)
+//extension ArticleListViewController {
+//    func initDict() { // デバック用にダミーデータを入れる
+//        ud.removeSuite(named: "articleUdArray")
+//        articleUdArray = []
+//
+//        // デバック用のダミーデータ
+//        var titleArray: [String] = ["mac","ipad","iphone"]
+//        var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
+//                               URL(string: "https://www.apple.com/jp/ipad/")!,
+//                               URL(string: "https://www.apple.com/jp/iphone/")!]
+//        var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
+//        var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
+//
+//
+//        for i in 0 ..< titleArray.count {
+//            let atc = Article(title: titleArray[i],
+//                              urlString: urlArray[i].absoluteString,
+//                              dateString: dateArray[i],
+//                              comment: commentArray[i])
+//
+//            articleUdArray.append(atc!.change2UdDict())
+//        }
+//
+//        ud.set(articleUdArray, forKey: "articleUdArray")
+//    }
+//
+//}
+
 // MARK: - tableView操作
 extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return articleDateStringArray.count // セクションの数
+        return articleDateStringArray.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -418,8 +440,6 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
                 tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
             }
             
-//            setArticlesUdFromArray(from: articleByDateArray)
-            
         }
     }
     
@@ -441,7 +461,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         articleTableView.rowHeight = UITableViewAutomaticDimension
         articleTableView.estimatedRowHeight = 600
         articleTableView.sectionHeaderHeight = 20
-        articleTableView.tableFooterView = UIView(frame: .zero)
+        articleTableView.tableFooterView = UIView(frame: .zero) // 空白cellのセパレータを非表示
         articleTableView.separatorInset = UIEdgeInsetsMake(0, 8, 0, 0) // 文字の頭に合わせている
         
         self.view.addSubview(articleTableView)
@@ -489,22 +509,24 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         
         if isEditingTableView {
             let leftBarButtonItem = UIBarButtonItem(title: "条件選択", style: .plain, target: self, action: #selector(onTappedKindSelectButton(_:)))
-            self.navigationItem.leftBarButtonItem = leftBarButtonItem
+            self.navigationItem.leftBarButtonItems = [leftBarButtonItem]
             let rightBarButtonItem = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
-            self.navigationItem.rightBarButtonItem = rightBarButtonItem
+            self.navigationItem.rightBarButtonItems = [rightBarButtonItem]
             self.navigationItem.titleView = nil
             navigationBarTopItem.title = "記事を選択"
         } else {
             let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(onTappedAddButton(_:)))
             let bookmarkBarButtonItem = UIBarButtonItem(image: UIImage(named: "bookmark_normal.png"), style: .plain, target: self, action: #selector(openBookmarkButton(_:)))
+            self.navigationItem.leftBarButtonItems = [leftBarButtonItem, bookmarkBarButtonItem]
             
-            self.navigationItem.leftBarButtonItems = [leftBarButtonItem,bookmarkBarButtonItem]
             let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
-            self.navigationItem.rightBarButtonItem = rightBarButtonItem
+            let spaceItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+            spaceItem.width = leftBarButtonItem.width + bookmarkBarButtonItem.width - rightBarButtonItem.width + 45 // 45は調整のため
+            self.navigationItem.rightBarButtonItems = [rightBarButtonItem, spaceItem]
             navigationBarTopItem.title = ""
             let uiImageView = UIImageView(image: UIImage(named: "Posty_logo_1440_360.png"))
             uiImageView.frame.size.height = ViewSize.navigationbarHeight * 0.75
-            uiImageView.frame.size.width = ViewSize.navigationbarHeight * 0.75 * 4
+            uiImageView.frame.size.width = ViewSize.navigationbarHeight * 0.75 * 3
             uiImageView.contentMode = .scaleAspectFit
             self.navigationItem.titleView = uiImageView
         }
@@ -561,10 +583,11 @@ extension ArticleListViewController: UINavigationControllerDelegate {
     func openBookmarkVC() {
         // 画面遷移
         let sb = UIStoryboard(name: "Bookmark", bundle: nil)
-        guard let vc = sb.instantiateInitialViewController() as? BookmarkViewController else { return }
+        guard let naviVc = sb.instantiateInitialViewController() as? UINavigationController else { return }
+        guard let vc = naviVc.topViewController as? BookmarkViewController else { return }
         vc.prevVC = self
-        self.present(vc, animated: true, completion: nil)
-
+        self.present(naviVc, animated: true, completion: nil)
+        
     }
     func showKindSelectAlert() {
         let actionSheet = UIAlertController(title: "一括で記事を選択します", message: "条件を選択してください", preferredStyle: .alert)
