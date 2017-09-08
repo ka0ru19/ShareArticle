@@ -76,6 +76,19 @@ class FirebaseDatabaseManager {
             
             
         })
-        
+    }
+    
+    // MARK: - ネットワークと通信できるかの判定
+    func checkConectedNetwork(vc: ArticleListViewController) {
+        let connectedRef = Database.database().reference(withPath: ".info/connected")
+        connectedRef.observe(.value, with: { snapshot in
+            if snapshot.value as? Bool ?? false {
+                print("Connected")
+                vc.successConectedNetwork()
+            } else {
+                print("Not connected")
+                vc.failedConectedNetwork()
+            }
+        })
     }
 }
