@@ -86,4 +86,18 @@ extension BookmarkViewController : UITableViewDelegate {
             }
         })
     }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            bookmarkDictArray.remove(at: indexPath.row)
+            ud.set(bookmarkDictArray, forKey: "bookmarkDictArray")
+            ud.synchronize()
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
 }
