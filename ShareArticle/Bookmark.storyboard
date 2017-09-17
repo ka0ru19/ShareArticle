@@ -20,25 +20,9 @@
                     <view key="view" contentMode="scaleToFill" id="XCz-D6-SCj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OQz-Gd-Lzw">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </tableView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="ImS-dj-IAD">
-                        <barButtonItem key="leftBarButtonItem" title="閉じる" id="TcR-wx-8Eg">
-                            <connections>
-                                <action selector="closeButtonTapped:" destination="NXT-pu-Fzj" id="Hoq-Ox-42N"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="tableView" destination="OQz-Gd-Lzw" id="9TX-FW-qpH"/>
-                    </connections>
+                    <navigationItem key="navigationItem" id="ImS-dj-IAD"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qO1-Jf-c0q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
