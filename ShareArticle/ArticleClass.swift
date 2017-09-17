@@ -36,17 +36,6 @@ class Article {
         print("init Article done. title: \(title as String)") // "as 型名"がないとOptionalになる
     }
     
-    // udのdictionaryから端末で扱うためのデータ型に変換するメソッド
-//    init?(from udDict: Dictionary<String, Any>){
-//        self.title = udDict["title"] as? String
-//        self.url = URL(string: udDict["urlString"] as! String)
-//        self.date = udDict["date"] as! Date
-//        if let comment = udDict["comment"] as? String {
-//            self.comment = comment
-//        }
-//        print("init Article done. title: \(self.title ?? "no-title")")
-//    }
-    
     // firebaseのdatabaseからクラスオブジェクトに変換する
     init?(from fbDict: Dictionary<String, String>) {
         self.title = fbDict["title"]
@@ -72,7 +61,7 @@ class Article {
         dict["urlString"] = self.url.absoluteString
         dict["date"] = self.date
         dict["comment"] = self.comment
-        print("changed to ud Dict: \(dict)")
+//        print("changed to ud Dict: \(dict)")
         return dict
     }
     
@@ -83,7 +72,7 @@ class Article {
         dict["url"] = self.url.absoluteString
         dict["date"] = self.date.string()
         dict["comment"] = self.comment
-        print("changed to ud Dict: \(dict)")
+//        print("changed to ud Dict: \(dict)")
         return dict
     }
     
