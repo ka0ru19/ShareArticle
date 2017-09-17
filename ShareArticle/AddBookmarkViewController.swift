@@ -56,7 +56,7 @@ class AddBookmarkViewController: UIViewController {
         let guideImage = UIImage(named: "bookmark_access.png")!
         let largeWidth = self.view.frame.width - largeMargin * 2
         let height = largeWidth / guideImage.size.width * guideImage.size.height
-        guideImageView.frame = CGRect(x: largeMargin, y: urlTextField.bottomY + largeMargin, width: largeWidth, height: height)
+        guideImageView.frame = CGRect(x: largeMargin, y: urlTextField.bottomY + margin, width: largeWidth, height: height)
         guideImageView.image = guideImage
         guideImageView.layer.borderColor = UIColor.saRed.cgColor
         guideImageView.layer.borderWidth = 1.0
