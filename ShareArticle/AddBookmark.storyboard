@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--ブックマークに追加-->
+        <!--Add Bookmark View Controller-->
         <scene sceneID="2zn-4Q-skV">
             <objects>
                 <viewController id="ryB-OK-whv" customClass="AddBookmarkViewController" customModule="ShareArticle" customModuleProvider="target" sceneMemberID="viewController">
@@ -22,22 +22,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="ブックマークに追加" id="igg-eU-fFy">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="S5t-en-txB">
-                            <connections>
-                                <action selector="cancelButtonTapped:" destination="ryB-OK-whv" id="mEe-Vy-DdP"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="保存" id="vpG-bz-1D0">
-                            <connections>
-                                <action selector="saveButtonTapped:" destination="ryB-OK-whv" id="WpZ-aj-G3a"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="igg-eU-fFy"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qFL-Dv-QWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1678" y="177"/>
+            <point key="canvasLocation" x="1226" y="170"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="iwR-kE-iXg">

@@ -10,14 +10,8 @@ import UIKit
 
 class AddBookmarkViewController: UIViewController {
     
-//    @IBOutlet weak var titleTextField: UITextField!
-//    @IBOutlet weak var urlTextField: UITextField!
-    
-    
-    let titleTextField = UITextField(frame: CGRect.zero)
-    let urlTextField = UITextField(frame: CGRect.zero)
-    
-    
+    let titleTextField = UITextField(frame: CGRect.zero) // ブックマークのタイトルを入力する
+    let urlTextField = UITextField(frame: CGRect.zero) // urlを表示する 編集不能
     var pageInfo: [Any] = [] // 前のviewで必ず値をもらってくる: [String, URL]の配列
     
     override func viewDidLoad() {
@@ -33,6 +27,14 @@ class AddBookmarkViewController: UIViewController {
                 return
         }
         
+        // MARK: navigatioinBarの設定
+        let leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped(_:)))
+        self.navigationItem.leftBarButtonItems = [leftBarButtonItem]
+        let rightBarButtonItem = UIBarButtonItem(title: "保存", style: .plain, target: self, action: #selector(saveButtonTapped(_:)))
+        self.navigationItem.rightBarButtonItems = [rightBarButtonItem]
+        navigationController.navigationBar.topItem?.title = "ブックマークに追加"
+        
+        // viewの設定
         let margin: CGFloat = 16
         let largeMargin : CGFloat = margin * 3
         let width = self.view.frame.width - margin * 2
@@ -50,7 +52,7 @@ class AddBookmarkViewController: UIViewController {
         urlTextField.text = url.absoluteString
         urlTextField.isEnabled = false
         
-        let guideImageView = UIImageView()
+        let guideImageView = UIImageView() //
         let guideImage = UIImage(named: "bookmark_access.png")!
         let largeWidth = self.view.frame.width - largeMargin * 2
         let height = largeWidth / guideImage.size.width * guideImage.size.height
