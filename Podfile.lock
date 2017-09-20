@@ -3,16 +3,24 @@ PODS:
   - AlamofireImage (3.2.0):
     - Alamofire (~> 4.1)
   - OpenGraph (1.0.1)
+  - Realm (2.8.3):
+    - Realm/Headers (= 2.8.3)
+  - Realm/Headers (2.8.3)
+  - RealmSwift (2.8.3):
+    - Realm (= 2.8.3)
 
 DEPENDENCIES:
   - AlamofireImage (~> 3.1)
   - OpenGraph
+  - RealmSwift
 
 SPEC CHECKSUMS:
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
   AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
   OpenGraph: ab741a1468a28a3cca10a03602034ed1c74b84d3
+  Realm: 3601ef091c8c499a31101d8563b991e75546cdce
+  RealmSwift: 8183818515471b01a99abdd2970f8e4fd52b6f4a
 
-PODFILE CHECKSUM: f5b588f37133f4bf161df702b86e0f03fd08cd4f
+PODFILE CHECKSUM: 8eb31d51213d9416b86f0f4a6d6263d97dd7bcad
 
 COCOAPODS: 1.2.1
