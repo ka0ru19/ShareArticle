@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0EABB536CCF85B382ED7E600 /* Pods_ShareArticle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF51C2DC13D959FB782D2E85 /* Pods_ShareArticle.framework */; };
+		6315147C1F6E42D700CA0DD1 /* bookmark_access.png in Resources */ = {isa = PBXBuildFile; fileRef = 6315147B1F6E42D700CA0DD1 /* bookmark_access.png */; };
 		632536E01F0F423E00D43C08 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632536DF1F0F423E00D43C08 /* ArrayExtension.swift */; };
 		6326D7B71F073B2700448E52 /* PostFromUIActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326D7B61F073B2700448E52 /* PostFromUIActivityViewController.swift */; };
 		632910991EECEC880071F2E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632910981EECEC880071F2E1 /* AppDelegate.swift */; };
@@ -113,6 +114,7 @@
 
 /* Begin PBXFileReference section */
 		629B2BA04CA8E52A59169EDA /* Pods-ShareArticle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareArticle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShareArticle/Pods-ShareArticle.debug.xcconfig"; sourceTree = "<group>"; };
+		6315147B1F6E42D700CA0DD1 /* bookmark_access.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bookmark_access.png; sourceTree = "<group>"; };
 		632536DF1F0F423E00D43C08 /* ArrayExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		6326D7B61F073B2700448E52 /* PostFromUIActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostFromUIActivityViewController.swift; sourceTree = "<group>"; };
 		632910951EECEC880071F2E1 /* ShareArticle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareArticle.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -428,6 +430,7 @@
 				63BC8E5E1F5E885D00E9F55E /* Tutorial03.jpg */,
 				63BC8E5F1F5E885D00E9F55E /* Tutorial04.jpg */,
 				63BC8E601F5E885D00E9F55E /* Tutorial05.jpg */,
+				6315147B1F6E42D700CA0DD1 /* bookmark_access.png */,
 			);
 			path = systemImage;
 			sourceTree = "<group>";
@@ -506,6 +509,7 @@
 				63BC8E581F58025200E9F55E /* bookmark_add@2x.png in Resources */,
 				63E410431F1CFED7004B71A6 /* stop_off.png in Resources */,
 				63DD884E1F529B4300885385 /* iTunesArtwork@3x.png in Resources */,
+				6315147C1F6E42D700CA0DD1 /* bookmark_access.png in Resources */,
 				632910B11EECF29F0071F2E1 /* ArticleTableViewCell.xib in Resources */,
 				63DD88481F529B4300885385 /* Icon-App-76x76@3x.png in Resources */,
 				63DD88461F529B4300885385 /* Icon-App-76x76@1x.png in Resources */,
@@ -797,6 +801,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.wataru.ShareArticle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -813,6 +818,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.wataru.ShareArticle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

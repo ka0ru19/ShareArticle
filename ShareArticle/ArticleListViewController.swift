@@ -259,6 +259,8 @@ extension ArticleListViewController {
 
 // MARK: - Firebaseのcomplition
 extension ArticleListViewController {
+    
+    // MARK
     public func successLoadDictArray(dictArray: [Dictionary<String, String>]) {
         var newArticleArray: [Article] = []
         
@@ -320,40 +322,22 @@ extension ArticleListViewController {
     
     public func failedSignInAnonymously(message: String) {
         print(message)
+        FirebaseDatabaseManager().checkConectedNetwork(vc: self)
     }
     
+    public func successConectedNetwork() {
+        successSignInAnonymously()
+    }
+    
+    public func failedConectedNetwork() {
+        // ネットワーク接続がありませんAlertを出す
+        let alert = UIAlertController(title: "通信エラー", message: "ネットワーク接続がありません", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "再試行", style: .default, handler: { _ in
+            FirebaseAuthManager().signInAnonymously(vc: self)
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
 }
-
-
-
-// MARK: - データベース連携操作(デバック用)
-//extension ArticleListViewController {
-//    func initDict() { // デバック用にダミーデータを入れる
-//        ud.removeSuite(named: "articleUdArray")
-//        articleUdArray = []
-//
-//        // デバック用のダミーデータ
-//        var titleArray: [String] = ["mac","ipad","iphone"]
-//        var urlArray: [URL] = [URL(string: "https://www.apple.com/jp/mac/")!,
-//                               URL(string: "https://www.apple.com/jp/ipad/")!,
-//                               URL(string: "https://www.apple.com/jp/iphone/")!]
-//        var dateArray = ["2017/06/11 04:11:58 +0900","2017/06/10 04:10:28 +0900","2017/06/12 04:12:53 +0900"]
-//        var commentArray: [String] = ["macほしくなった","ipadすげえ","iphone赤いの出てるう"]
-//
-//
-//        for i in 0 ..< titleArray.count {
-//            let atc = Article(title: titleArray[i],
-//                              urlString: urlArray[i].absoluteString,
-//                              dateString: dateArray[i],
-//                              comment: commentArray[i])
-//
-//            articleUdArray.append(atc!.change2UdDict())
-//        }
-//
-//        ud.set(articleUdArray, forKey: "articleUdArray")
-//    }
-//
-//}
 
 // MARK: - tableView操作
 extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -409,7 +393,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditingTableView {
-            // 出力中のとき
+            // 出力(記事選択)中のとき
             checkedArticleByDateArray[indexPath.section][indexPath.row] = !checkedArticleByDateArray[indexPath.section][indexPath.row]
             
             let cell = tableView.cellForRow(at: indexPath) as! ArticleTableViewCell
@@ -425,22 +409,40 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
+        let indexPath = editActionsForRowAt
+        let delete = UITableViewRowAction(style: .normal, title: "Delete"){ action, index in
+            
             // スワイプで削除された時
             
-            if let removeKey = articleByDateArray[indexPath.section][indexPath.row].selfArticleID {
+            if let removeKey = self.articleByDateArray[indexPath.section][indexPath.row].selfArticleID {
                 FirebaseDatabaseManager().removeArcitle(articleID: removeKey, vc: self)
             }
             
-            articleByDateArray[indexPath.section].remove(at: indexPath.row)
+            self.articleByDateArray[indexPath.section].remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             
-            if articleByDateArray[indexPath.section].count == 0 {
-                articleDateStringArray.remove(at: indexPath.section)
-                articleByDateArray.remove(at: indexPath.section)
+            if self.articleByDateArray[indexPath.section].count == 0 {
+                self.articleDateStringArray.remove(at: indexPath.section)
+                self.articleByDateArray.remove(at: indexPath.section)
                 tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
             }
             
         }
+        delete.backgroundColor = .red
+        
+        let share = UITableViewRowAction(style: .normal, title: "Share") { action, index in
+            // Shareボタンタップ時
+            let article = self.articleByDateArray[indexPath.section][indexPath.row]
+            self.showUiActiviyForSNS(itemArray: [article.url, article.comment])
+        }
+        share.backgroundColor = .blue
+        
+        return [delete, share]
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -519,7 +521,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             let bookmarkBarButtonItem = UIBarButtonItem(image: UIImage(named: "bookmark_normal.png"), style: .plain, target: self, action: #selector(openBookmarkButton(_:)))
             self.navigationItem.leftBarButtonItems = [leftBarButtonItem, bookmarkBarButtonItem]
             
-            let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
+            let rightBarButtonItem = UIBarButtonItem(title: "変換", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             let spaceItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
             spaceItem.width = leftBarButtonItem.width + bookmarkBarButtonItem.width - rightBarButtonItem.width + 45 // 45は調整のため
             self.navigationItem.rightBarButtonItems = [rightBarButtonItem, spaceItem]
@@ -538,6 +540,19 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         let activitySheet = UIActivityViewController(activityItems: activityItems, applicationActivities: appActivity)
         let excludeActivity: [UIActivityType] = [
             PostFromUIActivity().activityType!,
+            UIActivityType.print,
+            UIActivityType.postToWeibo,
+            UIActivityType.postToTencentWeibo
+        ]
+        activitySheet.excludedActivityTypes = excludeActivity
+        present(activitySheet, animated: true, completion: nil)
+    }
+    
+    func showUiActiviyForSNS(itemArray: [Any]) {
+        let activityItems: [Any] = itemArray
+        let appActivity = [PostFromUIActivity()]
+        let activitySheet = UIActivityViewController(activityItems: activityItems, applicationActivities: appActivity)
+        let excludeActivity: [UIActivityType] = [
             UIActivityType.print,
             UIActivityType.postToWeibo,
             UIActivityType.postToTencentWeibo

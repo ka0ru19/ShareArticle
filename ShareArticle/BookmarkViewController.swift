@@ -10,7 +10,7 @@ import UIKit
 
 class BookmarkViewController: UIViewController {
     
-    @IBOutlet weak var tableView: UITableView!
+    let tableView = UITableView(frame: CGRect.zero)
     
     let ud = UserDefaults.standard
     
@@ -30,13 +30,17 @@ class BookmarkViewController: UIViewController {
         navigationController.navigationBar.barTintColor = UIColor.lightRed
         navigationController.navigationBar.tintColor = UIColor.black
         navigationBarTopItem.title = "ブックマーク"
-
+        let leftBarButtonItem = UIBarButtonItem(title: "閉じる", style: .plain, target: self, action: #selector(closeButtonTapped(_:)))
+        self.navigationItem.leftBarButtonItems = [leftBarButtonItem]
         
         bookmarkDictArray = ud.array(forKey: "bookmarkDictArray") as? [Dictionary<String, String>] ?? []
 
+        tableView.frame = CGRect(x: 0, y: ViewSize.navigationbarBottomY,
+                                 width: self.view.frame.width, height: self.view.frame.height - ViewSize.navigationbarBottomY)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = UIView(frame: .zero)
+        self.view.addSubview(tableView)
         
     }
 
@@ -86,4 +90,18 @@ extension BookmarkViewController : UITableViewDelegate {
             }
         })
     }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            bookmarkDictArray.remove(at: indexPath.row)
+            ud.set(bookmarkDictArray, forKey: "bookmarkDictArray")
+            ud.synchronize()
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
 }

@@ -206,28 +206,25 @@ extension ReadWebViewController: UIScrollViewDelegate {
         let maxOffSet = contentSize.height - frameSize.height
         
         if currentPoint.y >= maxOffSet {
-            showToolbarAnimate()
-            self.navigationController?.setNavigationBarHidden(true, animated: true)
+            showBarAnimate()
         } else if beginingPoint.y < currentPoint.y {
             // スクロールダウンした時
-            hideToolbarAnimate()
-            self.navigationController?.setNavigationBarHidden(true, animated: true)
+            hideBarAnimate()
         }else{
             // スクロールアップした時
-            print("Scrolled up")
-            showToolbarAnimate()
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            showBarAnimate()
         }
     }
     
     // MARK: - webViewを縮小し、naviBarとtoolBarを表示する
-    func showToolbarAnimate() {
+    private func showBarAnimate() {
         if isViewShowed || isMovingToolbar{ return }
         isMovingToolbar = true
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.toolbar.frame.origin.y = self.view.frame.size.height
         self.webView.frame.origin.y = ViewSize.statusBarBottomY
         self.webView.frame.size.height = self.view.frame.size.height - ViewSize.statusBarBottomY
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             self.toolbar.frame.origin.y -= ViewSize.toolbarHeight
             self.webView.frame.origin.y += ViewSize.navigationbarHeight
             self.webView.frame.size.height -= ViewSize.navigationbarHeight + ViewSize.toolbarHeight
@@ -238,13 +235,14 @@ extension ReadWebViewController: UIScrollViewDelegate {
     }
     
     // MARK: - webViewを画面いっぱいにし、naviBarとtoolBarを非表示にする
-    func hideToolbarAnimate() {
+    private func hideBarAnimate() {
         if !isViewShowed || isMovingToolbar{ return }
         isMovingToolbar = true
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
         self.toolbar.frame.origin.y = self.view.frame.size.height - ViewSize.toolbarHeight
         self.webView.frame.origin.y = ViewSize.navigationbarBottomY
         self.webView.frame.size.height = self.view.frame.size.height - ViewSize.navigationbarBottomY - ViewSize.toolbarHeight
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             self.toolbar.frame.origin.y += ViewSize.toolbarHeight
             self.webView.frame.origin.y -= ViewSize.navigationbarHeight
             self.webView.frame.size.height += ViewSize.navigationbarHeight + ViewSize.toolbarHeight
