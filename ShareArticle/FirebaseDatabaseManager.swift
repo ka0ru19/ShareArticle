@@ -40,6 +40,16 @@ class FirebaseDatabaseManager {
         })
     }
     
+//    // MARK: -記事のidを取得
+//    func getAllArticleIdArray(vc: ArticleListViewController) {
+//        // Firebaseのデータベースにアクセスする下準備
+//        guard let uid = fireUser?.uid else { return }
+//        let articleIdListRef = rootRef.child("user-list").child(uid).child("article-list")
+////        let allKeyArray = articleIdListRef.accessibilityElementCount()
+//        // 取得成功
+////        vc.successGetAllArticleIdArray(idArray: idArray)
+//    }
+    
     // MARK: - 削除
     func removeArcitle(articleID: String, vc: ArticleListViewController) {
         guard let uid = fireUser?.uid else { return }
@@ -58,6 +68,10 @@ class FirebaseDatabaseManager {
     // MARK: - 投稿
     func postNewArcitle(newValue: [String:String], vc: PostFromUIActivityViewController){
         guard let uid = fireUser?.uid else { return }
+        
+        // 初投稿(または今までの投稿のidがrefに無かった場合)
+        
+        
         let articleIdListRef = rootRef.child("user-list").child(uid).child("article-list")
         
         let newRef = articleIdListRef.childByAutoId()
