@@ -67,7 +67,11 @@ class FirebaseDatabaseManager {
     
     // MARK: - 投稿
     func postNewArcitle(newValue: [String:String], vc: PostFromUIActivityViewController){
-        guard let uid = fireUser?.uid else { return }
+        guard let uid = fireUser?.uid else {
+            vc.failedGetArcitleArray(message: "post faild because no uid.")
+            return
+            
+        }
         
         // 初投稿(または今までの投稿のidがrefに無かった場合)
         
