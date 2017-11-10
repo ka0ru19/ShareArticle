@@ -61,7 +61,6 @@ class ArticleListViewController: UIViewController {
         let suiteName: String = "group.com.wataru.ShareArticle"
         let keyName: String = "shareData"
         guard let ud: UserDefaults = UserDefaults(suiteName: suiteName) else { return }
-//        print(ud.array(forKey: keyName))
         guard let shareDataArray: [[String: Any]] = ud.array(forKey: keyName) as? [[String : Any]] else { return }
         var newValues: [[String: String]] = []
         
@@ -385,7 +384,7 @@ extension ArticleListViewController {
     }
     
     func successPostNewArcitle() {
-        print("successPostNewArcitleが呼ばれたよ")
+        FirebaseDatabaseManager().getArcitleArray(vc: self)
     }
     
     func failedPostNewArcitle(message: String, faildValue: [String: String]) {

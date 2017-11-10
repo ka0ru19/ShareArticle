@@ -54,6 +54,9 @@ class ShareViewController: SLComposeServiceViewController {
         
         if itemProvider.hasItemConformingToTypeIdentifier(publicUrlString) {
             itemProvider.loadItem(forTypeIdentifier: publicUrlString, options: nil, completionHandler: { (item, error) in
+                if let e = error {
+                    print(e.localizedDescription)
+                }
                 if let url: URL = item as? URL {
                     // 保存処理
                     guard let ud: UserDefaults = UserDefaults(suiteName: self.suiteName) else { return }
@@ -68,11 +71,8 @@ class ShareViewController: SLComposeServiceViewController {
                     //  FirebaseDatabaseManager().postNewArcitle(newValue: newArticleDict, vc: self)
                     
                     
-                    if let pastArray = ud.array(forKey: self.keyName) {
-                        ud.set(pastArray + [newArticleDict], forKey: self.keyName)
-                    } else {
-                        ud.set([newArticleDict], forKey: self.keyName)
-                    }
+                    let pastArray = ud.array(forKey: self.keyName) as? [[String: Any]] ?? []
+                    ud.set(pastArray + [newArticleDict], forKey: self.keyName)
                     
 //                    ud.set(url.absoluteString, forKey: self.keyName)
                     ud.synchronize()
