@@ -72,7 +72,6 @@ class FirebaseDatabaseManager {
             return
             
         }
-        
         // 初投稿(または今までの投稿のidがrefに無かった場合)
         
         

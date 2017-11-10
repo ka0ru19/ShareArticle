@@ -56,6 +56,10 @@ class ArticleListViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         FirebaseAuthManager().signInAnonymously(vc: self)
+        
+        // TODO: - もし未投稿のものがあればこのタイミングで投稿
+        
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
