@@ -451,7 +451,7 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditingTableView {
-            // 出力中のとき
+            // 出力(記事選択)中のとき
             checkedArticleByDateArray[indexPath.section][indexPath.row] = !checkedArticleByDateArray[indexPath.section][indexPath.row]
             
             let cell = tableView.cellForRow(at: indexPath) as! ArticleTableViewCell
@@ -467,22 +467,40 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
+        let indexPath = editActionsForRowAt
+        let delete = UITableViewRowAction(style: .normal, title: "Delete"){ action, index in
+            
             // スワイプで削除された時
             
-            if let removeKey = articleByDateArray[indexPath.section][indexPath.row].selfArticleID {
+            if let removeKey = self.articleByDateArray[indexPath.section][indexPath.row].selfArticleID {
                 FirebaseDatabaseManager().removeArcitle(articleID: removeKey, vc: self)
             }
             
-            articleByDateArray[indexPath.section].remove(at: indexPath.row)
+            self.articleByDateArray[indexPath.section].remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             
-            if articleByDateArray[indexPath.section].count == 0 {
-                articleDateStringArray.remove(at: indexPath.section)
-                articleByDateArray.remove(at: indexPath.section)
+            if self.articleByDateArray[indexPath.section].count == 0 {
+                self.articleDateStringArray.remove(at: indexPath.section)
+                self.articleByDateArray.remove(at: indexPath.section)
                 tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
             }
             
         }
+        delete.backgroundColor = .red
+        
+        let share = UITableViewRowAction(style: .normal, title: "Share") { action, index in
+            // Shareボタンタップ時
+            let article = self.articleByDateArray[indexPath.section][indexPath.row]
+            self.showUiActiviyForSNS(itemArray: [article.url, article.comment])
+        }
+        share.backgroundColor = .blue
+        
+        return [delete, share]
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -573,7 +591,7 @@ extension ArticleListViewController: UINavigationControllerDelegate {
             let bookmarkBarButtonItem = UIBarButtonItem(image: UIImage(named: "bookmark_normal.png"), style: .plain, target: self, action: #selector(openBookmarkButton(_:)))
             self.navigationItem.leftBarButtonItems = [leftBarButtonItem, bookmarkBarButtonItem]
             
-            let rightBarButtonItem = UIBarButtonItem(title: "出力", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
+            let rightBarButtonItem = UIBarButtonItem(title: "変換", style: .plain, target: self, action: #selector(onTappedOutputButton(_:)))
             let spaceItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
             spaceItem.width = leftBarButtonItem.width + bookmarkBarButtonItem.width - rightBarButtonItem.width + 45 // 45は調整のため
             self.navigationItem.rightBarButtonItems = [rightBarButtonItem, spaceItem]
@@ -592,6 +610,19 @@ extension ArticleListViewController: UINavigationControllerDelegate {
         let activitySheet = UIActivityViewController(activityItems: activityItems, applicationActivities: appActivity)
         let excludeActivity: [UIActivityType] = [
             PostFromUIActivity().activityType!,
+            UIActivityType.print,
+            UIActivityType.postToWeibo,
+            UIActivityType.postToTencentWeibo
+        ]
+        activitySheet.excludedActivityTypes = excludeActivity
+        present(activitySheet, animated: true, completion: nil)
+    }
+    
+    func showUiActiviyForSNS(itemArray: [Any]) {
+        let activityItems: [Any] = itemArray
+        let appActivity = [PostFromUIActivity()]
+        let activitySheet = UIActivityViewController(activityItems: activityItems, applicationActivities: appActivity)
+        let excludeActivity: [UIActivityType] = [
             UIActivityType.print,
             UIActivityType.postToWeibo,
             UIActivityType.postToTencentWeibo
