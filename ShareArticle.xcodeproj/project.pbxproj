@@ -171,6 +171,8 @@
 		63953ACF1FB5FC26007978EF /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		63953AD21FB5FC26007978EF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		63953AD41FB5FC26007978EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		63953ADC1FB5FC99007978EF /* Posty.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Posty.entitlements; sourceTree = "<group>"; };
+		63953ADD1FB5FCF5007978EF /* ShareArticle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareArticle.entitlements; sourceTree = "<group>"; };
 		63A78ACF1F332A210081349B /* PublicFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicFunction.swift; sourceTree = "<group>"; };
 		63BC8E221F56C97800E9F55E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		63BC8E281F56CFC900E9F55E /* FirebaseDatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseDatabaseManager.swift; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 		632910971EECEC880071F2E1 /* ShareArticle */ = {
 			isa = PBXGroup;
 			children = (
+				63953ADD1FB5FCF5007978EF /* ShareArticle.entitlements */,
 				632910981EECEC880071F2E1 /* AppDelegate.swift */,
 				63BC8E281F56CFC900E9F55E /* FirebaseDatabaseManager.swift */,
 				63BC8E661F5ECC8E00E9F55E /* FirebaseAuthManager.swift */,
@@ -359,6 +362,7 @@
 		63953ACE1FB5FC26007978EF /* Posty */ = {
 			isa = PBXGroup;
 			children = (
+				63953ADC1FB5FC99007978EF /* Posty.entitlements */,
 				63953ACF1FB5FC26007978EF /* ShareViewController.swift */,
 				63953AD11FB5FC26007978EF /* MainInterface.storyboard */,
 				63953AD41FB5FC26007978EF /* Info.plist */,
@@ -549,11 +553,27 @@
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 44KX7M22LP;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 					63953ACC1FB5FC26007978EF = {
 						CreatedOnToolsVersion = 9.0;
 						DevelopmentTeam = 44KX7M22LP;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -841,7 +861,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -887,7 +907,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -901,6 +921,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ShareArticle/ShareArticle.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = 44KX7M22LP;
 				INFOPLIST_FILE = ShareArticle/Info.plist;
@@ -919,6 +940,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ShareArticle/ShareArticle.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = 44KX7M22LP;
 				INFOPLIST_FILE = ShareArticle/Info.plist;
@@ -942,6 +964,7 @@
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Posty/Posty.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 44KX7M22LP;
@@ -968,6 +991,7 @@
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Posty/Posty.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 44KX7M22LP;

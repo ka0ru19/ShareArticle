@@ -1,4 +1,4 @@
-//
+
 //  ArticleListViewController.swift
 //  ShareArticle
 //
@@ -57,8 +57,29 @@ class ArticleListViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         FirebaseAuthManager().signInAnonymously(vc: self)
         
-        // TODO: - もし未投稿のものがあればこのタイミングで投稿
+        //MARK: - もし未投稿のものがあればこのタイミングで投稿
+        let suiteName: String = "group.com.wataru.ShareArticle"
+        let keyName: String = "shareData"
+        guard let ud: UserDefaults = UserDefaults(suiteName: suiteName) else { return }
+//        print(ud.array(forKey: keyName))
+        guard let shareDataArray: [[String: Any]] = ud.array(forKey: keyName) as? [[String : Any]] else { return }
+        var newValues: [[String: String]] = []
         
+        // dateだけDate型なので、Stringにキャストして[[String: String]] を作る
+        for value in shareDataArray {
+            let tempDict: [String: String] = [
+                "title" : value["title"] as? String ?? "",
+                "url": value["url"] as? String ?? "",
+                "date": (value["date"] as? Date ?? Date()).string(),
+                "comment": value["comment"] as? String ?? "",
+            ]
+            newValues.append(tempDict)
+        }
+        // 投稿処理を投げる
+        FirebaseDatabaseManager().postNewArcitles(newValueArray: newValues, vc: self)
+        // 一旦udから削除。投稿に失敗すると、失敗した記事だけ別のudに保存される
+        ud.removeObject(forKey: keyName)
+        ud.synchronize()
         
     }
     
@@ -280,25 +301,31 @@ extension ArticleListViewController {
         articleArray.sort { $1.date < $0.date }
         
         // 更新する最初のindex num
-        let startIndex = currentArticleCount
+        //        let startIndex = currentArticleCount
         // 読み込む数
-        let addCount = articleArray.count - startIndex < addArticleNum ? articleArray.count - startIndex : addArticleNum
-        let currentArticleCount = startIndex + addCount
+        //        let addCount = articleArray.count - startIndex < addArticleNum ? articleArray.count - startIndex : addArticleNum
+        //        let currentArticleCount = startIndex + addCount
         
-        var currentDateString: String = ""
-        var currentArticleArray: [Article] = []
+        //        var currentDateString: String = ""
+        //        var currentArticleArray: [Article] = []
+        //        // セクションわけのために日付ごとに記事を分ける
+        //        if let currentLastArticleArray = articleByDateArray.last {
+        //            // 追加読み込み時
+        //            currentDateString = currentLastArticleArray.first?.date.dateString() // "yyyy/MM/dd"
+        //            currentArticleArray = (articleByDateArray.last?)! //
+        //
+        //            } else {
+        //            // 初回読み込み時
+        //            currentDateString = articleArray[0].date.dateString() // "yyyy/MM/dd"
+        //            articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
+        //
+        //        }
+        
+        
         // セクションわけのために日付ごとに記事を分ける
-        if let currentLastArticleArray = articleByDateArray.last {
-            // 追加読み込み時
-            currentDateString = currentLastArticleArray.first?.date.dateString() // "yyyy/MM/dd"
-            currentArticleArray = articleByDateArray.last //
-            
-            } else {
-            // 初回読み込み時
-            currentDateString = articleArray[0].date.dateString() // "yyyy/MM/dd"
-            articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
-            
-        }
+        var currentDateString: String = articleArray[0].date.dateString() // "yyyy/MM/dd"
+        var currentArticleArray: [Article] = []
+        articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
         
         var newArticleByDateArray:[[Article]] = [] // 同じ日付同士の記事を管理する配列
         for article in articleArray {
@@ -352,9 +379,21 @@ extension ArticleListViewController {
         // ネットワーク接続がありませんAlertを出す
         let alert = UIAlertController(title: "通信エラー", message: "ネットワーク接続がありません", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "再試行", style: .default, handler: { _ in
-                FirebaseAuthManager().signInAnonymously(vc: self)
+            FirebaseAuthManager().signInAnonymously(vc: self)
         }))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func successPostNewArcitle() {
+        print("successPostNewArcitleが呼ばれたよ")
+    }
+    
+    func failedPostNewArcitle(message: String, faildValue: [String: String]) {
+        print(message)
+        let ud = UserDefaults.standard
+        let pastFaildArray = ud.array(forKey: "paseFaildArray") ?? []
+        ud.set(pastFaildArray + [faildValue], forKey: "paseFaildArray")
+        ud.synchronize()
     }
 }
 
