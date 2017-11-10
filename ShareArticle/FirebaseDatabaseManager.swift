@@ -11,6 +11,8 @@ import Firebase
 
 class FirebaseDatabaseManager {
     
+    static var isNowLoading = false
+    
     let rootRef = Database.database().reference()
     let fireUser: User? = Auth.auth().currentUser
     
@@ -40,6 +42,16 @@ class FirebaseDatabaseManager {
         })
     }
     
+//    // MARK: -記事のidを取得
+//    func getAllArticleIdArray(vc: ArticleListViewController) {
+//        // Firebaseのデータベースにアクセスする下準備
+//        guard let uid = fireUser?.uid else { return }
+//        let articleIdListRef = rootRef.child("user-list").child(uid).child("article-list")
+////        let allKeyArray = articleIdListRef.accessibilityElementCount()
+//        // 取得成功
+////        vc.successGetAllArticleIdArray(idArray: idArray)
+//    }
+    
     // MARK: - 削除
     func removeArcitle(articleID: String, vc: ArticleListViewController) {
         guard let uid = fireUser?.uid else { return }
@@ -57,7 +69,12 @@ class FirebaseDatabaseManager {
     
     // MARK: - 投稿
     func postNewArcitle(newValue: [String:String], vc: PostFromUIActivityViewController){
-        guard let uid = fireUser?.uid else { return }
+        guard let uid = fireUser?.uid else {
+            vc.failedGetArcitleArray(message: "post faild because no uid.")
+            return
+            
+        }
+        
         let articleIdListRef = rootRef.child("user-list").child(uid).child("article-list")
         
         let newRef = articleIdListRef.childByAutoId()
@@ -76,6 +93,32 @@ class FirebaseDatabaseManager {
             
             
         })
+    }
+    
+    // MARK: - shareExtensionからの投稿
+    func postNewArcitles(newValueArray: [[String: String]], vc: ArticleListViewController) {
+        guard let uid = fireUser?.uid else {
+            vc.failedGetArcitleArray(message: "post faild because no uid.")
+            return
+        }
+        
+        let articleIdListRef = rootRef.child("user-list").child(uid).child("article-list")
+        
+        for newValue in newValueArray {
+            let newRef = articleIdListRef.childByAutoId()
+            let newKey = newRef.key
+            let newValueWithKey = newValue.union(other: ["selfArticleID": newKey])
+            
+            articleIdListRef.child(newKey).setValue(newValueWithKey, withCompletionBlock: {(error: Error?, ref) in
+                if let err = error {
+                    // 失敗
+                    vc.failedPostNewArcitle(message: err.localizedDescription, faildValue: newValue)
+                } else {
+                    // 成功. 投稿に成功した記事をリターン
+                    vc.successPostNewArcitle()
+                }
+            })
+        }
     }
     
     // MARK: - ネットワークと通信できるかの判定

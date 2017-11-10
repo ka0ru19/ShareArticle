@@ -1,4 +1,4 @@
-//
+
 //  ArticleListViewController.swift
 //  ShareArticle
 //
@@ -14,19 +14,18 @@ class ArticleListViewController: UIViewController {
     let toolbar = UIToolbar()
     let ud = UserDefaults.standard
     
-    var articleDictionary: Dictionary<String, [Article]> = [:]
-    
     var articleArray: [Article] = []
     var articleDateStringArray: [String] = [] // 記事の日付を管理する配列: セクションのタイトルで使う
     var articleByDateArray: [[Article]]  = [] // セクション分けして記事を表示するのに使う
     
-    var checkedArticleByDateArray: [[Bool]] = []
+    var checkedArticleByDateArray: [[Bool]] = [] // チェックが入っているものを管理
     
-    var isEditingTableView = false
+    var isEditingTableView = false // 出力のチェックを入力中
+    
+    var currentArticleCount = 0 // 現在表示中の記事の数
+    let addArticleNum = 20 // 追加で表示する記事の数
     
     var selectedUrl: URL!
-    
-    var articleUdArray: [Dictionary<String, Any>] = [] // udで保存するために型変換した記事配列
     
     enum SelectArticleType {
         case all
@@ -57,6 +56,31 @@ class ArticleListViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         FirebaseAuthManager().signInAnonymously(vc: self)
+        
+        //MARK: - もし未投稿のものがあればこのタイミングで投稿
+        let suiteName: String = "group.com.wataru.ShareArticle"
+        let keyName: String = "shareData"
+        guard let ud: UserDefaults = UserDefaults(suiteName: suiteName) else { return }
+//        print(ud.array(forKey: keyName))
+        guard let shareDataArray: [[String: Any]] = ud.array(forKey: keyName) as? [[String : Any]] else { return }
+        var newValues: [[String: String]] = []
+        
+        // dateだけDate型なので、Stringにキャストして[[String: String]] を作る
+        for value in shareDataArray {
+            let tempDict: [String: String] = [
+                "title" : value["title"] as? String ?? "",
+                "url": value["url"] as? String ?? "",
+                "date": (value["date"] as? Date ?? Date()).string(),
+                "comment": value["comment"] as? String ?? "",
+            ]
+            newValues.append(tempDict)
+        }
+        // 投稿処理を投げる
+        FirebaseDatabaseManager().postNewArcitles(newValueArray: newValues, vc: self)
+        // 一旦udから削除。投稿に失敗すると、失敗した記事だけ別のudに保存される
+        ud.removeObject(forKey: keyName)
+        ud.synchronize()
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -260,7 +284,7 @@ extension ArticleListViewController {
 // MARK: - Firebaseのcomplition
 extension ArticleListViewController {
     
-    // MARK
+    // MARK: Firebase Managerから記事の辞書型を取得してから1回呼ばれる
     public func successLoadDictArray(dictArray: [Dictionary<String, String>]) {
         var newArticleArray: [Article] = []
         
@@ -276,12 +300,34 @@ extension ArticleListViewController {
         // 日付でソート(新しい順)
         articleArray.sort { $1.date < $0.date }
         
+        // 更新する最初のindex num
+        //        let startIndex = currentArticleCount
+        // 読み込む数
+        //        let addCount = articleArray.count - startIndex < addArticleNum ? articleArray.count - startIndex : addArticleNum
+        //        let currentArticleCount = startIndex + addCount
+        
+        //        var currentDateString: String = ""
+        //        var currentArticleArray: [Article] = []
+        //        // セクションわけのために日付ごとに記事を分ける
+        //        if let currentLastArticleArray = articleByDateArray.last {
+        //            // 追加読み込み時
+        //            currentDateString = currentLastArticleArray.first?.date.dateString() // "yyyy/MM/dd"
+        //            currentArticleArray = (articleByDateArray.last?)! //
+        //
+        //            } else {
+        //            // 初回読み込み時
+        //            currentDateString = articleArray[0].date.dateString() // "yyyy/MM/dd"
+        //            articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
+        //
+        //        }
+        
+        
         // セクションわけのために日付ごとに記事を分ける
         var currentDateString: String = articleArray[0].date.dateString() // "yyyy/MM/dd"
         var currentArticleArray: [Article] = []
         articleDateStringArray = [currentDateString] // ["yyyy/MM/dd"]
         
-        var newArticleByDateArray:[[Article]] = [] // [[Article]]
+        var newArticleByDateArray:[[Article]] = [] // 同じ日付同士の記事を管理する配列
         for article in articleArray {
             let thisDateString = article.date.dateString()
             if currentDateString != thisDateString {
@@ -336,6 +382,18 @@ extension ArticleListViewController {
             FirebaseAuthManager().signInAnonymously(vc: self)
         }))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    func successPostNewArcitle() {
+        print("successPostNewArcitleが呼ばれたよ")
+    }
+    
+    func failedPostNewArcitle(message: String, faildValue: [String: String]) {
+        print(message)
+        let ud = UserDefaults.standard
+        let pastFaildArray = ud.array(forKey: "paseFaildArray") ?? []
+        ud.set(pastFaildArray + [faildValue], forKey: "paseFaildArray")
+        ud.synchronize()
     }
 }
 
@@ -450,11 +508,23 @@ extension ArticleListViewController: UITableViewDelegate, UITableViewDataSource 
     }
 }
 
+// MARK: - scrollView操作
+extension ArticleListViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let distanceFromBottom = scrollView.contentSize.height - scrollView.contentOffset.y
+        if distanceFromBottom < scrollView.frame.size.height {
+            // tableviewが下までスクロールした時
+            print("you reached end of the table")
+        }
+    }
+}
+
 // MARK: - view操作
 extension ArticleListViewController: UINavigationControllerDelegate {
     
     func initView() {
-        articleTableView.frame = CGRect(x: 0, y: ViewSize.navigationbarBottomY, width: self.view.frame.width, height: self.view.frame.height - ViewSize.navigationbarBottomY)
+        articleTableView.frame = CGRect(x: 0, y: ViewSize.navigationbarBottomY,
+                                        width: self.view.frame.width, height: self.view.frame.height - ViewSize.navigationbarBottomY)
         articleTableView.delegate = self
         articleTableView.dataSource = self
         articleTableView.register(UINib(nibName: "ArticleTableViewCell", bundle: nil),
