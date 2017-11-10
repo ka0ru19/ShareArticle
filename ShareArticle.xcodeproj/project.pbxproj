@@ -32,6 +32,9 @@
 		634CB66E1F263E0B00F2E7F5 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634CB66D1F263E0B00F2E7F5 /* UIColorExtension.swift */; };
 		634CB6701F2640AE00F2E7F5 /* nippoly_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 634CB66F1F2640AE00F2E7F5 /* nippoly_white.png */; };
 		638201EC1EF7A9B900ACE0FA /* PostFromUIActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */; };
+		63953AD01FB5FC26007978EF /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63953ACF1FB5FC26007978EF /* ShareViewController.swift */; };
+		63953AD31FB5FC26007978EF /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63953AD11FB5FC26007978EF /* MainInterface.storyboard */; };
+		63953AD71FB5FC26007978EF /* Posty.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 63953ACD1FB5FC26007978EF /* Posty.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		63A78AD01F332A210081349B /* PublicFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A78ACF1F332A210081349B /* PublicFunction.swift */; };
 		63BC8E231F56C97800E9F55E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63BC8E221F56C97800E9F55E /* GoogleService-Info.plist */; };
 		63BC8E291F56CFC900E9F55E /* FirebaseDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC8E281F56CFC900E9F55E /* FirebaseDatabaseManager.swift */; };
@@ -112,6 +115,30 @@
 		63E410511F1D1607004B71A6 /* thumbnail_nowLoading.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E4104F1F1D1607004B71A6 /* thumbnail_nowLoading.png */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		63953AD51FB5FC26007978EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6329108D1EECEC880071F2E1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 63953ACC1FB5FC26007978EF;
+			remoteInfo = Posty;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		63953ADB1FB5FC26007978EF /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				63953AD71FB5FC26007978EF /* Posty.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		629B2BA04CA8E52A59169EDA /* Pods-ShareArticle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareArticle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShareArticle/Pods-ShareArticle.debug.xcconfig"; sourceTree = "<group>"; };
 		6315147B1F6E42D700CA0DD1 /* bookmark_access.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bookmark_access.png; sourceTree = "<group>"; };
@@ -140,6 +167,10 @@
 		634CB66D1F263E0B00F2E7F5 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		634CB66F1F2640AE00F2E7F5 /* nippoly_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nippoly_white.png; sourceTree = "<group>"; };
 		638201EB1EF7A9B900ACE0FA /* PostFromUIActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostFromUIActivity.swift; sourceTree = "<group>"; };
+		63953ACD1FB5FC26007978EF /* Posty.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Posty.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		63953ACF1FB5FC26007978EF /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		63953AD21FB5FC26007978EF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		63953AD41FB5FC26007978EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63A78ACF1F332A210081349B /* PublicFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicFunction.swift; sourceTree = "<group>"; };
 		63BC8E221F56C97800E9F55E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		63BC8E281F56CFC900E9F55E /* FirebaseDatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseDatabaseManager.swift; sourceTree = "<group>"; };
@@ -231,6 +262,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		63953ACA1FB5FC26007978EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -247,6 +285,7 @@
 			isa = PBXGroup;
 			children = (
 				632910971EECEC880071F2E1 /* ShareArticle */,
+				63953ACE1FB5FC26007978EF /* Posty */,
 				632910961EECEC880071F2E1 /* Products */,
 				43EA93687CA4B8C69013E5D5 /* Pods */,
 				EFA49D4079CA464EDFCFF491 /* Frameworks */,
@@ -257,6 +296,7 @@
 			isa = PBXGroup;
 			children = (
 				632910951EECEC880071F2E1 /* ShareArticle.app */,
+				63953ACD1FB5FC26007978EF /* Posty.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -314,6 +354,16 @@
 				63BC8E2A1F57060400E9F55E /* DictionaryExtension.swift */,
 			);
 			name = Extension;
+			sourceTree = "<group>";
+		};
+		63953ACE1FB5FC26007978EF /* Posty */ = {
+			isa = PBXGroup;
+			children = (
+				63953ACF1FB5FC26007978EF /* ShareViewController.swift */,
+				63953AD11FB5FC26007978EF /* MainInterface.storyboard */,
+				63953AD41FB5FC26007978EF /* Info.plist */,
+			);
+			path = Posty;
 			sourceTree = "<group>";
 		};
 		63DD87E91F529B4300885385 /* icon */ = {
@@ -456,15 +506,34 @@
 				632910931EECEC880071F2E1 /* Resources */,
 				80E55EEF866D6F6718A29AA7 /* [CP] Embed Pods Frameworks */,
 				C2C7FFFCEBA849A971C17FE0 /* [CP] Copy Pods Resources */,
+				63953ADB1FB5FC26007978EF /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				63953AD61FB5FC26007978EF /* PBXTargetDependency */,
 			);
 			name = ShareArticle;
 			productName = ShareArticle;
 			productReference = 632910951EECEC880071F2E1 /* ShareArticle.app */;
 			productType = "com.apple.product-type.application";
+		};
+		63953ACC1FB5FC26007978EF /* Posty */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63953ADA1FB5FC26007978EF /* Build configuration list for PBXNativeTarget "Posty" */;
+			buildPhases = (
+				63953AC91FB5FC26007978EF /* Sources */,
+				63953ACA1FB5FC26007978EF /* Frameworks */,
+				63953ACB1FB5FC26007978EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Posty;
+			productName = Posty;
+			productReference = 63953ACD1FB5FC26007978EF /* Posty.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -472,12 +541,17 @@
 		6329108D1EECEC880071F2E1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0830;
+				LastSwiftUpdateCheck = 0900;
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Wataru Inoue";
 				TargetAttributes = {
 					632910941EECEC880071F2E1 = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = 44KX7M22LP;
+						ProvisioningStyle = Automatic;
+					};
+					63953ACC1FB5FC26007978EF = {
+						CreatedOnToolsVersion = 9.0;
 						DevelopmentTeam = 44KX7M22LP;
 						ProvisioningStyle = Automatic;
 					};
@@ -497,6 +571,7 @@
 			projectRoot = "";
 			targets = (
 				632910941EECEC880071F2E1 /* ShareArticle */,
+				63953ACC1FB5FC26007978EF /* Posty */,
 			);
 		};
 /* End PBXProject section */
@@ -590,6 +665,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		63953ACB1FB5FC26007978EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				63953AD31FB5FC26007978EF /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -669,7 +752,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		63953AC91FB5FC26007978EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				63953AD01FB5FC26007978EF /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		63953AD61FB5FC26007978EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 63953ACC1FB5FC26007978EF /* Posty */;
+			targetProxy = 63953AD51FB5FC26007978EF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6329109C1EECEC880071F2E1 /* Main.storyboard */ = {
@@ -686,6 +785,14 @@
 				632910A21EECEC880071F2E1 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		63953AD11FB5FC26007978EF /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				63953AD21FB5FC26007978EF /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -792,6 +899,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 629B2BA04CA8E52A59169EDA /* Pods-ShareArticle.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = 44KX7M22LP;
@@ -809,6 +917,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FC4FFD9067F8A16AA1B0C613 /* Pods-ShareArticle.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = 44KX7M22LP;
@@ -819,6 +928,58 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		63953AD81FB5FC26007978EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 44KX7M22LP;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Posty/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.wataru.ShareArticle.Posty;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		63953AD91FB5FC26007978EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 44KX7M22LP;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Posty/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.wataru.ShareArticle.Posty;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -839,6 +1000,15 @@
 			buildConfigurations = (
 				632910A81EECEC880071F2E1 /* Debug */,
 				632910A91EECEC880071F2E1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63953ADA1FB5FC26007978EF /* Build configuration list for PBXNativeTarget "Posty" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63953AD81FB5FC26007978EF /* Debug */,
+				63953AD91FB5FC26007978EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
